@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="Setlistbot.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
+  <WorkerRole name="SetlistbotWorker" vmsize="Small">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" />
+      <Setting name="Subreddit"/>
+      <Setting name="Username"/>
+      <Setting name="Password"/>
+      <Setting name="Key"/>
+      <Setting name="Secret"/>
+      <Setting name="MaxSetlists"/>
+      <Setting name="MaxComments"/>
+    </ConfigurationSettings>
+  </WorkerRole>
+</ServiceDefinition>
