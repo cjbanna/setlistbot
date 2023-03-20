@@ -2,6 +2,7 @@
 {
     public interface ISetlistProvider
     {
-        Task<IEnumerable<Setlist>> GetSetlistsAsync(DateTime date);
+        string ArtistId { get; }
+        Task<IEnumerable<Setlist>> GetSetlists(DateTime date);
     }
 }

@@ -11,7 +11,7 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
                 "PhishNetResponses/1997-11-22-setlist-response.json"
             );
             var json = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<SetlistResponse>(json);
+            return JsonConvert.DeserializeObject<SetlistResponse>(json)!;
         }
     }
 }

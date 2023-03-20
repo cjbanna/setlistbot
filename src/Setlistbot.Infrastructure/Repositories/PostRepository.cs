@@ -40,7 +40,7 @@ namespace Setlistbot.Infrastructure.Reddit
         public async Task<IEnumerable<Post>> GetAll()
         {
             var posts = await GetAllAsync();
-            return posts.Select(c => c.ToDomain());
+            return posts.Where(c => c != null).Select(c => c.ToDomain()!);
         }
     }
 }

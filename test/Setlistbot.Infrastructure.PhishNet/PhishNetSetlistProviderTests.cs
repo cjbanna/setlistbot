@@ -3,29 +3,32 @@ using Moq;
 
 namespace Setlistbot.Infrastructure.PhishNet.UnitTests
 {
-    public class PhishNetServiceTestFixture
+    public class PhishNetSetlistProviderTestFixture
     {
-        public Mock<ILogger<PhishNetService>> Logger { get; }
+        public Mock<ILogger<PhishNetSetlistProvider>> Logger { get; }
 
         public Mock<IPhishNetClient> PhishNetClient { get; }
 
-        public PhishNetService PhishNetService { get; }
+        public PhishNetSetlistProvider PhishNetSetlistProvider { get; }
 
-        public PhishNetServiceTestFixture()
+        public PhishNetSetlistProviderTestFixture()
         {
-            Logger = new Mock<ILogger<PhishNetService>>();
+            Logger = new Mock<ILogger<PhishNetSetlistProvider>>();
             PhishNetClient = new Mock<IPhishNetClient>();
-            PhishNetService = new PhishNetService(Logger.Object, PhishNetClient.Object);
+            PhishNetSetlistProvider = new PhishNetSetlistProvider(
+                Logger.Object,
+                PhishNetClient.Object
+            );
         }
     }
 
-    public class PhishNetServiceTests
+    public class PhishNetSetlistProviderTests
     {
         [Fact]
         public async Task GetSetlistsAsync_WhenSetlistResponse_ExpectSetlist()
         {
             // Arrange
-            var fixture = new PhishNetServiceTestFixture();
+            var fixture = new PhishNetSetlistProviderTestFixture();
             var date = new DateTime(1997, 11, 22);
 
             var setlistResponse = TestData.GetSetlistResponseTestData();
@@ -34,7 +37,7 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
                 .ReturnsAsync(setlistResponse);
 
             // Act
-            var setlists = await fixture.PhishNetService.GetSetlistsAsync(date);
+            var setlists = await fixture.PhishNetSetlistProvider.GetSetlists(date);
 
             // Assert
             Assert.NotNull(setlists);

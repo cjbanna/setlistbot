@@ -13,6 +13,9 @@ namespace Setlistbot.Domain.CommentAggregate
         public string Permalink { get; private set; } = string.Empty;
         public string ArtistId { get; private set; } = string.Empty;
         public string Reply { get; private set; } = string.Empty;
+
+        public string ParentId => $"t1_{Id}";
+
         public IReadOnlyCollection<DateTime> Dates
         {
             get

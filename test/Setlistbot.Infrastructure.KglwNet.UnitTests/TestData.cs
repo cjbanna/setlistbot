@@ -11,7 +11,7 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
                 "KglwNetResponses/2022-10-10-setlist-response.json"
             );
             var json = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<SetlistResponse>(json);
+            return JsonConvert.DeserializeObject<SetlistResponse>(json)!;
         }
     }
 }

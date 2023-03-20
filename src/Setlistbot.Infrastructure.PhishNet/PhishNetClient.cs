@@ -3,7 +3,7 @@ using Flurl;
 using Flurl.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Setlistbot.Infrastructure.Phish.Options;
+using Setlistbot.Infrastructure.PhishNet.Options;
 
 namespace Setlistbot.Infrastructure.PhishNet
 {
@@ -20,11 +20,13 @@ namespace Setlistbot.Infrastructure.PhishNet
 
         public async Task<SetlistResponse> GetSetlistAsync(DateTime date)
         {
+            var url = "";
+
             try
             {
                 // https://api.phish.net/v5/setlists/showdate/1997-11-22.json?apikey=YourApiKey
 
-                var url = Url.Combine(
+                url = Url.Combine(
                         _options.BaseUrl,
                         "setlists",
                         "showdate",
@@ -47,7 +49,7 @@ namespace Setlistbot.Infrastructure.PhishNet
             catch (FlurlHttpException ex)
             {
                 var body = await ex.GetResponseStringAsync();
-                _logger.LogError(body);
+                _logger.LogError("Phish call failed. Url: {Url} {Body}", url, body);
                 throw;
             }
         }

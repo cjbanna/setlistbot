@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.1.3" />
+    <PackageReference Include="Serilog" Version="2.12.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Setlistbot.Application\Setlistbot.Application.csproj" />
+    <ProjectReference Include="..\Setlistbot.Domain.Kglw\Setlistbot.Domain.Kglw.csproj" />
+    <ProjectReference Include="..\Setlistbot.Domain.Phish\Setlistbot.Domain.Phish.csproj" />
+    <ProjectReference Include="..\Setlistbot.Infrastructure.KglwNet\Setlistbot.Infrastructure.KglwNet.csproj" />
+    <ProjectReference Include="..\Setlistbot.Infrastructure.PhishNet\Setlistbot.Infrastructure.PhishNet.csproj" />
+    <ProjectReference Include="..\Setlistbot.Infrastructure.Reddit\Setlistbot.Infrastructure.Reddit.csproj" />
+    <ProjectReference Include="..\Setlistbot.Infrastructure\Setlistbot.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="host.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+  <Target Name="Husky" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(HUSKY)' != 0">
+    <Exec Command="dotnet tool restore" StandardOutputImportance="Low" StandardErrorImportance="High" />
+    <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High" WorkingDirectory="..\.." />
+  </Target>
+</Project>

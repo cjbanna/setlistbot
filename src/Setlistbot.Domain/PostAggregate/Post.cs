@@ -15,6 +15,8 @@ namespace Setlistbot.Domain.PostAggregate
         public string ArtistId { get; private set; } = string.Empty;
         public string Reply { get; private set; } = string.Empty;
 
+        public string ParentId => $"t3_{Id}";
+
         public IReadOnlyCollection<DateTime> Dates
         {
             get

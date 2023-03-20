@@ -1,4 +1,4 @@
-﻿namespace Setlistbot.Infrastructure.Phish.Options
+﻿namespace Setlistbot.Infrastructure.PhishNet.Options
 {
     public sealed class PhishNetOptions
     {

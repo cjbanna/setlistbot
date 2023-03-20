@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Setlistbot.Infrastructure.Phish.Options;
+using Setlistbot.Domain;
+using Setlistbot.Infrastructure.PhishNet.Options;
 
 namespace Setlistbot.Infrastructure.PhishNet.Extensions
 {
@@ -8,11 +9,15 @@ namespace Setlistbot.Infrastructure.PhishNet.Extensions
     {
         private const string ConfigKey = "PhishNet";
 
-        public static void AddPhishNet(this IServiceCollection services)
+        public static IServiceCollection AddPhishNet(this IServiceCollection services)
         {
             services.AddOptionsFromConfig<PhishNetOptions>(ConfigKey);
 
-            services.AddScoped<IPhishNetClient, PhishNetClient>();
+            services
+                .AddScoped<IPhishNetClient, PhishNetClient>()
+                .AddScoped<ISetlistProvider, PhishNetSetlistProvider>();
+
+            return services;
         }
 
         private static IServiceCollection AddOptionsFromConfig<T>(
@@ -26,10 +31,7 @@ namespace Setlistbot.Infrastructure.PhishNet.Extensions
             collection
                 .AddOptions<T>()
                 .Configure<IConfiguration>(
-                    (settings, configuration) =>
-                    {
-                        configuration.GetSection(key).Bind(settings);
-                    }
+                    (settings, configuration) => configuration.GetSection(key).Bind(settings)
                 );
 
             return collection;

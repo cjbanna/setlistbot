@@ -2,7 +2,7 @@ using Flurl.Http.Testing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using Setlistbot.Infrastructure.Phish.Options;
+using Setlistbot.Infrastructure.PhishNet.Options;
 
 namespace Setlistbot.Infrastructure.PhishNet.UnitTests
 {
