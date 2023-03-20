@@ -1,0 +1,234 @@
+@startuml C4 Code
+
+class Setlist {
+    +string ArtistId
+    +string ArtistName
+    +DateTime Date
+    +Location Location
+    +Set[] Sets
+}
+
+class Set {
+    +string Name
+    +Song[] Songs
+    +TimeSpan Duration
+}
+
+class Song {
+    +string Name
+    +int Position
+    +string Transition
+    +string Footnote
+    +TimeSpan Duration
+}
+
+class Location {
+    +string Venue
+    +string City
+    +string State
+    +string Country
+}
+
+Setlist --* Set : 1..*
+Setlist --* Location
+Set --* Song : 1..*
+
+class Comment <<Aggregate>> {
+    +string Id
+    +string Author
+    +string Body
+    +string Permalink
+    +string Subreddit
+    +string Reply
+    +DateTime[] Dates
+    +bool HasMentionOf(string text)
+    +void SetReply(string reply, DateTime[] showDates)
+}
+
+class Post <<Aggregate>> {
+    +string Id
+    +string Author
+    +string Title
+    +string SelfText
+    +string Permalink
+    +string Subreddit
+    +string Reply
+    +DateTime[] Dates
+    +bool HasMentionOf(string text)
+    +void SetReply(string reply, DateTime[] showDates)
+}
+
+class SetlistbotTimerFunc {
+    +void Run()
+}
+
+SetlistbotTimerFunc --* IRedditSetlistBot
+
+interface IRedditSetlistBot {
+    +void ReplyToMentions()
+}
+
+IRedditSetlistBot --* IRedditService
+
+class RedditSetlistBot <<IRedditSetlistBot>> {
+    +void ReplyToMentions()
+    -void ReplyToPosts(string subreddit)
+    -bool ShouldReply(Post post)
+    -void Reply(Post post)
+    -void ReplyToComments(string subreddit)
+    -bool ShouldReply(Comment comment)
+    -void Reply(Comment comment)
+    -string BuildReply(Setlist[] setlists)
+}
+
+RedditSetlistBot ..|> IRedditSetlistBot
+RedditSetlistBot --* ICommentRepository
+RedditSetlistBot --* IPostRepository
+RedditSetlistBot --* BotOptions
+RedditSetlistBot --* RedditOptions
+RedditSetlistBot --* ISetlistProvider
+RedditSetlistBot --* IReplyBuilderFactory
+
+class BotOptions <<IOptions<BotOptions>>> {
+    +string SetlistbotType
+    +string Subreddit
+    +int MaxSetlistCount
+    +bool RequireMention
+}
+
+class RedditOptions <<IOptions<T>>> {
+    +string Username
+    +string Password
+    +string Key
+    +string Secret
+}
+
+interface IRedditClient {
+    +string GetAuthToken()
+    +string GetComments(string subreddit, string before)
+    +string GetPosts(string subreddit, string before)
+    +string PostComment(string parent, string text)
+}
+
+interface IRedditService {
+    +Comment[] GetComments(string subreddit, string before)
+    +Post[] GetPosts(string subreddit, string before)
+    +bool PostComment(string parent, string text)
+}
+
+IRedditService --* IRedditClient
+IRedditService --* RedditOptions
+
+interface ICommentRepository {
+    +Comment Get(string id)
+    +Comment Add(Comment comment)
+    +void Delete(Comment comment)
+}
+
+ICommentRepository ..> Comment
+
+interface IPostRepository {
+    +Post Get(string id)
+    +Post Add(Post post)
+    +void Delete(Post post)
+}
+
+IPostRepository ..> Post
+
+interface IReplyBuilderFactory {
+    +IReplyBuilder GetReplyBuilder(string setlistbotType)
+}
+
+IReplyBuilderFactory ..> IReplyBuilder
+
+interface IReplyBuilder {
+    +string BuildReply(Setlist[] setlists, int maxSetlists)
+}
+
+class DefaultReplyBuilder <<IReplyBuilder>> {
+    +string BuildReply(Setlist[] setlists, int maxSetlists)
+}
+
+DefaultReplyBuilder .u.|> IReplyBuilder
+
+interface ISetlistProvider {
+    +Setlist GetSetlist(DateTime date)
+}
+
+package "Phish" {
+
+    interface IPhishNetClient {
+        +PhishNetSetlistResponse GetSetlist(DateTime date)
+    }
+
+    IPhishNetClient ..> PhishNetSetlistResponse
+
+    class PhishNetSetlistProvider <<ISetlistProvider>> {
+        +Setlist GetSetlist(DateTime date)
+    }
+
+    PhishNetSetlistProvider ..|> ISetlistProvider
+    PhishNetSetlistProvider --* IPhishNetClient
+
+    class PhishReplyBuilder <<IReplyBuilder>> {
+        +string BuildReply(Setlist[] setlists, int maxSetlists)
+    }
+    
+    PhishReplyBuilder ..|> IReplyBuilder
+
+    class PhishNetSetlistResponse {
+        +bool Error
+        +string ErrorMessage
+        +PhishNetSetlistData[] Data
+    }
+
+    PhishNetSetlistResponse ..> PhishNetSetlistData
+
+    class PhishNetSetlistData {
+        +string Set
+        +string Song
+        +int Position
+        +string Transition
+        +string Footnote
+        +string Venue
+        +string City
+        +string state
+        +string Country
+    }
+}
+
+package "KGLW" {
+    class KglwSetlistProvider <<ISetlistProvider>> {
+       +Setlist GetSetlist(DateTime date)
+    }
+
+    KglwSetlistProvider ..|> ISetlistProvider
+    KglwSetlistProvider --* ISongfishClient
+    
+    interface ISongfishClient {
+        +SongfishSetlistResponse GetSetlist(DateTime date)
+    }
+
+    ISongfishClient ..> SongfishSetlistResponse
+
+
+    class SongfishSetlistResponse {
+        +bool Error
+        +string ErrorMessage
+        +SongfishSetlistData[] Data
+    }
+
+    SongfishSetlistResponse ..> SongfishSetlistData
+
+    class SongfishSetlistData {
+        +string Set
+        +string Song
+        +int Position
+        +string Transition
+        +string Footnote
+        +string Venue
+        +string City
+        +string state
+        +string Country
+    }
+}
