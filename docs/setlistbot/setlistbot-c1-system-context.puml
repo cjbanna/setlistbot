@@ -1,0 +1,21 @@
+
+@startuml C1 System Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(commentor, "Commentor", "Makes a comment about a show that happened on a given date.")
+
+System(setlistbotSystem, "Setlistbot")
+System_Ext(reddit, "Reddit")
+System_Ext(discord, "Discord")
+System_Ext(songfish, "Songfish")
+System_Ext(phishnet, "Phish.net")
+
+Rel(commentor, reddit, "Makes a comment")
+Rel(commentor, discord, "Makes a comment")
+Rel(setlistbotSystem, reddit, "Responds to comments")
+Rel(discord, setlistbotSystem, "Sends interactions")
+Rel(setlistbotSystem, songfish, "Retrieves setlists")
+Rel(setlistbotSystem, phishnet, "Retrieves setlists")
+
+LAYOUT_WITH_LEGEND()
+@enduml
