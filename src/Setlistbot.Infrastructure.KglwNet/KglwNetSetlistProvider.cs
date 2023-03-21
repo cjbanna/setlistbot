@@ -83,7 +83,14 @@ namespace Setlistbot.Infrastructure.KglwNet
                         var setGrouping in showGrouping.GroupBy(x => $"{x.SetType} {x.SetNumber}")
                     )
                     {
-                        var set = new Set(setGrouping.Key);
+                        var setName = setGrouping.Key.Contains(
+                            "One Set",
+                            StringComparison.CurrentCultureIgnoreCase
+                        )
+                            ? "One Set"
+                            : setGrouping.Key;
+
+                        var set = new Set(setName);
 
                         var orderedSongResponses = setGrouping
                             .OrderBy(x => x.Position)

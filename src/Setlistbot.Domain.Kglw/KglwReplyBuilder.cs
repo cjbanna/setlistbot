@@ -33,8 +33,24 @@ namespace Setlistbot.Domain.Kglw
 
             var reply = new StringBuilder();
             reply.Append(
-                $"# {setlist.Date.ToString("yyyy-MM-dd")} {setlist.Location} @ {setlist.Location.Venue}, {setlist.Location.City}, {setlist.Location.State}, {setlist.Location.Country}"
+                $"# {setlist.Date.ToString("yyyy-MM-dd")} @ {setlist.Location.Venue}, {setlist.Location.City},"
             );
+
+            if (!string.IsNullOrWhiteSpace(setlist.Location.State))
+            {
+                reply.Append($" {setlist.Location.State},");
+            }
+
+            if (!string.IsNullOrWhiteSpace(setlist.Location.Country))
+            {
+                reply.Append($" {setlist.Location.Country}");
+            }
+
+            if (reply.ToString().EndsWith(','))
+            {
+                reply.Remove(reply.Length - 1, 1);
+            }
+
             reply.AppendLine();
             reply.AppendLine();
 
@@ -47,16 +63,28 @@ namespace Setlistbot.Domain.Kglw
 
                 foreach (var song in set.Songs)
                 {
-                    reply.Append($"{song.Name} {song.Transition} ");
+                    if (song.Transition == ",")
+                    {
+                        reply.Append($"{song.Name}{song.Transition} ");
+                    }
+                    else
+                    {
+                        reply.Append($"{song.Name} {song.Transition} ");
+                    }
                 }
 
-                reply.Remove(reply.Length - 1, 1);
+                reply.Remove(reply.Length - 2, 1);
                 reply.AppendLine();
                 reply.AppendLine();
             }
 
             var archiveOrgUrl = GetArchiveOrgUrl(setlist);
             reply.Append($"[archive.org]({archiveOrgUrl})");
+
+            reply.AppendLine();
+            reply.AppendLine();
+
+            reply.Append("> _data provided by [kglw.net](http://kglw.net)_");
 
             return reply.ToString();
         }

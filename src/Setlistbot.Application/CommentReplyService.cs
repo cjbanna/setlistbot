@@ -13,7 +13,9 @@ namespace Setlistbot.Application
     {
         private readonly ILogger<CommentReplyService> _logger;
         private readonly ICommentRepository _commentRepository;
+        private readonly IReplyBuilderFactory _replyBuilderFactory;
         private readonly IReplyBuilder _replyBuilder;
+        private readonly ISetlistProviderFactory _setlistProviderFactory;
         private readonly ISetlistProvider _setlistProvider;
         private readonly IRedditService _redditService;
         private readonly RedditOptions _redditOptions;
@@ -22,8 +24,8 @@ namespace Setlistbot.Application
         public CommentReplyService(
             ILogger<CommentReplyService> logger,
             ICommentRepository commentRepository,
-            IReplyBuilder replyBuilder,
-            ISetlistProvider setlistService,
+            IReplyBuilderFactory replyBuilderFactory,
+            ISetlistProviderFactory setlistProviderFactory,
             IRedditService redditService,
             IOptions<RedditOptions> redditOptions,
             IOptions<BotOptions> botOptions
@@ -31,13 +33,49 @@ namespace Setlistbot.Application
         {
             _logger = Ensure.Any.IsNotNull(logger, nameof(logger));
             _commentRepository = Ensure.Any.IsNotNull(commentRepository, nameof(commentRepository));
-            _replyBuilder = Ensure.Any.IsNotNull(replyBuilder, nameof(replyBuilder));
-            _setlistProvider = Ensure.Any.IsNotNull(setlistService, nameof(setlistService));
+            _replyBuilderFactory = Ensure.Any.IsNotNull(
+                replyBuilderFactory,
+                nameof(replyBuilderFactory)
+            );
+            _setlistProviderFactory = Ensure.Any.IsNotNull(
+                setlistProviderFactory,
+                nameof(setlistProviderFactory)
+            );
             _redditService = Ensure.Any.IsNotNull(redditService, nameof(redditService));
             Ensure.That(redditOptions, nameof(redditOptions)).IsNotNull();
             _redditOptions = Ensure.Any.IsNotNull(redditOptions.Value, nameof(redditOptions.Value));
             Ensure.That(botOptions, nameof(botOptions)).IsNotNull();
             _botOptions = Ensure.Any.IsNotNull(botOptions.Value, nameof(botOptions.Value));
+
+            Ensure
+                .That(
+                    _botOptions.ArtistId,
+                    nameof(_botOptions.ArtistId),
+                    options => options.WithMessage($"BotOptions:ArtistId is required")
+                )
+                .IsNotNullOrWhiteSpace();
+
+            var setlistProvider = _setlistProviderFactory.Get(_botOptions.ArtistId);
+
+            _setlistProvider = Ensure.Any.IsNotNull(
+                setlistProvider,
+                nameof(setlistProvider),
+                options =>
+                    options.WithMessage(
+                        $"There is no {nameof(ISetlistProvider)} configured for artist id: {_botOptions.ArtistId}"
+                    )
+            );
+
+            var replyBuilder = _replyBuilderFactory.Get(_botOptions.ArtistId);
+
+            _replyBuilder = Ensure.Any.IsNotNull(
+                replyBuilder,
+                nameof(replyBuilder),
+                options =>
+                    options.WithMessage(
+                        $"There is no {nameof(IReplyBuilder)} registered for artist id: {_botOptions.ArtistId}"
+                    )
+            );
         }
 
         public async Task Reply(Comment comment)

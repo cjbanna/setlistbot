@@ -13,8 +13,9 @@ namespace Setlistbot.Domain
         {
             // Sometimes the exact venue is not known
             Venue = venue;
+            // Shows played outside USA may not have a state
+            State = state;
             City = Ensure.String.IsNotNullOrWhiteSpace(city, nameof(city));
-            State = Ensure.String.IsNotNullOrWhiteSpace(state, nameof(state));
             Country = Ensure.String.IsNotNullOrWhiteSpace(country, nameof(country));
         }
     }

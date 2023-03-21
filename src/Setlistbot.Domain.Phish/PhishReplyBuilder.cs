@@ -52,7 +52,7 @@ namespace Setlistbot.Domain.Phish
                 {
                     reply.Append($"{song.Name} {song.Transition}");
                 }
-                reply.Remove(reply.Length - 1, 1);
+                reply.Remove(reply.Length - 2, 1);
                 reply.AppendLine();
                 reply.AppendLine();
             }

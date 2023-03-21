@@ -9,10 +9,8 @@ namespace Setlistbot.Infrastructure.Repositories
     {
         private readonly string _subreddit;
 
-        protected override string TableName => "comments";
-
-        public CommentRepository(string subreddit, string connectionString)
-            : base(connectionString)
+        public CommentRepository(string subreddit, string connectionString, string tableName)
+            : base(connectionString, tableName)
         {
             _subreddit = Ensure.String.IsNotNullOrWhiteSpace(subreddit, nameof(subreddit));
         }

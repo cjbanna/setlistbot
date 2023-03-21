@@ -7,14 +7,17 @@ namespace Setlistbot.Infrastructure.Data
         where T : class, ITableEntity, new()
     {
         protected readonly TableClient _client;
+        protected readonly string _tableName;
 
-        protected abstract string TableName { get; }
-
-        public AzureTableRepository(string connectionString)
+        public AzureTableRepository(string connectionString, string tableName)
         {
             Ensure.That(connectionString, nameof(connectionString)).IsNotNullOrWhiteSpace();
+            _tableName = Ensure.String.IsNotNullOrWhiteSpace(tableName, nameof(tableName));
 
-            _client = new TableClient(connectionString, TableName);
+            _client = new TableClient(connectionString, _tableName);
+
+            var serviceClient = new TableServiceClient(connectionString);
+            serviceClient.CreateTableIfNotExistsAsync(_tableName);
         }
 
         public async Task<IEnumerable<T>> GetAsync(string partitionKey)

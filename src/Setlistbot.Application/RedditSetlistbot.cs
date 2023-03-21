@@ -8,26 +8,26 @@ namespace Setlistbot.Application
 {
     public class RedditSetlistbot : IRedditSetlistbot
     {
+        private readonly ILogger<RedditSetlistbot> _logger;
         private readonly IRedditService _redditService;
         private readonly ICommentReplyService _commentReplyService;
         private readonly IPostReplyService _postReplyService;
-        private readonly ILogger<RedditSetlistbot> _logger;
         private readonly BotOptions _botOptions;
 
         public RedditSetlistbot(
+            ILogger<RedditSetlistbot> logger,
             IRedditService redditService,
             ICommentReplyService commentService,
             IPostReplyService postService,
-            IOptions<BotOptions> botOptions,
-            ILogger<RedditSetlistbot> logger
+            IOptions<BotOptions> botOptions
         )
         {
+            _logger = Ensure.Any.IsNotNull(logger, nameof(logger));
             _redditService = Ensure.Any.IsNotNull(redditService, nameof(redditService));
             _commentReplyService = Ensure.Any.IsNotNull(commentService, nameof(commentService));
             _postReplyService = Ensure.Any.IsNotNull(postService, nameof(postService));
             Ensure.That(botOptions, nameof(botOptions)).IsNotNull();
             _botOptions = Ensure.Any.IsNotNull(botOptions.Value, nameof(botOptions.Value));
-            _logger = Ensure.Any.IsNotNull(logger, nameof(logger));
         }
 
         public async Task ReplyToMentions()

@@ -3,16 +3,14 @@ using Setlistbot.Domain.PostAggregate;
 using Setlistbot.Infrastructure.Data;
 using Setlistbot.Infrastructure.Extensions;
 
-namespace Setlistbot.Infrastructure.Reddit
+namespace Setlistbot.Infrastructure.Repositories
 {
     public sealed class PostRepository : AzureTableRepository<PostEntity>, IPostRepository
     {
         private readonly string _subreddit;
 
-        protected override string TableName => "posts";
-
-        public PostRepository(string subreddit, string connectionString)
-            : base(connectionString)
+        public PostRepository(string subreddit, string connectionString, string tableName)
+            : base(connectionString, tableName)
         {
             _subreddit = Ensure.String.IsNotNullOrWhiteSpace(subreddit, nameof(subreddit));
         }

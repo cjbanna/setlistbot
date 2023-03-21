@@ -5,7 +5,7 @@ namespace Setlistbot.Domain.PostAggregate
 {
     public sealed class Post
     {
-        private List<DateTime> _dates = new();
+        private List<DateTime> _dates = null!;
 
         public string Id { get; private set; } = string.Empty;
         public string Author { get; private set; } = string.Empty;
