@@ -10,24 +10,17 @@ param location string = 'centralus'
 param artistId string
 
 @description('The function app settings')
+@secure()
 param funcAppSettings object = {}
 
-// var funcAppSettings = {
-//   'Bot:ArtistId': 'kglw'
-//   'Bot:Subreddit': 'bottesting'
-//   'Bot:MaxSetlistCount': '50'
-//   'Bot:RequireMention': 'true'
-//   'KglwNet:BaseUrl': 'https://kglw.songfishapp.com/api/v1'
-// }
-
-resource newRG 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+resource rgSetlistbot 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: 'rg-setlistbot-${environmentName}'
   location: location
 }
 
 module resources 'resources.bicep' = {
   name: 'resourcesModule'
-  scope: newRG
+  scope: rgSetlistbot
   params: {
     location: location
     environmentName: environmentName
