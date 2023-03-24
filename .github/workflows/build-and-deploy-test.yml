@@ -1,0 +1,76 @@
+name: Deploy setlistbot
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Solution
+        run: dotnet build --no-restore
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+
+      - name: Release Build
+        run: dotnet build --configuration Release
+
+      - name: Publish
+        run: dotnet publish --no-build --configuration Release --output ./publish
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: setlistbot
+          path: ./publish
+          if-no-files-found: error
+
+  deploy_test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: Test
+
+    env:
+      ENV_NAME: test
+      ARTIST_ID: kglw
+      RG_NAME: rg-setlistbot-test
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_TEST }}
+
+      - name: Provision Test Environment
+        run: |
+          cd scripts
+          ./provision.sh $ENV_NAME $ARTIST_ID
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: setlistbot
+          path: ./publish
+
+      - name: Deploy to Test
+        run: |
+          cd scripts
+          ./deploy.sh $RG_NAME $ARTIST_ID
