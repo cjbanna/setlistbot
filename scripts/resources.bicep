@@ -89,7 +89,7 @@ resource healthFunctionApp 'Microsoft.Web/sites@2021-03-01' = {
             value: 'dotnet'
           }
           {
-            name: 'StorageAccount:ConnectionString'
+            name: 'AzureTable:ConnectionString'
             value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
           }
 

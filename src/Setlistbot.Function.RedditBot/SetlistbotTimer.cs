@@ -24,7 +24,7 @@ namespace Setlistbot.Function.RedditBot
             "IDE0060:Remove unused parameter",
             Justification = "The Azure functions library requires the TimerInfo parameter"
         )]
-        public async Task Run([TimerTrigger("*/10 * * * * *")] TimerInfo timerInfo)
+        public async Task Run([TimerTrigger("*/30 * * * * *")] TimerInfo timerInfo)
         {
             try
             {

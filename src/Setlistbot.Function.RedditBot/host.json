@@ -1,11 +1,13 @@
 {
-    "version": "2.0",
-    "logging": {
-        "applicationInsights": {
-            "samplingSettings": {
-                "isEnabled": true,
-                "excludedTypes": "Request"
-            }
-        }
+  "version": "2.0",
+  "logging": {
+    "logLevel": {
+      "default": "Warning",
+      "Host.Aggregator": "Information",
+      "Host.Results": "Information",
+      "Function": "Information",
+      "Setlisbot.Function.RedditBot": "Information"
     }
+  },
+  "functionTimeout": "00:03:50"
 }
