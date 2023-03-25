@@ -26,4 +26,14 @@
     <ProjectReference Include="..\..\src\Setlistbot.Domain\Setlistbot.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestData\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestData\2022-10-11-reply.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

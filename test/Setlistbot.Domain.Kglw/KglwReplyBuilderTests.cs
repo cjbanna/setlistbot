@@ -44,7 +44,7 @@ namespace Setlistbot.Domain.Kglw.UnitTests
 
             var set2 = new Set("Set 2");
             set2.AddSong(new Song("Perihelion", 1, ">", 0, string.Empty));
-            set2.AddSong(new Song("I’m in Your Mind", 2, ">", 0, string.Empty));
+            set2.AddSong(new Song("I'm in Your Mind", 2, ">", 0, string.Empty));
             set2.AddSong(new Song("I'm Not in Your Mind", 3, ">", 0, string.Empty));
             set2.AddSong(new Song("Cellophane", 4, ">", 0, string.Empty));
             set2.AddSong(new Song("I'm in Your Mind Fuzz", 5, ",", 0, string.Empty));
@@ -72,18 +72,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             var actual = builder.Build(setlist);
 
             // Assert
-            Assert.Equal(
-                @"# 2022-10-11 @ Red Rocks, Morrison, CO, USA
-
-**Set 1:**  The Dripping Tap, Gaia, Predator X, Organ Farmer, Pleura, Oddlife > Doom City, K.G.L.W. (Outro), Boogiman Sam -> Sleepwalker, Sea of Trees -> The Bitter Boogie 
-
-**Set 2:**  Perihelion > I’m in Your Mind > I'm Not in Your Mind > Cellophane > I'm in Your Mind Fuzz, Tezeta, A New World > Altered Beast I > Alter Me I > Altered Beast II > Alter Me II > Altered Beast III > Ambergris, Muddy Water, Iron Lung, Robot Stop > Gamma Knife > People-Vultures > Mr. Beat -> Iron Lung 
-
-[archive.org](https://archive.org/details/KingGizzardAndTheLizardWizard?query=date:2022-10-11)
-
-> _data provided by [kglw.net](http://kglw.net)_",
-                actual
-            );
+            var expected = TestDataHelper.GetTestData("TestData/2022-10-11-reply.md");
+            Assert.Equal(expected, actual);
         }
     }
 }

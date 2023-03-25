@@ -17,8 +17,8 @@ namespace Setlistbot.Domain.Kglw
                     $"[{setlist.Date.ToString("yyyy-MM-dd")}]({archiveOrgUrl}) @ {setlist.Location.Venue}, {setlist.Location.City}, {setlist.Location.State}, {setlist.Location.Country}"
                 );
 
-                reply.AppendLine();
-                reply.AppendLine();
+                reply.Append(Environment.NewLine);
+                reply.Append(Environment.NewLine);
             }
 
             return reply.ToString();
@@ -51,8 +51,8 @@ namespace Setlistbot.Domain.Kglw
                 reply.Remove(reply.Length - 1, 1);
             }
 
-            reply.AppendLine();
-            reply.AppendLine();
+            reply.Append(Environment.NewLine);
+            reply.Append(Environment.NewLine);
 
             foreach (var set in setlist.Sets)
             {
@@ -74,15 +74,15 @@ namespace Setlistbot.Domain.Kglw
                 }
 
                 reply.Remove(reply.Length - 2, 1);
-                reply.AppendLine();
-                reply.AppendLine();
+                reply.Append(Environment.NewLine);
+                reply.Append(Environment.NewLine);
             }
 
             var archiveOrgUrl = GetArchiveOrgUrl(setlist);
             reply.Append($"[archive.org]({archiveOrgUrl})");
 
-            reply.AppendLine();
-            reply.AppendLine();
+            reply.Append(Environment.NewLine);
+            reply.Append(Environment.NewLine);
 
             reply.Append("> _data provided by [kglw.net](http://kglw.net)_");
 
