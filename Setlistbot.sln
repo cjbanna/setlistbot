@@ -27,7 +27,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Setlistbot.Domain.Kglw", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Setlistbot.Domain.Phish", "src\Setlistbot.Domain.Phish\Setlistbot.Domain.Phish.csproj", "{7EFB1E2F-E80B-40BF-A849-B48EF38C87EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setlistbot.Domain.Kglw.UnitTests", "test\Setlistbot.Domain.Kglw\Setlistbot.Domain.Kglw.UnitTests.csproj", "{3CC40CD7-65A9-445C-A71C-0EA3D57C6B9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Setlistbot.Domain.Kglw.UnitTests", "test\Setlistbot.Domain.Kglw\Setlistbot.Domain.Kglw.UnitTests.csproj", "{3CC40CD7-65A9-445C-A71C-0EA3D57C6B9C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Setlistbot.Function.Discord", "src\Setlistbot.Function.Discord\Setlistbot.Function.Discord.csproj", "{767427FF-457D-4034-BD1D-EE5BE063125E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Setlistbot.Infrastructure.Discord", "src\Setlistbot.Infrastructure.Discord\Setlistbot.Infrastructure.Discord.csproj", "{D7DE5152-F0C6-4917-BDA4-1F71BDB16819}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setlistbot.Application.UnitTests", "test\Setlistbot.Application.UnitTests\Setlistbot.Application.UnitTests.csproj", "{2DE9E043-D881-4752-8293-7BD73A9F6C32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +89,18 @@ Global
 		{3CC40CD7-65A9-445C-A71C-0EA3D57C6B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CC40CD7-65A9-445C-A71C-0EA3D57C6B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CC40CD7-65A9-445C-A71C-0EA3D57C6B9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{767427FF-457D-4034-BD1D-EE5BE063125E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{767427FF-457D-4034-BD1D-EE5BE063125E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{767427FF-457D-4034-BD1D-EE5BE063125E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{767427FF-457D-4034-BD1D-EE5BE063125E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7DE5152-F0C6-4917-BDA4-1F71BDB16819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7DE5152-F0C6-4917-BDA4-1F71BDB16819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7DE5152-F0C6-4917-BDA4-1F71BDB16819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7DE5152-F0C6-4917-BDA4-1F71BDB16819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DE9E043-D881-4752-8293-7BD73A9F6C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DE9E043-D881-4752-8293-7BD73A9F6C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DE9E043-D881-4752-8293-7BD73A9F6C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DE9E043-D881-4752-8293-7BD73A9F6C32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +109,7 @@ Global
 		{86F6D4A9-118C-4E9C-808C-DB33BB79FB1E} = {252ED6DC-C74D-4CDB-9D86-7827A870FEF8}
 		{5CF7F469-0D39-4EA8-BE04-4F9D8C29A69E} = {252ED6DC-C74D-4CDB-9D86-7827A870FEF8}
 		{3CC40CD7-65A9-445C-A71C-0EA3D57C6B9C} = {252ED6DC-C74D-4CDB-9D86-7827A870FEF8}
+		{2DE9E043-D881-4752-8293-7BD73A9F6C32} = {252ED6DC-C74D-4CDB-9D86-7827A870FEF8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {226663E9-92BC-4DCE-9A71-EB12AAAE94A1}

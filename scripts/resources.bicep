@@ -12,7 +12,8 @@ param funcAppSettings object
 
 var environmentNameClean = replace(environmentName, '-', '')
 var storageAccountName = 'stsetlistbot${environmentNameClean}'
-var botFunctionAppName = 'func-setlistbot-${artistId}-${environmentName}'
+var redditSetlistbotFuncName = 'func-setlistbot-${artistId}-${environmentName}'
+var discordSetlistbotFuncName = 'func-setlistbot-discord-${environmentName}'
 var applicationInsightsName = 'appi-setlistbot-${environmentName}'
 var hostingPlanName = 'plan-setlistbot-${environmentName}'
 
@@ -49,8 +50,8 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-resource healthFunctionApp 'Microsoft.Web/sites@2021-03-01' = {
-  name: botFunctionAppName
+resource redditSetlistbotFunc 'Microsoft.Web/sites@2021-03-01' = {
+  name: redditSetlistbotFuncName
   location: location
   kind: 'functionapp'
   identity: {
@@ -70,7 +71,7 @@ resource healthFunctionApp 'Microsoft.Web/sites@2021-03-01' = {
           }
           {
             name: 'WEBSITE_CONTENTSHARE'
-            value: toLower(botFunctionAppName)
+            value: toLower(redditSetlistbotFuncName)
           }
           {
             name: 'WEBSITE_RUN_FROM_PACKAGE'
@@ -87,6 +88,58 @@ resource healthFunctionApp 'Microsoft.Web/sites@2021-03-01' = {
           {
             name: 'FUNCTIONS_WORKER_RUNTIME'
             value: 'dotnet'
+          }
+          {
+            name: 'AzureTable:ConnectionString'
+            value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+          }
+
+        ], appSettings)
+      ftpsState: 'FtpsOnly'
+      minTlsVersion: '1.2'
+    }
+    httpsOnly: true
+  }
+}
+
+resource discordSetlistbotFunc 'Microsoft.Web/sites@2021-03-01' = {
+  name: discordSetlistbotFuncName
+  location: location
+  kind: 'functionapp'
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    serverFarmId: hostingPlan.id
+    siteConfig: {
+      appSettings: concat([
+          {
+            name: 'AzureWebJobsStorage'
+            value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+          }
+          {
+            name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+            value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+          }
+          {
+            name: 'WEBSITE_CONTENTSHARE'
+            value: toLower(discordSetlistbotFuncName)
+          }
+          {
+            name: 'WEBSITE_RUN_FROM_PACKAGE'
+            value: '1'
+          }
+          {
+            name: 'FUNCTIONS_EXTENSION_VERSION'
+            value: '~4'
+          }
+          {
+            name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+            value: applicationInsights.properties.InstrumentationKey
+          }
+          {
+            name: 'FUNCTIONS_WORKER_RUNTIME'
+            value: 'dotnet-isolated'
           }
           {
             name: 'AzureTable:ConnectionString'

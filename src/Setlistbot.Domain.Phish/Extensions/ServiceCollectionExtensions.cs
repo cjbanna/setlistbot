@@ -4,9 +4,15 @@ namespace Setlistbot.Domain.Phish.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddPhish(this IServiceCollection services)
+        public static IServiceCollection AddRedditPhish(this IServiceCollection services)
         {
-            services.AddScoped<IReplyBuilder, PhishReplyBuilder>();
+            services.AddScoped<IReplyBuilder, RedditReplyBuilder>();
+            return services;
+        }
+
+        public static IServiceCollection AddDiscordPhish(this IServiceCollection services)
+        {
+            services.AddScoped<IReplyBuilder, DiscordReplyBuilder>();
             return services;
         }
     }

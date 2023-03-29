@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Setlistbot.Application.Discord;
 using Setlistbot.Application.Options;
+using Setlistbot.Application.Reddit;
 
 namespace Setlistbot.Application.Extensions
 {
@@ -8,7 +10,7 @@ namespace Setlistbot.Application.Extensions
     {
         private const string ConfigKey = "Bot";
 
-        public static IServiceCollection AddBot(this IServiceCollection services)
+        public static IServiceCollection AddRedditBot(this IServiceCollection services)
         {
             services.AddOptionsFromConfig<BotOptions>(ConfigKey);
 
@@ -16,6 +18,18 @@ namespace Setlistbot.Application.Extensions
                 .AddScoped<ICommentReplyService, CommentReplyService>()
                 .AddScoped<IPostReplyService, PostReplyService>()
                 .AddScoped<IRedditSetlistbot, RedditSetlistbot>()
+                .AddScoped<IReplyBuilderFactory, ReplyBuilderFactory>()
+                .AddScoped<ISetlistProviderFactory, SetlistProviderFactory>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddDiscordBot(this IServiceCollection services)
+        {
+            services.AddOptionsFromConfig<BotOptions>(ConfigKey);
+
+            services
+                .AddScoped<IDiscordInteractionService, DiscordInteractionService>()
                 .AddScoped<IReplyBuilderFactory, ReplyBuilderFactory>()
                 .AddScoped<ISetlistProviderFactory, SetlistProviderFactory>();
 

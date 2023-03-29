@@ -3,7 +3,7 @@
     public interface IReplyBuilder
     {
         string ArtistId { get; }
-        string Build(IList<Setlist> setlists, int maxSetlists);
+        string Build(IEnumerable<Setlist> setlists, int maxSetlists);
         string Build(Setlist setlist);
     }
 }

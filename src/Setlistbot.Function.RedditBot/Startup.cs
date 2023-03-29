@@ -35,14 +35,14 @@ namespace Setlistbot.Function.RedditBot
                 .AddLogging()
                 .AddOptions()
                 // Application
-                .AddBot();
+                .AddRedditBot();
 
             var subreddit = GetSubreddit(builder);
 
             // Domain
             builder.Services
-                .AddPhish()
-                .AddKglw()
+                .AddRedditPhish()
+                .AddRedditKglw()
                 // Infrastructure
                 .AddInfrastructure(subreddit)
                 .AddReddit()
