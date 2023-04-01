@@ -36,6 +36,11 @@ namespace Setlistbot.Function.Discord
                 }
 
                 var interactionResponse = await _discordInteractionService.GetResponse(interaction);
+                if (interactionResponse == null)
+                {
+                    throw new Exception("No interaction response returned");
+                }
+
                 var httpResponse = httpRequest.CreateResponse(HttpStatusCode.OK);
                 await httpResponse.WriteAsJsonAsync(interactionResponse);
                 return httpResponse;
@@ -43,6 +48,9 @@ namespace Setlistbot.Function.Discord
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to handle interaction");
+                httpRequest.Body.Seek(0, SeekOrigin.Begin);
+                var body = await httpRequest.ReadAsStringAsync();
+                _logger.LogInformation("HTTP body: {Body}", body);
                 return httpRequest.CreateResponse(HttpStatusCode.InternalServerError);
             }
         }
