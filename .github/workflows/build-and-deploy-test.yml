@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: "Build and Test"
     runs-on: ubuntu-latest
 
     steps:
@@ -57,6 +58,7 @@ jobs:
           if-no-files-found: error
 
   deploy_reddit_kglw_test:
+    name: "Deploy Reddit Bot (KGLW) to Test Environment"
     needs: build
     runs-on: ubuntu-latest
 
@@ -80,6 +82,7 @@ jobs:
           publish-profile: ${{ secrets.PUBLISH_PROFILE_FUNC_SETLISTBOT_KGLW_TEST }}
 
   deploy_discord_test:
+    name: "Deploy Discord Bot to Test Environment"
     needs: build
     runs-on: ubuntu-latest
 
