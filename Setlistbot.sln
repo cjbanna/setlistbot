@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Setlistbot.Function.Discord
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Setlistbot.Infrastructure.Discord", "src\Setlistbot.Infrastructure.Discord\Setlistbot.Infrastructure.Discord.csproj", "{D7DE5152-F0C6-4917-BDA4-1F71BDB16819}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setlistbot.Application.UnitTests", "test\Setlistbot.Application.UnitTests\Setlistbot.Application.UnitTests.csproj", "{2DE9E043-D881-4752-8293-7BD73A9F6C32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Setlistbot.Application.UnitTests", "test\Setlistbot.Application.UnitTests\Setlistbot.Application.UnitTests.csproj", "{2DE9E043-D881-4752-8293-7BD73A9F6C32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setlistbot.Function.Discord.UnitTests", "test\Setlistbot.Function.Discord.UnitTests\Setlistbot.Function.Discord.UnitTests.csproj", "{BE2657CA-2398-4ABA-890B-3AF476814F9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +103,10 @@ Global
 		{2DE9E043-D881-4752-8293-7BD73A9F6C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DE9E043-D881-4752-8293-7BD73A9F6C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DE9E043-D881-4752-8293-7BD73A9F6C32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE2657CA-2398-4ABA-890B-3AF476814F9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE2657CA-2398-4ABA-890B-3AF476814F9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE2657CA-2398-4ABA-890B-3AF476814F9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE2657CA-2398-4ABA-890B-3AF476814F9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +116,7 @@ Global
 		{5CF7F469-0D39-4EA8-BE04-4F9D8C29A69E} = {252ED6DC-C74D-4CDB-9D86-7827A870FEF8}
 		{3CC40CD7-65A9-445C-A71C-0EA3D57C6B9C} = {252ED6DC-C74D-4CDB-9D86-7827A870FEF8}
 		{2DE9E043-D881-4752-8293-7BD73A9F6C32} = {252ED6DC-C74D-4CDB-9D86-7827A870FEF8}
+		{BE2657CA-2398-4ABA-890B-3AF476814F9D} = {252ED6DC-C74D-4CDB-9D86-7827A870FEF8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {226663E9-92BC-4DCE-9A71-EB12AAAE94A1}

@@ -2,6 +2,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Setlistbot.Application.Discord;
+using Setlistbot.Function.Discord.Extensions;
 using Setlistbot.Infrastructure.Discord.Interactions;
 using System.Net;
 
@@ -29,7 +30,7 @@ namespace Setlistbot.Function.Discord
         {
             try
             {
-                var interaction = await httpRequest.ReadFromJsonAsync<Interaction>();
+                var interaction = await httpRequest.DeserializeJsonBodyAsync<Interaction>();
                 if (interaction == null)
                 {
                     throw new Exception($"Could not parse interaction from HTTP request body");
@@ -42,7 +43,7 @@ namespace Setlistbot.Function.Discord
                 }
 
                 var httpResponse = httpRequest.CreateResponse(HttpStatusCode.OK);
-                await httpResponse.WriteAsJsonAsync(interactionResponse);
+                await httpResponse.SerializeJsonBodyAsync(interactionResponse);
                 return httpResponse;
             }
             catch (Exception ex)
