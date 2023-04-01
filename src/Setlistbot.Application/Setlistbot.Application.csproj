@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Setlistbot.Infrastructure.Discord\Setlistbot.Infrastructure.Discord.csproj" />
     <ProjectReference Include="..\Setlistbot.Infrastructure.Reddit\Setlistbot.Infrastructure.Reddit.csproj" />
   </ItemGroup>
 

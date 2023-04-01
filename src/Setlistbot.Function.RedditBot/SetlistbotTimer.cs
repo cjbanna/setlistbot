@@ -1,6 +1,6 @@
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Setlistbot.Application;
+using Setlistbot.Application.Reddit;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;

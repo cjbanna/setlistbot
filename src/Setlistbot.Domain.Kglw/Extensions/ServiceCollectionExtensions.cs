@@ -4,9 +4,15 @@ namespace Setlistbot.Domain.Kglw.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddKglw(this IServiceCollection services)
+        public static IServiceCollection AddRedditKglw(this IServiceCollection services)
         {
-            services.AddScoped<IReplyBuilder, KglwReplyBuilder>();
+            services.AddScoped<IReplyBuilder, RedditReplyBuilder>();
+            return services;
+        }
+
+        public static IServiceCollection AddDiscordKglw(this IServiceCollection services)
+        {
+            services.AddScoped<IReplyBuilder, DiscordReplyBuilder>();
             return services;
         }
     }
