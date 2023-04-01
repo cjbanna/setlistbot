@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.0.x
 
@@ -36,41 +36,68 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal
 
-      - name: Release Build
-        run: dotnet build --configuration Release --output ./publish
+      - name: Release Build Reddit Bot
+        run: dotnet build src/Setlistbot.Function.RedditBot/Setlistbot.Function.RedditBot.csproj --configuration Release --output ./RedditBot
+
+      - name: Release Build Discord Bot
+        run: dotnet build src/Setlistbot.Function.Discord/Setlistbot.Function.Discord.csproj --configuration Release --output ./DiscordBot
+
+      - name: Upload Reddit Bot Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: redditbot
+          path: ./RedditBot
+          if-no-files-found: error
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: setlistbot
-          path: ./publish
+          name: discordbot
+          path: ./DiscordBot
           if-no-files-found: error
 
-  deploy_test:
+  deploy_reddit_kglw_test:
     needs: build
     runs-on: ubuntu-latest
 
     environment:
       name: Test
 
-    env:
-      ENV_NAME: test
-      ARTIST_ID: kglw
-      RG_NAME: rg-setlistbot-test
-      FUNC_NAME: func-setlistbot-kglw-test
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: redditbot
+          path: ./RedditBot
+
+      - name: Deploy Reddit Bot to Test Environment
+        uses: Azure/functions-action@v1
+        with:
+          app-name: func-setlistbot-reddit-kglw-test
+          package: "./RedditBot"
+          publish-profile: ${{ secrets.PUBLISH_PROFILE_FUNC_SETLISTBOT_KGLW_TEST }}
+
+  deploy_discord_test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: Test
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Download Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
-          name: setlistbot
-          path: ./publish
+          name: discordbot
+          path: ./DiscordBot
 
-      - name: Deploy Setlistbot to Test Environment
+      - name: Deploy Discord Bot to Test Environment
         uses: Azure/functions-action@v1
         with:
-          app-name: $FUNC_NAME
-          package: "./publish"
-          publish-profile: ${{ secrets.PUBLISH_PROFILE_FUNC_SETLISTBOT_KGLW_TEST }}
+          app-name: func-setlistbot-discord-test
+          package: "./DiscordBot"
+          publish-profile: ${{ secrets.PUBLISH_PROFILE_FUNC_DISCORDBOT_TEST }}
