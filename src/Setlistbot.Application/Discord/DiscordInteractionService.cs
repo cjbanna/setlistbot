@@ -28,7 +28,6 @@ namespace Setlistbot.Application.Discord
                 var handlers = new List<Func<Interaction, Task<InteractionResponse?>>>
                 {
                     HandlePing,
-                    HandleTestCommand,
                     HandleSetlistCommand
                 };
 
@@ -56,25 +55,6 @@ namespace Setlistbot.Application.Discord
             {
                 _logger.LogInformation("Ping handled");
                 return new InteractionResponse { Type = InteractionCallbackType.Pong };
-            }
-
-            return await Task.FromResult<InteractionResponse?>(null);
-        }
-
-        private async Task<InteractionResponse?> HandleTestCommand(Interaction interaction)
-        {
-            if (
-                interaction.InteractionType == InteractionType.ApplicationCommand
-                && interaction.Data?.Name == "test"
-            )
-            {
-                _logger.LogInformation("Test command handled");
-
-                return new InteractionResponse
-                {
-                    Type = InteractionCallbackType.ChannelMessageWithSource,
-                    Data = new InteractionCallbackData { Content = "yo", }
-                };
             }
 
             return await Task.FromResult<InteractionResponse?>(null);
