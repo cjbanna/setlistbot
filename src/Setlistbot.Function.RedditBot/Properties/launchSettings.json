@@ -2,7 +2,7 @@
   "profiles": {
     "Setlistbot.Function.RedditBot": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7040",
+      "commandLineArgs": "--port 7255",
       "launchBrowser": false
     }
   }

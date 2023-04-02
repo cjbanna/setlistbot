@@ -1,9 +1,7 @@
-using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Setlistbot.Application.Reddit;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 
 namespace Setlistbot.Function.RedditBot
 {
@@ -18,13 +16,13 @@ namespace Setlistbot.Function.RedditBot
             _bot = bot;
         }
 
-        [FunctionName("SetlistbotTimer")]
+        [Function("SetlistbotTimer")]
         [SuppressMessage(
             "Style",
             "IDE0060:Remove unused parameter",
             Justification = "The Azure functions library requires the TimerInfo parameter"
         )]
-        public async Task Run([TimerTrigger("*/30 * * * * *")] TimerInfo timerInfo)
+        public async Task Run([TimerTrigger("*/30 * * * * *")] MyInfo myTimer)
         {
             try
             {
@@ -40,5 +38,21 @@ namespace Setlistbot.Function.RedditBot
                 _logger.LogError(ex, "Error in SetlistbotTimer function.");
             }
         }
+    }
+
+    public class MyInfo
+    {
+        public MyScheduleStatus? ScheduleStatus { get; set; }
+
+        public bool IsPastDue { get; set; }
+    }
+
+    public class MyScheduleStatus
+    {
+        public DateTime Last { get; set; }
+
+        public DateTime Next { get; set; }
+
+        public DateTime LastUpdated { get; set; }
     }
 }
