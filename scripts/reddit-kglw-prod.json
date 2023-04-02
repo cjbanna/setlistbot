@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Bot__ArtistID",
+    "value": "kglw"
+  },
+  {
+    "name": "Bot__MaxSetlistCount",
+    "value": "25"
+  },
+  {
+    "name": "Bot__RequireMention",
+    "value": "true"
+  },
+  {
+    "name": "Bot__Subreddit",
+    "value": "kgatlw"
+  }
+]

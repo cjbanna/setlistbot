@@ -1,0 +1,1 @@
+az functionapp config appsettings set -n func-setlistbot-reddit-kglw-prod -g rg-setlistbot-prod --settings "@reddit-kglw-prod.json"

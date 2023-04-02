@@ -18,7 +18,7 @@ resource rgSetlistbot 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   location: location
 }
 
-module resources 'resources.bicep' = {
+module resources 'reddit-resources.bicep' = {
   name: 'resourcesModule'
   scope: rgSetlistbot
   params: {

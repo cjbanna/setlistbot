@@ -1,0 +1,1 @@
+az functionapp config appsettings set -n func-setlistbot-reddit-phish-prod -g rg-setlistbot-prod --settings "@reddit-phish-prod.json"
