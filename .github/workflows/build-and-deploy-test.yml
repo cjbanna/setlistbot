@@ -107,7 +107,7 @@ jobs:
 
   deploy_reddit_kglw_prod:
     name: "Deploy Reddit Bot (KGLW) to Prod Environment"
-    needs: build
+    needs: deploy_reddit_kglw_test
     runs-on: ubuntu-latest
 
     environment:
@@ -131,7 +131,7 @@ jobs:
 
   deploy_discord_prod:
     name: "Deploy Discord Bot to Prod Environment"
-    needs: build
+    needs: deploy_discord_test
     runs-on: ubuntu-latest
 
     environment:
