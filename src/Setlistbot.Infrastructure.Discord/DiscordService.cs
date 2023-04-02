@@ -39,12 +39,6 @@ namespace Setlistbot.Infrastructure.Discord
             {
                 new CreateGlobalApplicationCommand
                 {
-                    Name = "test",
-                    Description = "Basic command",
-                    Type = ApplicationCommandType.ChatInput
-                },
-                new CreateGlobalApplicationCommand
-                {
                     Name = "setlist",
                     Description = "Gets a setlist by band and date",
                     Type = ApplicationCommandType.ChatInput,
