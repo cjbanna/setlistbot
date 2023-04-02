@@ -99,13 +99,29 @@ namespace Setlistbot.Application.Discord
                     return new InteractionResponse
                     {
                         Type = InteractionCallbackType.ChannelMessageWithSource,
-                        Data = new InteractionCallbackData { Content = "Failed to parse date", }
+                        Data = new InteractionCallbackData
+                        {
+                            Content =
+                                $"Failed to parse date: '{dateInput}'. Try using mm/dd/yy or yyyy-mm-dd.",
+                        }
                     };
                 }
 
                 var setlists = await setlistProvider.GetSetlists(date);
-                var replyBuilder = _replyBuilderFactory.Get(artistId);
+                if (!setlists.Any())
+                {
+                    return new InteractionResponse
+                    {
+                        Type = InteractionCallbackType.ChannelMessageWithSource,
+                        Data = new InteractionCallbackData
+                        {
+                            Content =
+                                $"No setlist found for {artistId} on {date:yyyy-MM-dd}. Please try again with a different date or artist."
+                        }
+                    };
+                }
 
+                var replyBuilder = _replyBuilderFactory.Get(artistId);
                 var reply = replyBuilder.Build(setlists.First());
 
                 return new InteractionResponse
