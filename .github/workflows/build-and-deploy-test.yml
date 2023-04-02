@@ -104,3 +104,51 @@ jobs:
           app-name: func-setlistbot-discord-test
           package: "./DiscordBot"
           publish-profile: ${{ secrets.PUBLISH_PROFILE_FUNC_DISCORDBOT_TEST }}
+
+  deploy_reddit_kglw_prod:
+    name: "Deploy Reddit Bot (KGLW) to Prod Environment"
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: Prod
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: redditbot
+          path: ./RedditBot
+
+      - name: Deploy Reddit Bot to Prod Environment
+        uses: Azure/functions-action@v1
+        with:
+          app-name: func-setlistbot-reddit-kglw-prod
+          package: "./RedditBot"
+          publish-profile: ${{ secrets.PUBLISH_PROFILE_FUNC_SETLISTBOT_KGLW_PROD }}
+
+  deploy_discord_prod:
+    name: "Deploy Discord Bot to Prod Environment"
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: Prod
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: discordbot
+          path: ./DiscordBot
+
+      - name: Deploy Discord Bot to Prod Environment
+        uses: Azure/functions-action@v1
+        with:
+          app-name: func-setlistbot-discord-prod
+          package: "./DiscordBot"
+          publish-profile: ${{ secrets.PUBLISH_PROFILE_FUNC_DISCORDBOT_PROD }}
