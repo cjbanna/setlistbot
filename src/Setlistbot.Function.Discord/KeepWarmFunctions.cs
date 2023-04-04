@@ -19,7 +19,7 @@ namespace Setlistbot.Function.Discord
             "IDE0060:Remove unused parameter",
             Justification = "The Azure functions library requires the TimerInfo parameter"
         )]
-        public void KeepWarm([TimerTrigger("* */3 * * * *")] object timerInfo)
+        public void KeepWarm([TimerTrigger("0 */3 * * * *")] object timerInfo)
         {
             _logger.LogInformation("Keep warm function called");
         }
