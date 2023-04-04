@@ -30,4 +30,5 @@ Supported commands:
 Supported artists:
 
 - Phish
+- Grateful Dead
 - King Gizzard & the Lizard Wizard
