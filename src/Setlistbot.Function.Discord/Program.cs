@@ -5,11 +5,13 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Extensions.Logging;
 using Setlistbot.Application.Extensions;
+using Setlistbot.Domain.GratefulDead.Extensions;
 using Setlistbot.Domain.Kglw.Extensions;
 using Setlistbot.Domain.Phish.Extensions;
 using Setlistbot.Function.Discord.Middleware;
 using Setlistbot.Infrastructure.Discord;
 using Setlistbot.Infrastructure.Discord.Extensions;
+using Setlistbot.Infrastructure.GratefulDead.Extensions;
 using Setlistbot.Infrastructure.KglwNet.Extensions;
 using Setlistbot.Infrastructure.PhishNet.Extensions;
 
@@ -36,7 +38,9 @@ var host = new HostBuilder()
             .AddDiscordKglw()
             .AddKglwNet()
             .AddDiscordPhish()
-            .AddPhishNet();
+            .AddPhishNet()
+            .AddDiscordGratefulDead()
+            .AddGratefulDeadInMemory();
 
         services.AddSingleton<ILoggerProvider>(
             (serviceProvider) =>

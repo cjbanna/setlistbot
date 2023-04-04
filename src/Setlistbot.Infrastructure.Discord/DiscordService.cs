@@ -61,6 +61,11 @@ namespace Setlistbot.Infrastructure.Discord
                                 {
                                     Name = "King Gizzard and the Lizard Wizard",
                                     Value = "kglw"
+                                },
+                                new ApplicationCommandOptionChoice
+                                {
+                                    Name = "Grateful Dead",
+                                    Value = "gd"
                                 }
                             }
                         },
