@@ -23,6 +23,8 @@ You can add the bot to your discord server by using this link:
 
 [Add setlistbot to Discord](https://discord.com/api/oauth2/authorize?client_id=1091917839209869413&permissions=2048&scope=bot)
 
+![discord](/docs/discord-example.png)
+
 Supported commands:
 
 `/setlist <artist> <date>`
