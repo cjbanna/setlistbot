@@ -86,7 +86,7 @@ resource redditSetlistbotFunc 'Microsoft.Web/sites@2021-03-01' = {
           }
           {
             name: 'FUNCTIONS_WORKER_RUNTIME'
-            value: 'dotnet'
+            value: 'dotnet-isolated'
           }
           {
             name: 'AzureTable:ConnectionString'
