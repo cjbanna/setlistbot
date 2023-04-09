@@ -102,7 +102,7 @@ namespace Setlistbot.Application.Discord
                 }
 
                 var replyBuilder = _replyBuilderFactory.Get(artistId);
-                var reply = replyBuilder.Build(setlists.First());
+                var reply = replyBuilder.Build(setlists);
 
                 return new InteractionResponse
                 {

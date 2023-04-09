@@ -6,11 +6,18 @@ namespace Setlistbot.Domain.GratefulDead
     {
         public string ArtistId => "gd";
 
-        public string Build(IEnumerable<Setlist> setlists, int maxSetlists)
+        public string Build(IEnumerable<Setlist> setlists)
+        {
+            return setlists.Count() == 1
+                ? BuildSingleSetlistReply(setlists.First())
+                : BuildMultipleSetlistReply(setlists);
+        }
+
+        private string BuildMultipleSetlistReply(IEnumerable<Setlist> setlists)
         {
             var reply = new StringBuilder();
 
-            foreach (var setlist in setlists.Take(maxSetlists).OrderBy(s => s.Date))
+            foreach (var setlist in setlists.OrderBy(s => s.Date))
             {
                 var archiveOrgUrl = GetArchiveOrgUrl(setlist);
                 var location = $"{setlist.Location.City}, {setlist.Location.State}";
@@ -30,7 +37,7 @@ namespace Setlistbot.Domain.GratefulDead
             return reply.ToString();
         }
 
-        public string Build(Setlist setlist)
+        private string BuildSingleSetlistReply(Setlist setlist)
         {
             var reply = new StringBuilder();
             var date = setlist.Date.ToString("yyyy-MM-dd");

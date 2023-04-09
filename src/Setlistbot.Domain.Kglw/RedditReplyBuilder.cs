@@ -6,11 +6,18 @@ namespace Setlistbot.Domain.Kglw
     {
         public string ArtistId => "kglw";
 
-        public string Build(IEnumerable<Setlist> setlists, int maxSetlists)
+        public string Build(IEnumerable<Setlist> setlists)
+        {
+            return setlists.Count() == 1
+                ? BuildSingleSetlistReply(setlists.First())
+                : BuildMultipleSetlistReply(setlists);
+        }
+
+        private string BuildMultipleSetlistReply(IEnumerable<Setlist> setlists)
         {
             var reply = new StringBuilder();
 
-            foreach (var setlist in setlists.Take(maxSetlists).OrderBy(s => s.Date))
+            foreach (var setlist in setlists.OrderBy(s => s.Date))
             {
                 var archiveOrgUrl = GetArchiveOrgUrl(setlist);
                 reply.Append(
@@ -24,7 +31,7 @@ namespace Setlistbot.Domain.Kglw
             return reply.ToString();
         }
 
-        public string Build(Setlist setlist)
+        private string BuildSingleSetlistReply(Setlist setlist)
         {
             if (setlist == default)
             {

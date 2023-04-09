@@ -6,11 +6,18 @@ namespace Setlistbot.Domain.Phish
     {
         public string ArtistId => "phish";
 
-        public string Build(IEnumerable<Setlist> setlists, int maxSetlists = 20)
+        public string Build(IEnumerable<Setlist> setlists)
+        {
+            return setlists.Count() == 1
+                ? BuildSingleSetlistReply(setlists.First())
+                : BuildMultipleSetlistReply(setlists);
+        }
+
+        private string BuildMultipleSetlistReply(IEnumerable<Setlist> setlists)
         {
             var reply = new StringBuilder();
 
-            foreach (var setlist in setlists.Take(maxSetlists).OrderBy(s => s.Date))
+            foreach (var setlist in setlists.OrderBy(s => s.Date))
             {
                 var date = setlist.Date.ToString("yyyy-MM-dd");
                 var location = $"{setlist.Location.City}, {setlist.Location.State}";
@@ -32,7 +39,7 @@ namespace Setlistbot.Domain.Phish
             return reply.ToString();
         }
 
-        public string Build(Setlist setlist)
+        public string BuildSingleSetlistReply(Setlist setlist)
         {
             var reply = new StringBuilder();
             var date = setlist.Date.ToString("yyyy-MM-dd");

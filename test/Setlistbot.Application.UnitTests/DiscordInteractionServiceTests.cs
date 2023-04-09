@@ -48,7 +48,7 @@ namespace Setlistbot.Application.UnitTests
             setlistProvider.Setup(p => p.GetSetlists(date)).ReturnsAsync(setlists);
 
             var replyBuilder = new Mock<IReplyBuilder>();
-            replyBuilder.Setup(b => b.Build(setlists.First())).Returns("Some setlist");
+            replyBuilder.Setup(b => b.Build(setlists)).Returns("Some setlist");
 
             SetlistProviderFactory.Setup(f => f.Get("phish")).Returns(setlistProvider.Object);
 

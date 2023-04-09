@@ -6,13 +6,14 @@ namespace Setlistbot.Domain.GratefulDead
     {
         public string ArtistId => "gd";
 
-        public string Build(IEnumerable<Setlist> setlists, int maxSetlists)
+        public string Build(IEnumerable<Setlist> setlists)
         {
-            return string.Empty;
-        }
+            if (setlists == null || !setlists.Any())
+            {
+                return string.Empty;
+            }
 
-        public string Build(Setlist setlist)
-        {
+            var setlist = setlists.First();
             var reply = new StringBuilder();
             var date = setlist.Date.ToString("yyyy-MM-dd");
             var location = $"{setlist.Location.City}, {setlist.Location.State}";

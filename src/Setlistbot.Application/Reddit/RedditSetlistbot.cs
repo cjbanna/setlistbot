@@ -173,18 +173,7 @@ namespace Setlistbot.Application.Reddit
 
         private string BuildReply(List<Setlist> setlists)
         {
-            var reply = string.Empty;
-
-            if (setlists.Count > 1)
-            {
-                reply = _replyBuilder.Build(setlists, _botOptions.MaxSetlistCount);
-            }
-            else if (setlists.Count == 1)
-            {
-                reply = _replyBuilder.Build(setlists.First());
-            }
-
-            return reply;
+            return _replyBuilder.Build(setlists.Take(_botOptions.MaxSetlistCount));
         }
 
         private async Task<List<Setlist>> GetSetlists(Comment comment)

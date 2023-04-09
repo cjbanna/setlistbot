@@ -6,18 +6,14 @@ namespace Setlistbot.Domain.Kglw
     {
         public string ArtistId => "kglw";
 
-        public string Build(IEnumerable<Setlist> setlists, int maxSetlists)
+        public string Build(IEnumerable<Setlist> setlists)
         {
-            return string.Empty;
-        }
-
-        public string Build(Setlist setlist)
-        {
-            if (setlist == default)
+            if (setlists == null || !setlists.Any())
             {
                 return string.Empty;
             }
 
+            var setlist = setlists.First();
             var reply = new StringBuilder();
             reply.Append("**King Gizzard & the Lizard Wizard**");
             reply.Append(Environment.NewLine);

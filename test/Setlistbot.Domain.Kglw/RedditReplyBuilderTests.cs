@@ -69,7 +69,7 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             var builder = new RedditReplyBuilder();
 
             // Act
-            var actual = builder.Build(setlist);
+            var actual = builder.Build(new[] { setlist });
 
             // Assert
             var expected = TestDataHelper.GetTestData("TestData/2022-10-11-reply.md");
