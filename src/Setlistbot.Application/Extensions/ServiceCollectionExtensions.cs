@@ -15,8 +15,6 @@ namespace Setlistbot.Application.Extensions
             services.AddOptionsFromConfig<BotOptions>(ConfigKey);
 
             services
-                .AddScoped<ICommentReplyService, CommentReplyService>()
-                .AddScoped<IPostReplyService, PostReplyService>()
                 .AddScoped<IRedditSetlistbot, RedditSetlistbot>()
                 .AddScoped<IReplyBuilderFactory, ReplyBuilderFactory>()
                 .AddScoped<ISetlistProviderFactory, SetlistProviderFactory>();
