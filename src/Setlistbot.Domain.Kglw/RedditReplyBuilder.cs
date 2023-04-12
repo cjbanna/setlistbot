@@ -19,9 +19,9 @@ namespace Setlistbot.Domain.Kglw
 
             foreach (var setlist in setlists.OrderBy(s => s.Date))
             {
-                var archiveOrgUrl = GetArchiveOrgUrl(setlist);
+                var kglwNetUrl = GetKglwNetUrl(setlist);
                 reply.Append(
-                    $"[{setlist.Date.ToString("yyyy-MM-dd")}]({archiveOrgUrl}) @ {setlist.Location.Venue}, {setlist.Location.City}, {setlist.Location.State}, {setlist.Location.Country}"
+                    $"[{setlist.Date.ToString("yyyy-MM-dd")}]({kglwNetUrl}) @ {setlist.Location.Venue}, {setlist.Location.City}, {setlist.Location.State}, {setlist.Location.Country}"
                 );
 
                 reply.Append(Environment.NewLine);
@@ -85,20 +85,15 @@ namespace Setlistbot.Domain.Kglw
                 reply.Append(Environment.NewLine);
             }
 
-            var archiveOrgUrl = GetArchiveOrgUrl(setlist);
-            reply.Append($"[archive.org]({archiveOrgUrl})");
-
-            reply.Append(Environment.NewLine);
-            reply.Append(Environment.NewLine);
-
-            reply.Append("> _data provided by [kglw.net](http://kglw.net)_");
+            var kglwUrl = GetKglwNetUrl(setlist);
+            reply.Append($"> _data provided by [kglw.net]({kglwUrl})_");
 
             return reply.ToString();
         }
 
-        private string GetArchiveOrgUrl(Setlist setlist)
+        private string GetKglwNetUrl(Setlist setlist)
         {
-            return $"https://archive.org/details/KingGizzardAndTheLizardWizard?query=date:{setlist.Date.ToString("yyyy-MM-dd")}";
+            return $"http://kglw.today/{setlist.Date.ToString("yyyy-MM-dd")}";
         }
     }
 }
