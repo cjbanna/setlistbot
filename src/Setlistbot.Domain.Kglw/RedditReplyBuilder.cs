@@ -85,8 +85,7 @@ namespace Setlistbot.Domain.Kglw
                 reply.Append(Environment.NewLine);
             }
 
-            var kglwUrl = GetKglwNetUrl(setlist);
-            reply.Append($"> _data provided by [kglw.net]({kglwUrl})_");
+            reply.Append($"> _data provided by [kglw.net](https://kglw.net)_");
 
             return reply.ToString();
         }
