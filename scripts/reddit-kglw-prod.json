@@ -9,7 +9,7 @@
   },
   {
     "name": "Bot__RequireMention",
-    "value": "true"
+    "value": "false"
   },
   {
     "name": "Bot__Subreddit",
