@@ -48,7 +48,3 @@ Supported artists:
 ## Component
 
 ![Component](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/cjbanna/setlistbot/main/docs/setlistbot-c3-component.puml)
-
-## Class
-
-[Class diagrams](/docs/c4-class.md)
