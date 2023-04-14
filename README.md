@@ -34,3 +34,27 @@ Supported artists:
 - Phish
 - Grateful Dead
 - King Gizzard & the Lizard Wizard
+
+# Design
+
+## System Context
+
+![System Context](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/cjbanna/setlistbot/main/docs/setlistbot-c1-system-context.puml)
+
+## Container
+
+![Container](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/cjbanna/setlistbot/main/docs/setlistbot-c2-container.puml)
+
+## Component
+
+![Component](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/cjbanna/setlistbot/main/docs/setlistbot-c3-component.puml)
+
+## Class
+
+[Reddit Bot](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/cjbanna/setlistbot/main/docs/setlistbot-c4-class-reddit-bot.puml)
+
+[Phish Provider](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/cjbanna/setlistbot/main/docs/setlistbot-c4-class-phish-provider.puml)
+
+[Grateful Dead Provider](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/cjbanna/setlistbot/main/docs/setlistbot-c4-class-grateful-dead-provider.puml)
+
+[King Gizzard & the Lizard Wizard Provider](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/cjbanna/setlistbot/main/docs/setlistbot-c4-class-kglw-provider.puml)

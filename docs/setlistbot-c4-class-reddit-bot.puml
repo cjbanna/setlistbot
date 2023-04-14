@@ -68,35 +68,58 @@ interface IRedditSetlistBot {
     +void ReplyToMentions()
 }
 
-IRedditSetlistBot --* IRedditService
-
 class RedditSetlistBot <<IRedditSetlistBot>> {
     +void ReplyToMentions()
     -void ReplyToPosts(string subreddit)
-    -bool ShouldReply(Post post)
-    -void Reply(Post post)
     -void ReplyToComments(string subreddit)
-    -bool ShouldReply(Comment comment)
-    -void Reply(Comment comment)
-    -string BuildReply(Setlist[] setlists)
 }
 
 RedditSetlistBot ..|> IRedditSetlistBot
-RedditSetlistBot --* ICommentRepository
-RedditSetlistBot --* IPostRepository
+RedditSetlistBot --* IRedditService
 RedditSetlistBot --* BotOptions
-RedditSetlistBot --* RedditOptions
-RedditSetlistBot --* ISetlistProvider
+RedditSetlistBot --* ISetlistProviderFactory
 RedditSetlistBot --* IReplyBuilderFactory
+RedditSetlistBot --* IPostRepository
+RedditSetlistBot --* ICommentRepository
+' RedditSetlistBot --* ICommentReplyService
+' RedditSetlistBot --* IPostReplyService
 
-class BotOptions <<IOptions<BotOptions>>> {
+' interface IPostReplyService {
+'     +void Reply(Post post)
+' }
+
+' class PostReplyService <<IPostReplyService>> {
+'     +void Reply(Post post)
+' }
+
+' PostReplyService ..|> IPostReplyService
+' PostReplyService --* IPostRepository
+' PostReplyService --* IReplyBuilderFactory
+' PostReplyService --* ISetlistProviderFactory
+' PostReplyService --* IRedditService
+
+' interface ICommentReplyService {
+'     +void Reply(Comment comment)
+' }
+
+' class CommentReplyService <<ICommentReplyService>> {
+'     +void Reply(Comment comment)
+' }
+
+' CommentReplyService ..|> ICommentReplyService
+' CommentReplyService --* ICommentRepository
+' CommentReplyService --* IReplyBuilderFactory
+' CommentReplyService --* ISetlistProviderFactory
+' CommentReplyService --* IRedditService
+
+class BotOptions <<IOptions>> {
     +string SetlistbotType
     +string Subreddit
     +int MaxSetlistCount
     +bool RequireMention
 }
 
-class RedditOptions <<IOptions<T>>> {
+class RedditOptions <<IOptions>> {
     +string Username
     +string Password
     +string Key
@@ -136,99 +159,25 @@ interface IPostRepository {
 IPostRepository ..> Post
 
 interface IReplyBuilderFactory {
-    +IReplyBuilder GetReplyBuilder(string setlistbotType)
+    +IReplyBuilder Get(string artistId)
 }
 
 IReplyBuilderFactory ..> IReplyBuilder
 
 interface IReplyBuilder {
-    +string BuildReply(Setlist[] setlists, int maxSetlists)
+    +string ArtistId
+    +string BuildReply(Setlist[] setlists)
 }
 
-class DefaultReplyBuilder <<IReplyBuilder>> {
-    +string BuildReply(Setlist[] setlists, int maxSetlists)
+interface ISetlistProviderFactory {
+    +ISetlistProvider Get(string artistId)
 }
 
-DefaultReplyBuilder .u.|> IReplyBuilder
+ISetlistProviderFactory ..> ISetlistProvider
 
 interface ISetlistProvider {
+    +string ArtistId
     +Setlist GetSetlist(DateTime date)
 }
 
-package "Phish" {
-
-    interface IPhishNetClient {
-        +PhishNetSetlistResponse GetSetlist(DateTime date)
-    }
-
-    IPhishNetClient ..> PhishNetSetlistResponse
-
-    class PhishNetSetlistProvider <<ISetlistProvider>> {
-        +Setlist GetSetlist(DateTime date)
-    }
-
-    PhishNetSetlistProvider ..|> ISetlistProvider
-    PhishNetSetlistProvider --* IPhishNetClient
-
-    class PhishReplyBuilder <<IReplyBuilder>> {
-        +string BuildReply(Setlist[] setlists, int maxSetlists)
-    }
-    
-    PhishReplyBuilder ..|> IReplyBuilder
-
-    class PhishNetSetlistResponse {
-        +bool Error
-        +string ErrorMessage
-        +PhishNetSetlistData[] Data
-    }
-
-    PhishNetSetlistResponse ..> PhishNetSetlistData
-
-    class PhishNetSetlistData {
-        +string Set
-        +string Song
-        +int Position
-        +string Transition
-        +string Footnote
-        +string Venue
-        +string City
-        +string state
-        +string Country
-    }
-}
-
-package "KGLW" {
-    class KglwSetlistProvider <<ISetlistProvider>> {
-       +Setlist GetSetlist(DateTime date)
-    }
-
-    KglwSetlistProvider ..|> ISetlistProvider
-    KglwSetlistProvider --* ISongfishClient
-    
-    interface ISongfishClient {
-        +SongfishSetlistResponse GetSetlist(DateTime date)
-    }
-
-    ISongfishClient ..> SongfishSetlistResponse
-
-
-    class SongfishSetlistResponse {
-        +bool Error
-        +string ErrorMessage
-        +SongfishSetlistData[] Data
-    }
-
-    SongfishSetlistResponse ..> SongfishSetlistData
-
-    class SongfishSetlistData {
-        +string Set
-        +string Song
-        +int Position
-        +string Transition
-        +string Footnote
-        +string Venue
-        +string City
-        +string state
-        +string Country
-    }
-}
+ISetlistProvider ..> Setlist

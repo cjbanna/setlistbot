@@ -1,10 +1,11 @@
 @startuml C2 Containers
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
-Person(commentor, "Commentor", "Makes a comment about a show that happened on a given date.")
+Person(discordUser, "Discord User", "User /setlist command.")
+Person(redditUser, "Reddit User", "Uses Reddit to comment/post.")
 
 System_Boundary(setlistbot, "Setlistbot System") {
-    Container(bot, "Setlistbot", "dotnet", "Reddit/Discord bot")
+    Container(bot, "Setlistbot", "dotnet", "Reddit/Discord bot", $sprite="robot")
     ContainerDb(db, "Database", "Azure Table Storage", "Stores show data and comments")
 }
 
@@ -13,12 +14,12 @@ System_Ext(discord, "Discord", "Social media platform")
 System_Ext(songfish, "Songfish", "Show database")
 System_Ext(phishnet, "Phish.net", "Show database")
 
-Rel(commentor, reddit, "Uses")
-Rel(commentor, discord, "Uses")
-Rel_L(bot, reddit, "Replies to comments")
-Rel_L(discord, bot, "Sends interaction requests")
+Rel(redditUser, reddit, "Uses")
+Rel(discordUser, discord, "Uses")
+Rel(bot, reddit, "Replies to comments")
+Rel(discord, bot, "Sends interaction requests")
 Rel(bot, db, "Reads/writes show data")
-Rel_R(bot, songfish, "Queries for show data")
+Rel(bot, songfish, "Queries for show data")
 Rel(bot, phishnet, "Queries for show data")
 
 LAYOUT_WITH_LEGEND()

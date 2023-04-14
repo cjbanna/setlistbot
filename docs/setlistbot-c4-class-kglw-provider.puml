@@ -1,0 +1,63 @@
+@startuml C4 Code
+
+
+interface IReplyBuilder {
+    +string ArtistId
+    +string BuildReply(Setlist[] setlists)
+}
+
+interface ISetlistProvider {
+    +string ArtistId
+    +Setlist GetSetlist(DateTime date)
+}
+
+package "Setlistbot.Domain.Kglw" {
+    class KglwRedditReplyBuilder <<IReplyBuilder>> {
+        +string BuildReply(Setlist[] setlists)
+    }
+    
+    KglwRedditReplyBuilder ..|> IReplyBuilder
+
+    class KglwDiscordReplyBuilder <<IReplyBuilder>> {
+        +string BuildReply(Setlist[] setlists)
+    }
+
+    KglwDiscordReplyBuilder ..|> IReplyBuilder
+}
+
+package "Setlistbot.Infrastructure.Kglw" {
+    class KglwSetlistProvider <<ISetlistProvider>> {
+       +Setlist GetSetlist(DateTime date)
+    }
+
+    KglwSetlistProvider ..|> ISetlistProvider
+    KglwSetlistProvider --* ISongfishClient
+    
+    interface ISongfishClient {
+        +SongfishSetlistResponse GetSetlist(DateTime date)
+    }
+
+    ISongfishClient ..> SongfishSetlistResponse
+
+
+    class SongfishSetlistResponse {
+        +bool Error
+        +string ErrorMessage
+        +SongfishSetlistData[] Data
+    }
+
+    SongfishSetlistResponse ..> SongfishSetlistData
+
+    class SongfishSetlistData {
+        +string Set
+        +string Song
+        +int Position
+        +string Transition
+        +string Footnote
+        +string Venue
+        +string City
+        +string state
+        +string Country
+    }
+
+}

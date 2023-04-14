@@ -2,7 +2,7 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 System_Ext(redditApi, "Reddit API", "Provides access to Reddit comments and posts")
-System_Ext(discord, "Discord API", "Provides access to Discord channels and messages")
+System_Ext(discord, "Discord", "Sends callbacks to the bot when users interact with it")
 System_Ext(songfishApi, "Songfish API", "")
 System_Ext(phishnetApi, "Phish.net API", "")
 
@@ -12,7 +12,7 @@ System_Boundary(c1, "Setlistbot System") {
     Component(setlistProvider, "Setlist Provider", "dotnet", "A common interface to retrieve setlists for a band")
     Component(phishProvider, "Phish Provider", "dotnet", "Phish.net setlist provider")
     Component(kingGizzardProvider, "King Gizzard Provider", "dotnet", "Songfish setlist provider")
-    Component(gratefulDeadProvider, "Grateful Dead Provider", "dotnet", "Database setlist provider")
+    Component(gratefulDeadProvider, "Grateful Dead Provider", "dotnet", "In-memory setlist provider")
 
     Boundary(redditBoundary, "Reddit") {
         Component(redditBot, "Reddit Bot", "dotnet", "Checks new Reddit posts and comments for setlist requests")
@@ -22,17 +22,13 @@ System_Boundary(c1, "Setlistbot System") {
 
     Boundary(discordBoundary, "Discord") {
         Component(discordBot, "Discord Bot", "dotnet", "Knows how to handle interactions from Discord")
-        ComponentDb(discordDb, "Discord Database", "Azure Table Storage", "Keeps track of which interactions have been responded to")
     }
 }
-
-Container(api, "Setlistbot API", ".NET Core", "Backend")
 
 
 Rel(redditBot, redditApiService, "Uses", "")
 Rel(setlistbotListener, discordBot, "Uses", "")
 Rel(redditBot, redditDb, "Reads from and writes to", "HTTPS")
-Rel(discordBot, discordDb, "Reads from and writes to", "HTTPS")
 Rel(setlistbotTimer, redditBot, "Uses", "")
 Rel(redditBot, setlistProvider, "Uses", "")
 Rel(redditApiService, redditApi, "Reads from and writes to", "HTTPS")
@@ -44,8 +40,6 @@ Rel(setlistProvider, phishProvider, "Uses", "")
 Rel(kingGizzardProvider, songfishApi, "Reads from", "HTTPS")
 Rel(phishProvider, phishnetApi, "Reads from", "HTTPS")
 Rel(setlistProvider, gratefulDeadProvider, "Uses", "")
-Rel(gratefulDeadProvider, api, "Reads from", "HTTPS")
-
 
 LAYOUT_WITH_LEGEND()
 

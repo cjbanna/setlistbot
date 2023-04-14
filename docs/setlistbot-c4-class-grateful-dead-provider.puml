@@ -1,0 +1,35 @@
+@startuml C4 Code
+
+
+interface IReplyBuilder {
+    +string ArtistId
+    +string BuildReply(Setlist[] setlists)
+}
+
+interface ISetlistProvider {
+    +string ArtistId
+    +Setlist GetSetlist(DateTime date)
+}
+
+package "Setlistbot.Domain.GratefulDead" {
+    class GratefulDeadRedditReplyBuilder <<IReplyBuilder>> {
+        +string BuildReply(Setlist[] setlists)
+    }
+    
+    GratefulDeadRedditReplyBuilder ..|> IReplyBuilder
+
+    class GratefulDeadDiscordReplyBuilder <<IReplyBuilder>> {
+        +string BuildReply(Setlist[] setlists)
+    }
+
+    GratefulDeadDiscordReplyBuilder ..|> IReplyBuilder
+}
+
+package "Setlistbot.Infrastructure.GratefulDead" {
+    class GratefulDeadInMemorySetlistProvider <<ISetlistProvider>> {
+        +string ArtistId
+        +Setlist GetSetlist(DateTime date)
+    }
+
+    GratefulDeadInMemorySetlistProvider ..|> ISetlistProvider
+}

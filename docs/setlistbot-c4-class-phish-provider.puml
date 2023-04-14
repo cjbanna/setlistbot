@@ -1,0 +1,62 @@
+@startuml C4 Code
+
+
+interface IReplyBuilder {
+    +string ArtistId
+    +string BuildReply(Setlist[] setlists)
+}
+
+interface ISetlistProvider {
+    +string ArtistId
+    +Setlist GetSetlist(DateTime date)
+}
+
+package "Setlistbot.Domain.Phish" {
+    class PhishRedditReplyBuilder <<IReplyBuilder>> {
+        +string BuildReply(Setlist[] setlists)
+    }
+    
+    PhishRedditReplyBuilder ..|> IReplyBuilder
+
+    class PhishDiscordReplyBuilder <<IReplyBuilder>> {
+        +string BuildReply(Setlist[] setlists)
+    }
+
+    PhishDiscordReplyBuilder ..|> IReplyBuilder
+}
+
+package "Setlistbot.Infrastructure.Phish" {
+    interface IPhishNetClient {
+        +PhishNetSetlistResponse GetSetlist(DateTime date)
+    }
+
+    IPhishNetClient ..> PhishNetSetlistResponse
+
+    class PhishNetSetlistProvider <<ISetlistProvider>> {
+        +string ArtistId
+        +Setlist GetSetlist(DateTime date)
+    }
+
+    PhishNetSetlistProvider ..|> ISetlistProvider
+    PhishNetSetlistProvider --* IPhishNetClient
+
+    class PhishNetSetlistResponse {
+        +bool Error
+        +string ErrorMessage
+        +PhishNetSetlistData[] Data
+    }
+
+    PhishNetSetlistResponse ..> PhishNetSetlistData
+
+    class PhishNetSetlistData {
+        +string Set
+        +string Song
+        +int Position
+        +string Transition
+        +string Footnote
+        +string Venue
+        +string City
+        +string state
+        +string Country
+    }
+}
