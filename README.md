@@ -10,12 +10,13 @@ A setlistbot for reddit and discord.
 
 - [/r/phish](https://reddit.com/r/phish)
 - [/r/gratefuldead](https://reddit.com/r/gratefuldead)
+- [/r/kgatlw](https://reddit.com/r/kgatlw)
 
 Each subreddit supports only a single artist.
 
 - Phish
 - Grateful Dead
-<!-- - King Gizzard & the Lizard Wizard -->
+- King Gizzard & the Lizard Wizard
 
 ## Discord
 
