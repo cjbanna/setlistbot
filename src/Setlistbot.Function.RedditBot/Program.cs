@@ -7,9 +7,11 @@ using Serilog;
 using Serilog.Extensions.Logging;
 using Setlistbot.Application.Extensions;
 using Setlistbot.Application.Options;
+using Setlistbot.Domain.GratefulDead.Extensions;
 using Setlistbot.Domain.Kglw.Extensions;
 using Setlistbot.Domain.Phish.Extensions;
 using Setlistbot.Infrastructure.Extensions;
+using Setlistbot.Infrastructure.GratefulDead.Extensions;
 using Setlistbot.Infrastructure.KglwNet.Extensions;
 using Setlistbot.Infrastructure.PhishNet.Extensions;
 using Setlistbot.Infrastructure.Reddit.Extensions;
@@ -40,11 +42,13 @@ namespace Setlistbot.Function.RedditBot
                     services
                         .AddRedditPhish()
                         .AddRedditKglw()
+                        .AddRedditGratefulDead()
                         // Infrastructure
                         .AddInfrastructure(subreddit)
                         .AddReddit()
                         .AddKglwNet()
-                        .AddPhishNet();
+                        .AddPhishNet()
+                        .AddGratefulDeadInMemory();
 
                     services.AddSingleton<ILoggerProvider>(
                         (serviceProvider) =>
