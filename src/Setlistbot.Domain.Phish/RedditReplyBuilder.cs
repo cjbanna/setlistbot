@@ -22,7 +22,9 @@ namespace Setlistbot.Domain.Phish
                 var date = setlist.Date.ToString("yyyy-MM-dd");
                 var location = $"{setlist.Location.City}, {setlist.Location.State}";
 
-                reply.Append($"# {date} {location} @ {setlist.Location.Venue}");
+                reply.Append(
+                    $"# {date} {location} {setlist.Location.Venue}, {setlist.Location.City}, {setlist.Location.State}, {setlist.Location.Country}"
+                );
                 reply.AppendLine();
                 reply.AppendFormat(
                     "[phish.net]({0}) | [phish.in]({1}) | [phishtracks]({2})",
@@ -42,23 +44,43 @@ namespace Setlistbot.Domain.Phish
         public string BuildSingleSetlistReply(Setlist setlist)
         {
             var reply = new StringBuilder();
-            var date = setlist.Date.ToString("yyyy-MM-dd");
-            var location = $"{setlist.Location.City}, {setlist.Location.State}";
+            reply.Append(
+                $"# {setlist.Date.ToString("yyyy-MM-dd")} @ {setlist.Location.Venue}, {setlist.Location.City},"
+            );
 
-            reply.Append($"# {date} {location} @ {setlist.Location.Venue}");
+            if (!string.IsNullOrWhiteSpace(setlist.Location.State))
+            {
+                reply.Append($" {setlist.Location.State},");
+            }
+
+            if (!string.IsNullOrWhiteSpace(setlist.Location.Country))
+            {
+                reply.Append($" {setlist.Location.Country}");
+            }
+
+            if (reply.ToString().EndsWith(','))
+            {
+                reply.Remove(reply.Length - 1, 1);
+            }
+
             reply.AppendLine();
             reply.AppendLine();
 
             foreach (var set in setlist.Sets)
             {
-                var span = TimeSpan.FromMilliseconds(set.Duration);
-                var hours = span.TotalHours >= 1 ? span.ToString("%h") + "h " : string.Empty;
-                var minutes = span.ToString("mm");
-                reply.AppendFormat(@"**{0}**: ({1}{2}m)  ", set.Name, hours, minutes);
+                reply.AppendFormat(@"**{0}**: ", set.Name);
                 foreach (var song in set.Songs.OrderBy(s => s.Position))
                 {
-                    reply.Append($"{song.Name} {song.Transition}");
+                    if (song.Transition == ",")
+                    {
+                        reply.Append($"{song.Name}{song.Transition} ");
+                    }
+                    else
+                    {
+                        reply.Append($"{song.Name} {song.Transition} ");
+                    }
                 }
+
                 reply.Remove(reply.Length - 2, 1);
                 reply.AppendLine();
                 reply.AppendLine();
