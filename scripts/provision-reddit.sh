@@ -38,4 +38,4 @@ az deployment sub create \
     --name deploy-$environment_name \
     --location centralus \
     --template-file reddit-main.bicep \
-    --parameters environmentName=$environment_name artistId=$artist_id #funcAppSettings="$json"
+    --parameters environmentName=$environment_name artistId=$artist_id funcAppSettings="$json"
