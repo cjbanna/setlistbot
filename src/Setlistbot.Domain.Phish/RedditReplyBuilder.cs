@@ -109,7 +109,7 @@ namespace Setlistbot.Domain.Phish
 
         private string GetPhishinUrl(Setlist setlist)
         {
-            return string.Format("http://phish.in/{0}", setlist.Date);
+            return string.Format("http://phish.in/{0}", setlist.Date.ToString("yyyy-MM-dd"));
         }
 
         private string GetPhishNetUrl(Setlist setlist)
