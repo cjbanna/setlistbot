@@ -105,6 +105,30 @@ jobs:
           package: "./RedditBot"
           publish-profile: ${{ secrets.PUBLISH_PROFILE_FUNC_SETLISTBOT_PHISH_TEST }}
 
+  deploy_reddit_gd_test:
+    name: "Deploy Reddit Bot (Grateful Dead) to Test Environment"
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: Test
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: redditbot
+          path: ./RedditBot
+
+      - name: Deploy Reddit Bot to Test Environment
+        uses: Azure/functions-action@v1
+        with:
+          app-name: func-setlistbot-reddit-gd-test
+          package: "./RedditBot"
+          publish-profile: ${{ secrets.PUBLISH_PROFILE_FUNC_SETLISTBOT_GD_TEST }}
+
   deploy_discord_test:
     name: "Deploy Discord Bot to Test Environment"
     needs: build
@@ -176,6 +200,30 @@ jobs:
           app-name: func-setlistbot-reddit-phish-prod
           package: "./RedditBot"
           publish-profile: ${{ secrets.PUBLISH_PROFILE_FUNC_SETLISTBOT_PHISH_PROD }}
+
+  deploy_reddit_gd_prod:
+    name: "Deploy Reddit Bot (Grateful Dead) to Prod Environment"
+    needs: deploy_reddit_gd_test
+    runs-on: ubuntu-latest
+
+    environment:
+      name: Prod
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: redditbot
+          path: ./RedditBot
+
+      - name: Deploy Reddit Bot to Prod Environment
+        uses: Azure/functions-action@v1
+        with:
+          app-name: func-setlistbot-reddit-gd-prod
+          package: "./RedditBot"
+          publish-profile: ${{ secrets.PUBLISH_PROFILE_FUNC_SETLISTBOT_GD_PROD }}
 
   deploy_discord_prod:
     name: "Deploy Discord Bot to Prod Environment"
