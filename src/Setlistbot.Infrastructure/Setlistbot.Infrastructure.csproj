@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Setlistbot.Domain\Setlistbot.Domain.csproj" />
+    <ProjectReference Include="..\Setlistbot.Infrastructure.Discord\Setlistbot.Infrastructure.Discord.csproj" />
   </ItemGroup>
 
 </Project>

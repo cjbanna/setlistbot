@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Setlistbot.Infrastructure.Discord\Setlistbot.Infrastructure.Discord.csproj" />
     <ProjectReference Include="..\Setlistbot.Infrastructure.Reddit\Setlistbot.Infrastructure.Reddit.csproj" />
+    <ProjectReference Include="..\Setlistbot.Infrastructure\Setlistbot.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

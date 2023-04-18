@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Setlistbot.Infrastructure.Discord.Extensions;
 using Setlistbot.Infrastructure.Discord.Interactions;
+using Setlistbot.Infrastructure.Repositories;
 
 namespace Setlistbot.Application.Discord
 {
@@ -9,16 +10,19 @@ namespace Setlistbot.Application.Discord
         private readonly ILogger<DiscordInteractionService> _logger;
         private readonly ISetlistProviderFactory _setlistProviderFactory;
         private readonly IReplyBuilderFactory _replyBuilderFactory;
+        private readonly IDiscordUsageRepository _discordUsageRepository;
 
         public DiscordInteractionService(
             ILogger<DiscordInteractionService> logger,
             ISetlistProviderFactory setlistProviderFactory,
-            IReplyBuilderFactory replyBuilderFactory
+            IReplyBuilderFactory replyBuilderFactory,
+            IDiscordUsageRepository discordUsageRepository
         )
         {
             _logger = logger;
             _setlistProviderFactory = setlistProviderFactory;
             _replyBuilderFactory = replyBuilderFactory;
+            _discordUsageRepository = discordUsageRepository;
         }
 
         public async Task<InteractionResponse?> GetResponse(Interaction interaction)
@@ -68,6 +72,8 @@ namespace Setlistbot.Application.Discord
             )
             {
                 _logger.LogInformation("Setlist command handled");
+
+                await _discordUsageRepository.TrackUsageAsync(interaction);
 
                 var artistId = interaction.GetOption("artist");
                 var dateInput = interaction.GetOption("date");

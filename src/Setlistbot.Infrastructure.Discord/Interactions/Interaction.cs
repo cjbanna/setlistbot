@@ -15,5 +15,8 @@ namespace Setlistbot.Infrastructure.Discord.Interactions
 
         [JsonProperty("data")]
         public InteractionData? Data { get; set; }
+
+        [JsonProperty("guild_id")]
+        public string GuildId { get; set; } = string.Empty;
     }
 }
