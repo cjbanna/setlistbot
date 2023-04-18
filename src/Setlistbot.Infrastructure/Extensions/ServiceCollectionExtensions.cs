@@ -1,6 +1,7 @@
 ﻿using Azure.Data.Tables;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Setlistbot.Domain.CommentAggregate;
 using Setlistbot.Domain.PostAggregate;
@@ -44,7 +45,38 @@ namespace Setlistbot.Infrastructure.Extensions
                 )
                 .AddScoped<IPostRepository>(
                     _ => new PostRepository(subreddit, options.ConnectionString, postsTableName)
+                )
+                .AddScoped<IDiscordUsageRepository>(
+                    provider =>
+                        new DiscordUsageRepository(
+                            options.ConnectionString,
+                            "discordusage",
+                            provider.GetRequiredService<ILogger<DiscordUsageRepository>>()
+                        )
                 );
+
+            return services;
+        }
+
+        public static IServiceCollection AddDiscordUsageInfrastructure(
+            this IServiceCollection services
+        )
+        {
+            services.AddOptionsFromConfig<AzureTableOptions>(ConfigKey);
+
+            var options = services
+                .BuildServiceProvider()
+                .GetRequiredService<IOptions<AzureTableOptions>>()
+                .Value;
+
+            services.AddScoped<IDiscordUsageRepository>(
+                provider =>
+                    new DiscordUsageRepository(
+                        options.ConnectionString,
+                        "discordusage",
+                        provider.GetRequiredService<ILogger<DiscordUsageRepository>>()
+                    )
+            );
 
             return services;
         }

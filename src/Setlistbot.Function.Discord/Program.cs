@@ -11,6 +11,7 @@ using Setlistbot.Domain.Phish.Extensions;
 using Setlistbot.Function.Discord.Middleware;
 using Setlistbot.Infrastructure.Discord;
 using Setlistbot.Infrastructure.Discord.Extensions;
+using Setlistbot.Infrastructure.Extensions;
 using Setlistbot.Infrastructure.GratefulDead.Extensions;
 using Setlistbot.Infrastructure.KglwNet.Extensions;
 using Setlistbot.Infrastructure.PhishNet.Extensions;
@@ -33,6 +34,7 @@ var host = new HostBuilder()
     {
         services
             .AddLogging()
+            .AddDiscordUsageInfrastructure()
             .AddDiscordBot()
             .AddDiscord()
             .AddDiscordKglw()

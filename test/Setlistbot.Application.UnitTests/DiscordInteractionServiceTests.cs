@@ -3,6 +3,7 @@ using Moq;
 using Setlistbot.Application.Discord;
 using Setlistbot.Domain;
 using Setlistbot.Infrastructure.Discord.Interactions;
+using Setlistbot.Infrastructure.Repositories;
 
 namespace Setlistbot.Application.UnitTests
 {
@@ -11,6 +12,7 @@ namespace Setlistbot.Application.UnitTests
         public Mock<ILogger<DiscordInteractionService>> Logger { get; }
         public Mock<ISetlistProviderFactory> SetlistProviderFactory { get; }
         public Mock<IReplyBuilderFactory> ReplyBuilderFactory { get; }
+        public Mock<IDiscordUsageRepository> DiscordUsageRepository { get; }
         public DiscordInteractionService DiscordInteractionService { get; }
 
         public DiscordInteractionServiceTestFixture()
@@ -18,11 +20,13 @@ namespace Setlistbot.Application.UnitTests
             Logger = new Mock<ILogger<DiscordInteractionService>>();
             SetlistProviderFactory = new Mock<ISetlistProviderFactory>();
             ReplyBuilderFactory = new Mock<IReplyBuilderFactory>();
+            DiscordUsageRepository = new Mock<IDiscordUsageRepository>();
 
             DiscordInteractionService = new DiscordInteractionService(
                 Logger.Object,
                 SetlistProviderFactory.Object,
-                ReplyBuilderFactory.Object
+                ReplyBuilderFactory.Object,
+                DiscordUsageRepository.Object
             );
         }
     }
