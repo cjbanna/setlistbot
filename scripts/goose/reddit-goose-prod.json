@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Bot__ArtistID",
+    "value": "goose"
+  },
+  {
+    "name": "Bot__MaxSetlistCount",
+    "value": "25"
+  },
+  {
+    "name": "Bot__RequireMention",
+    "value": "false"
+  },
+  {
+    "name": "Bot__Subreddit",
+    "value": "GoosetheBand"
+  }
+]

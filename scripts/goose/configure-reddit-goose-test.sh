@@ -1,0 +1,1 @@
+az functionapp config appsettings set -n func-setlistbot-reddit-goose-test -g rg-setlistbot-test --settings "@reddit-goose-test.json"
