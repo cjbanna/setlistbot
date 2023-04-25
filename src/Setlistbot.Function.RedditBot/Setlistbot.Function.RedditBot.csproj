@@ -18,9 +18,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Setlistbot.Application\Setlistbot.Application.csproj" />
+    <ProjectReference Include="..\Setlistbot.Domain.Goose\Setlistbot.Domain.Goose.csproj" />
     <ProjectReference Include="..\Setlistbot.Domain.GratefulDead\Setlistbot.Domain.GratefulDead.csproj" />
     <ProjectReference Include="..\Setlistbot.Domain.Kglw\Setlistbot.Domain.Kglw.csproj" />
     <ProjectReference Include="..\Setlistbot.Domain.Phish\Setlistbot.Domain.Phish.csproj" />
+    <ProjectReference Include="..\Setlistbot.Infrastructure.ElGoose\Setlistbot.Infrastructure.ElGoose.csproj" />
     <ProjectReference Include="..\Setlistbot.Infrastructure.GratefulDead\Setlistbot.Infrastructure.GratefulDead.csproj" />
     <ProjectReference Include="..\Setlistbot.Infrastructure.KglwNet\Setlistbot.Infrastructure.KglwNet.csproj" />
     <ProjectReference Include="..\Setlistbot.Infrastructure.PhishNet\Setlistbot.Infrastructure.PhishNet.csproj" />
