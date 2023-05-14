@@ -42,6 +42,7 @@ namespace Setlistbot.Infrastructure.Reddit
                 };
 
                 var response = await "https://www.reddit.com/api/v1/access_token"
+                    .WithHeader("User-Agent", "setlistbot")
                     .WithBasicAuth(key, secret)
                     .PostUrlEncodedAsync(request)
                     .ReceiveJson<AuthTokenResponse>();
@@ -91,7 +92,8 @@ namespace Setlistbot.Infrastructure.Reddit
                     url += $"?limit={limit}";
                 }
 
-                response = await url.GetJsonAsync<SubredditCommentsResponse>();
+                response = await url.WithHeader("User-Agent", "setlistbot")
+                    .GetJsonAsync<SubredditCommentsResponse>();
             }
             catch (FlurlHttpException ex)
             {
@@ -116,7 +118,8 @@ namespace Setlistbot.Infrastructure.Reddit
             {
                 var url = $"https://www.reddit.com/r/{subreddit}/new.json";
 
-                response = await url.GetJsonAsync<SubredditPostsResponse>();
+                response = await url.WithHeader("User-Agent", "setlistbot")
+                    .GetJsonAsync<SubredditPostsResponse>();
             }
             catch (FlurlHttpException ex)
             {
