@@ -56,7 +56,8 @@ namespace Setlistbot.Infrastructure.KglwNet
                                 s.City,
                                 s.State,
                                 s.Country,
-                                s.ShowNotes
+                                s.ShowNotes,
+                                s.Permalink
                             }
                     )
                     .OrderBy(s => s.Key.ShowDate)
