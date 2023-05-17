@@ -66,6 +66,12 @@ namespace Setlistbot.Domain.Kglw.UnitTests
 
             setlist.AddSet(set2);
 
+            var permalink = new Uri(
+                "king-gizzard-the-lizard-wizard-october-10-2022-red-rocks-amphitheatre-morrison-co-usa.html",
+                UriKind.Relative
+            );
+            setlist.AddPermalink(permalink);
+
             var builder = new RedditReplyBuilder();
 
             // Act

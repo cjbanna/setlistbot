@@ -85,14 +85,15 @@ namespace Setlistbot.Domain.Kglw
                 reply.Append(Environment.NewLine);
             }
 
-            reply.Append($"> _data provided by [kglw.net](https://kglw.net)_");
+            var kglwNetUrl = GetKglwNetUrl(setlist);
+            reply.Append($"> _data provided by [kglw.net]({kglwNetUrl})_");
 
             return reply.ToString();
         }
 
         private string GetKglwNetUrl(Setlist setlist)
         {
-            return $"http://kglw.today/{setlist.Date.ToString("yyyy-MM-dd")}";
+            return $"https://kglw.net/setlists/{setlist.Permalink}";
         }
     }
 }

@@ -54,5 +54,8 @@ namespace Setlistbot.Infrastructure.KglwNet
 
         [JsonProperty("shownotes")]
         public string ShowNotes { get; set; } = string.Empty;
+
+        [JsonProperty("permalink")]
+        public string Permalink { get; set; } = string.Empty;
     }
 }

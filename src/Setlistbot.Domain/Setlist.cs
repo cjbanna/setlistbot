@@ -14,7 +14,8 @@ namespace Setlistbot.Domain
         public Location Location { get; private set; } = null!;
         public int Duration => Sets.Sum(s => s.Duration);
         public string Notes { get; private set; } = string.Empty;
-        public string SpotifyUrl { get; private set; } = string.Empty;
+        public string? SpotifyUrl { get; private set; }
+        public string? Permalink { get; private set; }
 
         private Setlist() { }
 
@@ -60,8 +61,13 @@ namespace Setlistbot.Domain
         public void AddSpotifyUrl(Uri url)
         {
             Ensure.That(url, nameof(url)).IsNotNull();
-
             SpotifyUrl = url.ToString();
+        }
+
+        public void AddPermalink(Uri url)
+        {
+            Ensure.That(url, nameof(url)).IsNotNull();
+            Permalink = url.ToString();
         }
     }
 }
