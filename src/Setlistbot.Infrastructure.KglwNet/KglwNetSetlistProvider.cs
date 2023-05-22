@@ -80,6 +80,12 @@ namespace Setlistbot.Infrastructure.KglwNet
                         showGrouping.Key.ShowNotes
                     );
 
+                    var permalink = GetPermalink(showGrouping.Key.Permalink);
+                    if (permalink != null)
+                    {
+                        setlist.AddPermalink(permalink);
+                    }
+
                     foreach (
                         var setGrouping in showGrouping.GroupBy(x => $"{x.SetType} {x.SetNumber}")
                     )
@@ -135,6 +141,16 @@ namespace Setlistbot.Infrastructure.KglwNet
                 );
                 throw;
             }
+        }
+
+        private Uri? GetPermalink(string permalink)
+        {
+            if (string.IsNullOrWhiteSpace(permalink))
+            {
+                return null;
+            }
+
+            return new Uri(permalink, UriKind.Relative);
         }
     }
 }
