@@ -62,7 +62,13 @@ namespace Setlistbot.Infrastructure.Reddit
 
             try
             {
-                var response = await _client.GetPosts(subreddit);
+                var token = await GetAuthToken();
+                if (token == null)
+                {
+                    return Enumerable.Empty<Post>();
+                }
+
+                var response = await _client.GetPosts(token, subreddit);
                 if (response != null)
                 {
                     return response.Data.Children
@@ -95,13 +101,7 @@ namespace Setlistbot.Infrastructure.Reddit
 
             try
             {
-                var token = await _client.GetAuthToken(
-                    _redditOptions.Username,
-                    _redditOptions.Password,
-                    _redditOptions.Key,
-                    _redditOptions.Secret
-                );
-
+                var token = await GetAuthToken();
                 if (token == null)
                 {
                     return false;
@@ -116,6 +116,16 @@ namespace Setlistbot.Infrastructure.Reddit
             }
 
             return false;
+        }
+
+        private async Task<string?> GetAuthToken()
+        {
+            return await _client.GetAuthToken(
+                _redditOptions.Username,
+                _redditOptions.Password,
+                _redditOptions.Key,
+                _redditOptions.Secret
+            );
         }
     }
 }

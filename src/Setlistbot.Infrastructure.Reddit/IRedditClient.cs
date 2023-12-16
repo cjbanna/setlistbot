@@ -7,6 +7,6 @@ namespace Setlistbot.Infrastructure.Reddit
         Task<string?> GetAuthToken(string username, string password, string key, string secret);
         Task<SubredditCommentsResponse?> GetComments(string subreddit, int? limit = default);
         Task<PostCommentResponse?> PostComment(string token, string parent, string text);
-        Task<SubredditPostsResponse?> GetPosts(string subreddit);
+        Task<SubredditPostsResponse?> GetPosts(string token, string subreddit);
     }
 }
