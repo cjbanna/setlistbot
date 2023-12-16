@@ -108,7 +108,13 @@ namespace Setlistbot.Infrastructure.Reddit
             return response;
         }
 
-        public async Task<SubredditPostsResponse?> GetPosts(string subreddit)
+        /// <summary>
+        /// Gets the last 25 posts for a subreddit
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
+        public async Task<SubredditPostsResponse?> GetPosts(string token, string subreddit)
         {
             Ensure.That(subreddit, nameof(subreddit)).IsNotNullOrWhiteSpace();
 
@@ -116,9 +122,10 @@ namespace Setlistbot.Infrastructure.Reddit
 
             try
             {
-                var url = $"https://www.reddit.com/r/{subreddit}/new.json";
+                var url = $"https://oauth.reddit.com/r/{subreddit}/new";
 
                 response = await url.WithHeader("User-Agent", "setlistbot")
+                    .WithOAuthBearerToken(token)
                     .GetJsonAsync<SubredditPostsResponse>();
             }
             catch (FlurlHttpException ex)
