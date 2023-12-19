@@ -11,17 +11,6 @@
       "command": "dotnet",
       "args": ["csharpier", "${staged}"],
       "include": ["**/*.cs"]
-    },
-    {
-      "name": "dotnet test",
-      "command": "dotnet",
-      "args": [
-        "test",
-        "--verbosity",
-        "quiet",
-        "--filter",
-        "FullyQualifiedName~UnitTests"
-      ]
     }
   ]
 }
