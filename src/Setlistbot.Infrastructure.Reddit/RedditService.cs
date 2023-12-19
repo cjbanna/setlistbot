@@ -31,7 +31,17 @@ namespace Setlistbot.Infrastructure.Reddit
 
             try
             {
-                var response = await _client.GetComments(subreddit, _redditOptions.CommentsLimit);
+                var token = await GetAuthToken();
+                if (token == null)
+                {
+                    return Enumerable.Empty<Comment>();
+                }
+
+                var response = await _client.GetComments(
+                    token,
+                    subreddit,
+                    _redditOptions.CommentsLimit
+                );
                 if (response != null)
                 {
                     return response.Data.Children

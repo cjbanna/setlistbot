@@ -69,6 +69,7 @@ namespace Setlistbot.Infrastructure.Reddit
         /// <param name="limit">The number of comments to take</param>
         /// <returns>The deserialized response from the API if successful</returns>
         public async Task<SubredditCommentsResponse?> GetComments(
+            string token,
             string subreddit,
             int? limit = default
         )
@@ -85,7 +86,7 @@ namespace Setlistbot.Infrastructure.Reddit
             try
             {
                 // 25 is the default limit if no 'limit' query parameter is supplied
-                var url = $"https://www.reddit.com/r/{subreddit}/comments.json";
+                var url = $"https://oauth.reddit.com/r/{subreddit}/comments.json";
 
                 if (limit.HasValue)
                 {
@@ -93,6 +94,7 @@ namespace Setlistbot.Infrastructure.Reddit
                 }
 
                 response = await url.WithHeader("User-Agent", "setlistbot")
+                    .WithOAuthBearerToken(token)
                     .GetJsonAsync<SubredditCommentsResponse>();
             }
             catch (FlurlHttpException ex)
