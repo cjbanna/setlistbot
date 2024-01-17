@@ -35,5 +35,15 @@ namespace Setlistbot.Domain
 
             _songs.Add(song);
         }
+
+        // A method that returns a new Set with the songs in a random order
+        public Set Shuffle()
+        {
+            var random = new Random();
+            var shuffledSongs = _songs.OrderBy(s => random.Next()).ToList();
+            var shuffledSet = new Set(Name);
+            shuffledSet.AddSongs(shuffledSongs);
+            return shuffledSet;
+        }
     }
 }
