@@ -26,4 +26,12 @@ namespace Setlistbot.Domain
         public int Duration { get; }
         public string Footnote { get; }
     }
+
+    public static class SongExtensions
+    {
+        public static Song WithFootnote(this Song song, string footnote)
+        {
+            return new Song(song.Name, song.Position, song.Transition, song.Duration, footnote);
+        }
+    }
 }
