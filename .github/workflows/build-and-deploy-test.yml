@@ -35,7 +35,12 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Release Build Reddit Bot
         run: dotnet build src/Setlistbot.Function.RedditBot/Setlistbot.Function.RedditBot.csproj --configuration Release --output ./RedditBot
