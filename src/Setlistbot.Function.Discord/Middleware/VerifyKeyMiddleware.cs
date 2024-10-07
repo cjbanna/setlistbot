@@ -1,11 +1,11 @@
-﻿using Microsoft.Azure.Functions.Worker;
+﻿using System.Net;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.Functions.Worker.Middleware;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Setlistbot.Infrastructure.Discord;
 using Setlistbot.Infrastructure.Discord.Options;
-using System.Net;
 
 namespace Setlistbot.Function.Discord.Middleware
 {

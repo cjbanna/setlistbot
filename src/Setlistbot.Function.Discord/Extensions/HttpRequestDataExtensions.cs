@@ -1,7 +1,7 @@
-﻿using Microsoft.Azure.Functions.Worker.Http;
+﻿using System.Text;
+using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Text;
 
 namespace Setlistbot.Function.Discord.Extensions
 {
@@ -14,7 +14,7 @@ namespace Setlistbot.Function.Discord.Extensions
             new JsonSerializerSettings
             {
                 ContractResolver = ContractResolver,
-                NullValueHandling = NullValueHandling.Ignore
+                NullValueHandling = NullValueHandling.Ignore,
             };
 
         /// <summary>

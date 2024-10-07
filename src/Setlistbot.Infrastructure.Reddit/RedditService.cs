@@ -44,17 +44,16 @@ namespace Setlistbot.Infrastructure.Reddit
                 );
                 if (response != null)
                 {
-                    return response.Data.Children
-                        .Where(c => c != null)
-                        .Select(
-                            c =>
-                                Comment.NewComment(
-                                    c.Data.Id,
-                                    c.Data.Author,
-                                    c.Data.Body,
-                                    c.Data.Permalink,
-                                    subreddit
-                                )
+                    return response
+                        .Data.Children.Where(c => c != null)
+                        .Select(c =>
+                            Comment.NewComment(
+                                c.Data.Id,
+                                c.Data.Author,
+                                c.Data.Body,
+                                c.Data.Permalink,
+                                subreddit
+                            )
                         );
                 }
             }
@@ -81,18 +80,17 @@ namespace Setlistbot.Infrastructure.Reddit
                 var response = await _client.GetPosts(token, subreddit);
                 if (response != null)
                 {
-                    return response.Data.Children
-                        .Where(c => c != null)
-                        .Select(
-                            c =>
-                                Post.NewPost(
-                                    c.Data.Id,
-                                    c.Data.Author,
-                                    c.Data.Title,
-                                    c.Data.SelfText,
-                                    c.Data.Permalink,
-                                    subreddit
-                                )
+                    return response
+                        .Data.Children.Where(c => c != null)
+                        .Select(c =>
+                            Post.NewPost(
+                                c.Data.Id,
+                                c.Data.Author,
+                                c.Data.Title,
+                                c.Data.SelfText,
+                                c.Data.Permalink,
+                                subreddit
+                            )
                         );
                 }
             }

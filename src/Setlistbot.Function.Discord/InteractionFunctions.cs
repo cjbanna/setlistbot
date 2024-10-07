@@ -1,10 +1,10 @@
+using System.Net;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Setlistbot.Application.Discord;
 using Setlistbot.Function.Discord.Extensions;
 using Setlistbot.Infrastructure.Discord.Interactions;
-using System.Net;
 
 namespace Setlistbot.Function.Discord
 {

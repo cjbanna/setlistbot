@@ -30,7 +30,7 @@ namespace Setlistbot.Domain.GratefulDead
                 reply.Append($"**{set.Name}**: ");
                 foreach (var song in set.Songs.OrderBy(s => s.Position))
                 {
-                    if (song.Transition.Trim() == ">")
+                    if (song.SongTransition.Trim() == ">")
                     {
                         reply.Append($"{song.Name} > ");
                     }

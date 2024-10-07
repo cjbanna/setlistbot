@@ -22,7 +22,7 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
                     new PhishNetOptions
                     {
                         ApiKey = "MyApiKey",
-                        BaseUrl = "https://api.phish.net/v5"
+                        BaseUrl = "https://api.phish.net/v5",
                     }
                 );
 
@@ -49,8 +49,8 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
             // Assert
             Assert.NotNull(result);
 
-            fixture.HttpTest
-                .ShouldHaveCalled(
+            fixture
+                .HttpTest.ShouldHaveCalled(
                     "https://api.phish.net/v5/setlists/showdate/1997-11-22.json?apikey=MyApiKey"
                 )
                 .WithVerb(HttpMethod.Get)

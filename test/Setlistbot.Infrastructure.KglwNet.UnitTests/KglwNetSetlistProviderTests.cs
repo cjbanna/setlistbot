@@ -64,79 +64,79 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
                 {
                     Assert.Equal(1, song.Position);
                     Assert.Equal("Mars For The Rich", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(2, song.Position);
                     Assert.Equal("Hell", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(3, song.Position);
                     Assert.Equal("Magenta Mountain", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(4, song.Position);
                     Assert.Equal("Inner Cell", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(5, song.Position);
                     Assert.Equal("Loyalty", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(6, song.Position);
                     Assert.Equal("Horology", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(7, song.Position);
                     Assert.Equal("O.N.E.", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(8, song.Position);
                     Assert.Equal("Nuclear Fusion", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(9, song.Position);
                     Assert.Equal("All Is Known", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(10, song.Position);
                     Assert.Equal("Straws In The Wind", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(11, song.Position);
                     Assert.Equal("The Garden Goblin", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(12, song.Position);
                     Assert.Equal("The River", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(13, song.Position);
                     Assert.Equal("Magma", song.Name);
-                    Assert.Equal("", song.Transition);
+                    Assert.Equal("", song.SongTransition);
                 }
             );
 
@@ -147,85 +147,85 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
                 {
                     Assert.Equal(1, song.Position);
                     Assert.Equal("Rattlesnake", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(2, song.Position);
                     Assert.Equal("Automation", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(3, song.Position);
                     Assert.Equal("Honey", song.Name);
-                    Assert.Equal("->", song.Transition);
+                    Assert.Equal("->", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(4, song.Position);
                     Assert.Equal("Sleep Drifter", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(5, song.Position);
                     Assert.Equal("Ataraxia", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(6, song.Position);
                     Assert.Equal("Evil Death Roll", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(7, song.Position);
                     Assert.Equal("Ice V", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(8, song.Position);
                     Assert.Equal("The Reticent Raconteur", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(9, song.Position);
                     Assert.Equal("The Lord of Lightning", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(10, song.Position);
                     Assert.Equal("The Balrog", song.Name);
-                    Assert.Equal("->", song.Transition);
+                    Assert.Equal("->", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(11, song.Position);
                     Assert.Equal("Trapdoor", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(12, song.Position);
                     Assert.Equal("Hot Water", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(13, song.Position);
                     Assert.Equal("The Grim Reaper", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(14, song.Position);
                     Assert.Equal("Planet B", song.Name);
-                    Assert.Equal("", song.Transition);
+                    Assert.Equal("", song.SongTransition);
                 }
             );
         }

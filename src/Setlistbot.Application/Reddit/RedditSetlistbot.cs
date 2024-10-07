@@ -16,7 +16,6 @@ namespace Setlistbot.Application.Reddit
         private readonly IRedditService _redditService;
         private readonly ICommentRepository _commentRepository;
         private readonly IPostRepository _postRepository;
-        private readonly IReplyBuilderFactory _replyBuilderFactory;
         private readonly IReplyBuilder _replyBuilder;
         private readonly ISetlistProviderFactory _setlistProviderFactory;
         private readonly ISetlistProvider _setlistProvider;
@@ -38,7 +37,7 @@ namespace Setlistbot.Application.Reddit
             _redditService = Ensure.Any.IsNotNull(redditService, nameof(redditService));
             _commentRepository = Ensure.Any.IsNotNull(commentRepository, nameof(commentRepository));
             _postRepository = Ensure.Any.IsNotNull(postRepository, nameof(postRepository));
-            _replyBuilderFactory = Ensure.Any.IsNotNull(
+            var replyBuilderFactory1 = Ensure.Any.IsNotNull(
                 replyBuilderFactory,
                 nameof(replyBuilderFactory)
             );
@@ -72,7 +71,7 @@ namespace Setlistbot.Application.Reddit
                     )
             );
 
-            var replyBuilder = _replyBuilderFactory.Get(_botOptions.ArtistId);
+            var replyBuilder = replyBuilderFactory1.Get(_botOptions.ArtistId);
 
             _replyBuilder = Ensure.Any.IsNotNull(
                 replyBuilder,
@@ -198,7 +197,7 @@ namespace Setlistbot.Application.Reddit
             }
         }
 
-        public async Task Reply(Post post)
+        private async Task Reply(Post post)
         {
             Ensure.Any.IsNotNull(post, nameof(post));
 

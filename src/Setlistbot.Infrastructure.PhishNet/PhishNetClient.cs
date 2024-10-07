@@ -1,4 +1,5 @@
-﻿using EnsureThat;
+﻿using CSharpFunctionalExtensions;
+using EnsureThat;
 using Flurl;
 using Flurl.Http;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ namespace Setlistbot.Infrastructure.PhishNet
             _options = Ensure.Any.IsNotNull(options, nameof(options)).Value;
         }
 
-        public async Task<SetlistResponse> GetSetlistAsync(DateTime date)
+        public async Task<Maybe<SetlistResponse>> GetSetlistAsync(DateOnly date)
         {
             var url = "";
 

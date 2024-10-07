@@ -32,8 +32,8 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
             var date = new DateTime(1997, 11, 22);
 
             var setlistResponse = TestData.GetSetlistResponseTestData();
-            fixture.PhishNetClient
-                .Setup(x => x.GetSetlistAsync(date))
+            fixture
+                .PhishNetClient.Setup(x => x.GetSetlistAsync(date))
                 .ReturnsAsync(setlistResponse);
 
             // Act
@@ -63,49 +63,49 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
                 {
                     Assert.Equal(1, song.Position);
                     Assert.Equal("Mike's Song", song.Name);
-                    Assert.Equal("->", song.Transition);
+                    Assert.Equal("->", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(2, song.Position);
                     Assert.Equal("I Am Hydrogen", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(3, song.Position);
                     Assert.Equal("Weekapaug Groove", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(4, song.Position);
                     Assert.Equal("Harry Hood", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(5, song.Position);
                     Assert.Equal("Train Song", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(6, song.Position);
                     Assert.Equal("Billy Breathes", song.Name);
-                    Assert.Equal(",", song.Transition);
+                    Assert.Equal(",", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(7, song.Position);
                     Assert.Equal("Frankenstein", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(8, song.Position);
                     Assert.Equal("Izabella", song.Name);
-                    Assert.Equal("", song.Transition);
+                    Assert.Equal("", song.SongTransition);
                 }
             );
 
@@ -116,31 +116,31 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
                 {
                     Assert.Equal(1, song.Position);
                     Assert.Equal("Halley's Comet", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(2, song.Position);
                     Assert.Equal("Tweezer", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(3, song.Position);
                     Assert.Equal("Black-Eyed Katy", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(4, song.Position);
                     Assert.Equal("Piper", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(5, song.Position);
                     Assert.Equal("Run Like an Antelope", song.Name);
-                    Assert.Equal("", song.Transition);
+                    Assert.Equal("", song.SongTransition);
                     Assert.Equal("Lyric changed to \"Michael Esquandolas.\"", song.Footnote);
                 }
             );
@@ -152,13 +152,13 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
                 {
                     Assert.Equal(1, song.Position);
                     Assert.Equal("Bouncing Around the Room", song.Name);
-                    Assert.Equal(">", song.Transition);
+                    Assert.Equal(">", song.SongTransition);
                 },
                 song =>
                 {
                     Assert.Equal(2, song.Position);
                     Assert.Equal("Tweezer Reprise", song.Name);
-                    Assert.Equal("", song.Transition);
+                    Assert.Equal("", song.SongTransition);
                 }
             );
         }

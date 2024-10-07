@@ -45,7 +45,7 @@ namespace Setlistbot.Application.UnitTests
             var location = new Location("Madison Square Garden", "New York", "NY", "USA");
             var setlists = new List<Setlist>
             {
-                Setlist.NewSetlist("phish", "Phish", date, location, string.Empty)
+                Setlist.NewSetlist("phish", "Phish", date, location, string.Empty),
             };
 
             var setlistProvider = new Mock<ISetlistProvider>();
@@ -92,9 +92,9 @@ namespace Setlistbot.Application.UnitTests
                     Options = new InteractionOption[]
                     {
                         new InteractionOption { Name = "artist", Value = "phish" },
-                        new InteractionOption { Name = "date", Value = "1995-12-31" }
-                    }
-                }
+                        new InteractionOption { Name = "date", Value = "1995-12-31" },
+                    },
+                },
             };
 
             // Act
@@ -122,9 +122,9 @@ namespace Setlistbot.Application.UnitTests
                     Options = new InteractionOption[]
                     {
                         new InteractionOption { Name = "artist", Value = "phish" },
-                        new InteractionOption { Name = "date", Value = "not a date" }
-                    }
-                }
+                        new InteractionOption { Name = "date", Value = "not a date" },
+                    },
+                },
             };
 
             // Act
@@ -155,9 +155,9 @@ namespace Setlistbot.Application.UnitTests
                     Options = new InteractionOption[]
                     {
                         new InteractionOption { Name = "artist", Value = "phish" },
-                        new InteractionOption { Name = "date", Value = "1980-01-01" }
-                    }
-                }
+                        new InteractionOption { Name = "date", Value = "1980-01-01" },
+                    },
+                },
             };
 
             // Act

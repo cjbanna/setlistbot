@@ -18,7 +18,7 @@ namespace Setlistbot.Infrastructure.Extensions
                 Comment = comment.Body,
                 Reply = comment.Reply,
                 Author = comment.Author,
-                Permalink = comment.Permalink
+                Permalink = comment.Permalink,
             };
         }
 

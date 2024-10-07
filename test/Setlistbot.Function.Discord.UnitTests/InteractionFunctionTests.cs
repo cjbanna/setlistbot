@@ -1,11 +1,11 @@
+using System.Net;
+using System.Text;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using Setlistbot.Application.Discord;
 using Setlistbot.Infrastructure.Discord.Interactions;
-using System.Net;
-using System.Text;
 
 namespace Setlistbot.Function.Discord.UnitTests
 {
@@ -45,12 +45,11 @@ namespace Setlistbot.Function.Discord.UnitTests
             var httpRequest = new FakeHttpRequestData(fixture.FunctionContext.Object, bodyStream);
 
             // Simulate a pong response to a ping request
-            fixture.DiscordInteractionService
-                .Setup(
-                    d =>
-                        d.GetResponse(
-                            It.Is<Interaction>(i => i.InteractionType == InteractionType.Ping)
-                        )
+            fixture
+                .DiscordInteractionService.Setup(d =>
+                    d.GetResponse(
+                        It.Is<Interaction>(i => i.InteractionType == InteractionType.Ping)
+                    )
                 )
                 .ReturnsAsync(new InteractionResponse { Type = InteractionCallbackType.Pong });
 

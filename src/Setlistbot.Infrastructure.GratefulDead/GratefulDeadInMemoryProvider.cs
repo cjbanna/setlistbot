@@ -19,7 +19,7 @@ namespace Setlistbot.Infrastructure.GratefulDead
 
         public string ArtistId => "gd";
 
-        public async Task<IEnumerable<domain.Setlist>> GetSetlists(DateTime date)
+        public async Task<IEnumerable<domain.Setlist>> GetSetlists(DateOnly date)
         {
             return await Task.FromResult(
                 Setlists.Value.Where(s => s.ShowDate == date).Select(s => s.ToSetlist())
@@ -29,7 +29,7 @@ namespace Setlistbot.Infrastructure.GratefulDead
 
     public record Setlist
     {
-        public DateTime ShowDate { get; init; }
+        public DateOnly ShowDate { get; init; }
         public string Venue { get; init; } = string.Empty;
         public string Location { get; init; } = string.Empty;
         public string SpotifyUrl { get; set; } = string.Empty;

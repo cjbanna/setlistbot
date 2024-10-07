@@ -43,8 +43,8 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
             // Assert
             Assert.NotNull(result);
 
-            fixture.HttpTest
-                .ShouldHaveCalled(
+            fixture
+                .HttpTest.ShouldHaveCalled(
                     "https://kglw.songfishapp.com/api/v1/setlists/showdate/2022-10-10.json"
                 )
                 .WithVerb(HttpMethod.Get)

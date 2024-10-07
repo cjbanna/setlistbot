@@ -1,6 +1,6 @@
-﻿using Microsoft.Azure.Functions.Worker;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Setlistbot.Function.Discord
 {

@@ -3,11 +3,11 @@
   "isRoot": true,
   "tools": {
     "husky": {
-      "version": "0.5.4",
+      "version": "0.7.1",
       "commands": ["husky"]
     },
     "CSharpier": {
-      "version": "0.23.0",
+      "version": "0.29.2",
       "commands": ["dotnet-csharpier"]
     }
   }

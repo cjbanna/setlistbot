@@ -3,6 +3,6 @@
     public interface ISetlistProvider
     {
         string ArtistId { get; }
-        Task<IEnumerable<Setlist>> GetSetlists(DateTime date);
+        Task<IEnumerable<Setlist>> GetSetlists(DateOnly date);
     }
 }

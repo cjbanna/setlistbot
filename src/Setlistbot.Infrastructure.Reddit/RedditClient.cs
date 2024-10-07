@@ -38,7 +38,7 @@ namespace Setlistbot.Infrastructure.Reddit
                 {
                     grant_type = "password",
                     username,
-                    password
+                    password,
                 };
 
                 var response = await "https://www.reddit.com/api/v1/access_token"
@@ -164,7 +164,7 @@ namespace Setlistbot.Infrastructure.Reddit
                 {
                     api_type = "json",
                     thing_id = parent,
-                    text
+                    text,
                 };
 
                 var flurlResponse = await "https://oauth.reddit.com/api/comment"

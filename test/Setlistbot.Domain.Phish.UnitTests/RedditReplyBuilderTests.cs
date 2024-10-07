@@ -9,7 +9,7 @@ namespace Setlistbot.Domain.Phish.UnitTests
             var builder = new RedditReplyBuilder();
 
             // Act
-            var actual = builder.ArtistId;
+            var actual = RedditReplyBuilder.ArtistId;
 
             // Assert
             Assert.Equal("phish", actual);

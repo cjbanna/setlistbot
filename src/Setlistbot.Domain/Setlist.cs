@@ -1,4 +1,5 @@
-﻿using EnsureThat;
+﻿using CSharpFunctionalExtensions;
+using EnsureThat;
 
 namespace Setlistbot.Domain
 {
@@ -8,27 +9,25 @@ namespace Setlistbot.Domain
 
         public IReadOnlyList<Set> Sets => _sets.AsReadOnly();
 
-        public string ArtistId { get; private set; } = string.Empty;
-        public string ArtistName { get; private set; } = string.Empty;
-        public DateTime Date { get; private set; }
-        public Location Location { get; private set; } = null!;
-        public int Duration => Sets.Sum(s => s.Duration);
+        public ArtistId ArtistId { get; private set; } = default!;
+        public ArtistName ArtistName { get; private set; } = default!;
+        public DateOnly Date { get; private set; }
+        public Location Location { get; private set; } = default!;
+        public TimeSpan Duration => _sets.Aggregate(TimeSpan.Zero, (acc, s) => acc + s.Duration);
         public string Notes { get; private set; } = string.Empty;
-        public string? SpotifyUrl { get; private set; }
-        public string? Permalink { get; private set; }
+        public Maybe<string> SpotifyUrl { get; private set; }
+        public Maybe<string> Permalink { get; private set; }
 
         private Setlist() { }
 
         public static Setlist NewSetlist(
-            string artistId,
-            string artistName,
-            DateTime showDate,
+            ArtistId artistId,
+            ArtistName artistName,
+            DateOnly showDate,
             Location location,
             string notes
         )
         {
-            Ensure.That(artistId, nameof(artistId)).IsNotNullOrWhiteSpace();
-            Ensure.That(artistName, nameof(artistName)).IsNotNullOrWhiteSpace();
             Ensure.That(location, nameof(location)).IsNotNull();
             Ensure.That(notes, nameof(notes)).IsNotNull();
 
@@ -38,7 +37,7 @@ namespace Setlistbot.Domain
                 ArtistName = artistName,
                 Date = showDate,
                 Location = location,
-                Notes = notes
+                Notes = notes,
             };
         }
 
@@ -47,8 +46,8 @@ namespace Setlistbot.Domain
             Ensure.That(set, nameof(set)).IsNotNull();
 
             if (
-                _sets.Any(
-                    s => string.Equals(s.Name, set.Name, StringComparison.CurrentCultureIgnoreCase)
+                _sets.Any(s =>
+                    string.Equals(s.Name, set.Name, StringComparison.CurrentCultureIgnoreCase)
                 )
             )
             {

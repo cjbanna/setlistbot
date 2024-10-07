@@ -51,7 +51,7 @@ namespace Setlistbot.Domain.PostAggregate
                 SelfText = selfText,
                 Permalink = permalink,
                 ArtistId = artistId,
-                Reply = string.Empty
+                Reply = string.Empty,
             };
         }
 
@@ -80,7 +80,7 @@ namespace Setlistbot.Domain.PostAggregate
                 SelfText = selfText,
                 Permalink = permalink,
                 ArtistId = artistId,
-                Reply = reply
+                Reply = reply,
             };
         }
 

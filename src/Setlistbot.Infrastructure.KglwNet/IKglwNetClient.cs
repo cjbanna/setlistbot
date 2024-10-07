@@ -1,7 +1,9 @@
-﻿namespace Setlistbot.Infrastructure.KglwNet
+﻿using CSharpFunctionalExtensions;
+
+namespace Setlistbot.Infrastructure.KglwNet
 {
     public interface IKglwNetClient
     {
-        Task<SetlistResponse> GetSetlistAsync(DateTime date);
+        Task<Maybe<SetlistResponse>> GetSetlistAsync(DateOnly date);
     }
 }

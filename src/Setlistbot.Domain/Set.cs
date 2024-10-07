@@ -6,13 +6,12 @@ namespace Setlistbot.Domain
     {
         private readonly List<Song> _songs = new();
 
-        public string Name { get; private set; }
-        public IReadOnlyList<Song> Songs => _songs.OrderBy(s => s.Position).ToList().AsReadOnly();
-        public int Duration => _songs.Sum(s => s.Duration);
+        public SetName Name { get; private set; }
+        public IReadOnlyList<Song> Songs => _songs.OrderBy(s => s.Position).ToList();
+        public TimeSpan Duration => _songs.Aggregate(TimeSpan.Zero, (acc, s) => acc + s.Duration);
 
-        public Set(string name)
+        public Set(SetName name)
         {
-            Ensure.That(name, nameof(name)).IsNotNullOrWhiteSpace();
             Name = name;
         }
 
@@ -26,8 +25,6 @@ namespace Setlistbot.Domain
 
         public void AddSong(Song song)
         {
-            Ensure.That(song, nameof(song)).IsNotNull();
-
             if (Songs.Any(s => s.Position == song.Position))
             {
                 throw new InvalidOperationException($"Position {song.Position} must be unique");
@@ -35,5 +32,11 @@ namespace Setlistbot.Domain
 
             _songs.Add(song);
         }
+    }
+
+    public record SetName : StringNotNullOrWhiteSpace
+    {
+        public SetName(string value)
+            : base(value) { }
     }
 }

@@ -35,25 +35,21 @@ namespace Setlistbot.Infrastructure.Extensions
             serviceClient.CreateTableIfNotExists(postsTableName);
 
             services
-                .AddScoped<ICommentRepository>(
-                    _ =>
-                        new CommentRepository(
-                            subreddit,
-                            options.ConnectionString,
-                            commentsTableName
-                        )
-                )
-                .AddScoped<IPostRepository>(
-                    _ => new PostRepository(subreddit, options.ConnectionString, postsTableName)
-                )
-                .AddScoped<IDiscordUsageRepository>(
-                    provider =>
-                        new DiscordUsageRepository(
-                            options.ConnectionString,
-                            "discordusage",
-                            provider.GetRequiredService<ILogger<DiscordUsageRepository>>()
-                        )
-                );
+                .AddScoped<ICommentRepository>(_ => new CommentRepository(
+                    subreddit,
+                    options.ConnectionString,
+                    commentsTableName
+                ))
+                .AddScoped<IPostRepository>(_ => new PostRepository(
+                    subreddit,
+                    options.ConnectionString,
+                    postsTableName
+                ))
+                .AddScoped<IDiscordUsageRepository>(provider => new DiscordUsageRepository(
+                    options.ConnectionString,
+                    "discordusage",
+                    provider.GetRequiredService<ILogger<DiscordUsageRepository>>()
+                ));
 
             return services;
         }
@@ -69,14 +65,11 @@ namespace Setlistbot.Infrastructure.Extensions
                 .GetRequiredService<IOptions<AzureTableOptions>>()
                 .Value;
 
-            services.AddScoped<IDiscordUsageRepository>(
-                provider =>
-                    new DiscordUsageRepository(
-                        options.ConnectionString,
-                        "discordusage",
-                        provider.GetRequiredService<ILogger<DiscordUsageRepository>>()
-                    )
-            );
+            services.AddScoped<IDiscordUsageRepository>(provider => new DiscordUsageRepository(
+                options.ConnectionString,
+                "discordusage",
+                provider.GetRequiredService<ILogger<DiscordUsageRepository>>()
+            ));
 
             return services;
         }

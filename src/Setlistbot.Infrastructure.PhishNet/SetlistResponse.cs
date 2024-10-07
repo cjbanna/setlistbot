@@ -8,7 +8,7 @@ namespace Setlistbot.Infrastructure.PhishNet
         public string ErrorMessage { get; set; } = string.Empty;
 
         [JsonProperty("data")]
-        public SetlistResponseData[] Data { get; set; } = Array.Empty<SetlistResponseData>();
+        public SetlistResponseData[] Data { get; set; } = [];
     }
 
     public class SetlistResponseData

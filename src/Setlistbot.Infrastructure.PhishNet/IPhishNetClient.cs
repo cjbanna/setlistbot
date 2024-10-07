@@ -1,7 +1,9 @@
-﻿namespace Setlistbot.Infrastructure.PhishNet
+﻿using CSharpFunctionalExtensions;
+
+namespace Setlistbot.Infrastructure.PhishNet
 {
     public interface IPhishNetClient
     {
-        Task<SetlistResponse> GetSetlistAsync(DateTime date);
+        Task<Maybe<SetlistResponse>> GetSetlistAsync(DateOnly date);
     }
 }

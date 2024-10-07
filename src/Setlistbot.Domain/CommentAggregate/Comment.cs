@@ -5,7 +5,7 @@ namespace Setlistbot.Domain.CommentAggregate
 {
     public sealed class Comment
     {
-        private List<DateTime> _dates = null!;
+        private List<DateTime> _dates = [];
 
         public string Id { get; private set; } = string.Empty;
         public string Author { get; private set; } = string.Empty;
@@ -48,7 +48,7 @@ namespace Setlistbot.Domain.CommentAggregate
                 Body = body,
                 Permalink = permalink,
                 ArtistId = artistId,
-                Reply = string.Empty
+                Reply = string.Empty,
             };
         }
 
@@ -75,7 +75,7 @@ namespace Setlistbot.Domain.CommentAggregate
                 Body = body,
                 Permalink = permalink,
                 ArtistId = artistId,
-                Reply = reply
+                Reply = reply,
             };
         }
 

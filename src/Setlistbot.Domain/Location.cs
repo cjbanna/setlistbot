@@ -1,22 +1,39 @@
-﻿using EnsureThat;
+﻿using CSharpFunctionalExtensions;
 
 namespace Setlistbot.Domain
 {
-    public class Location
+    public record Location(Maybe<Venue> Venue, City City, Maybe<State> State, Country Country)
     {
-        public string Venue { get; private set; }
-        public string City { get; private set; }
-        public string State { get; private set; }
-        public string Country { get; private set; }
+        // Sometimes the exact venue is not known
+        public Maybe<Venue> Venue { get; private set; } = Venue;
+        public City City { get; private set; } = City;
 
-        public Location(string venue, string city, string state, string country)
-        {
-            // Sometimes the exact venue is not known
-            Venue = venue;
-            // Shows played outside USA may not have a state
-            State = state;
-            City = Ensure.String.IsNotNullOrWhiteSpace(city, nameof(city));
-            Country = Ensure.String.IsNotNullOrWhiteSpace(country, nameof(country));
-        }
+        // Shows played outside USA may not have a state
+        public Maybe<State> State { get; private set; } = State;
+        public Country Country { get; private set; } = Country;
+    }
+
+    public record State : StringNotNullOrWhiteSpace
+    {
+        public State(string value)
+            : base(value) { }
+    }
+
+    public record Venue : StringNotNullOrWhiteSpace
+    {
+        public Venue(string value)
+            : base(value) { }
+    }
+
+    public record City : StringNotNullOrWhiteSpace
+    {
+        public City(string value)
+            : base(value) { }
+    }
+
+    public record Country : StringNotNullOrWhiteSpace
+    {
+        public Country(string value)
+            : base(value) { }
     }
 }

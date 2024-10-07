@@ -16,7 +16,7 @@ namespace Setlistbot.Infrastructure.Extensions
                 ApplicationId = interaction.ApplicationId,
                 GuildId = interaction.GuildId,
                 IteractionType = (int)interaction.InteractionType,
-                Data = JsonConvert.SerializeObject(interaction.Data)
+                Data = JsonConvert.SerializeObject(interaction.Data),
             };
         }
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Logging;
 using Setlistbot.Domain;
 
 namespace Setlistbot.Infrastructure.KglwNet
@@ -19,18 +20,12 @@ namespace Setlistbot.Infrastructure.KglwNet
 
         public string ArtistId => "kglw";
 
-        public async Task<IEnumerable<Setlist>> GetSetlists(DateTime date)
+        public async Task<IEnumerable<Setlist>> GetSetlists(DateOnly date)
         {
             try
             {
-                var setlistResponse = await _kglwNetClient.GetSetlistAsync(date);
-
-                if (setlistResponse == null || setlistResponse.Data == null)
-                {
-                    return Enumerable.Empty<Setlist>();
-                }
-
-                return GetSetlistsFromResponse(setlistResponse);
+                var response = await _kglwNetClient.GetSetlistAsync(date);
+                return response.Match(GetSetlistsFromResponse, () => []);
             }
             catch (Exception ex)
             {
@@ -45,21 +40,18 @@ namespace Setlistbot.Infrastructure.KglwNet
             {
                 var setlists = new List<Setlist>();
 
-                var kglwSetlists = setlistResponse.Data
-                    .Where(s => s.ArtistName == "King Gizzard & the Lizard Wizard")
-                    .GroupBy(
-                        s =>
-                            new
-                            {
-                                s.ShowDate,
-                                s.Venue,
-                                s.City,
-                                s.State,
-                                s.Country,
-                                s.ShowNotes,
-                                s.Permalink
-                            }
-                    )
+                var kglwSetlists = setlistResponse
+                    .Data.Where(s => s.ArtistName == "King Gizzard & the Lizard Wizard")
+                    .GroupBy(s => new
+                    {
+                        s.ShowDate,
+                        s.Venue,
+                        s.City,
+                        s.State,
+                        s.Country,
+                        s.ShowNotes,
+                        s.Permalink,
+                    })
                     .OrderBy(s => s.Key.ShowDate)
                     .ToArray();
 
@@ -68,14 +60,14 @@ namespace Setlistbot.Infrastructure.KglwNet
                     var location = $"{showGrouping.Key.City}, {showGrouping.Key.State}";
 
                     var setlist = Setlist.NewSetlist(
-                        "kglw",
-                        "King Gizzard & the Lizard Wizard",
-                        DateTime.Parse(showGrouping.Key.ShowDate),
+                        new ArtistId("kglw"),
+                        new ArtistName("King Gizzard & the Lizard Wizard"),
+                        DateOnly.Parse(showGrouping.Key.ShowDate),
                         new Location(
-                            showGrouping.Key.Venue,
-                            showGrouping.Key.City,
-                            showGrouping.Key.State,
-                            showGrouping.Key.Country
+                            new Venue(showGrouping.Key.Venue),
+                            new City(showGrouping.Key.City),
+                            new State(showGrouping.Key.State),
+                            new Country(showGrouping.Key.Country)
                         ),
                         showGrouping.Key.ShowNotes
                     );
@@ -97,7 +89,7 @@ namespace Setlistbot.Infrastructure.KglwNet
                             ? "One Set"
                             : setGrouping.Key;
 
-                        var set = new Set(setName);
+                        var set = new Set(new SetName(setName));
 
                         var orderedSongResponses = setGrouping
                             .OrderBy(x => x.Position)
@@ -108,17 +100,17 @@ namespace Setlistbot.Infrastructure.KglwNet
                                         x.Song,
                                         x.Transition,
                                         Index = i + 1,
-                                        x.Footnote
+                                        x.Footnote,
                                     }
                             );
 
                         foreach (var songResponse in orderedSongResponses)
                         {
                             var song = new Song(
-                                songResponse.Song,
-                                songResponse.Index,
-                                songResponse.Transition,
-                                default,
+                                new SongName(songResponse.Song),
+                                new SongPosition(songResponse.Index),
+                                songResponse.Transition.ToSongTransition(),
+                                TimeSpan.Zero,
                                 songResponse.Footnote
                             );
                             set.AddSong(song);

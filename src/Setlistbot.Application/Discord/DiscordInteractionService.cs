@@ -32,7 +32,7 @@ namespace Setlistbot.Application.Discord
                 var handlers = new List<Func<Interaction, Task<InteractionResponse?>>>
                 {
                     HandlePing,
-                    HandleSetlistCommand
+                    HandleSetlistCommand,
                 };
 
                 foreach (var handler in handlers)
@@ -80,7 +80,7 @@ namespace Setlistbot.Application.Discord
 
                 var setlistProvider = _setlistProviderFactory.Get(artistId);
 
-                if (!DateTime.TryParse(dateInput, out var date))
+                if (!DateOnly.TryParse(dateInput, out var date))
                 {
                     return new InteractionResponse
                     {
@@ -89,7 +89,7 @@ namespace Setlistbot.Application.Discord
                         {
                             Content =
                                 $"Failed to parse date: '{dateInput}'. Try using mm/dd/yy or yyyy-mm-dd.",
-                        }
+                        },
                     };
                 }
 
@@ -102,8 +102,8 @@ namespace Setlistbot.Application.Discord
                         Data = new InteractionCallbackData
                         {
                             Content =
-                                $"No setlist found for {artistId} on {date:yyyy-MM-dd}. Please try again with a different date or artist."
-                        }
+                                $"No setlist found for {artistId} on {date:yyyy-MM-dd}. Please try again with a different date or artist.",
+                        },
                     };
                 }
 
@@ -113,7 +113,7 @@ namespace Setlistbot.Application.Discord
                 return new InteractionResponse
                 {
                     Type = InteractionCallbackType.ChannelMessageWithSource,
-                    Data = new InteractionCallbackData { Content = reply }
+                    Data = new InteractionCallbackData { Content = reply },
                 };
             }
 

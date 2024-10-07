@@ -31,62 +31,62 @@ namespace Setlistbot.Infrastructure.GratefulDead.UnitTests
                         song =>
                         {
                             Assert.Equal("New Minglewood Blues", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Loser", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("El Paso", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("They Love Each Other", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Jack Straw", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Deal", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Lazy Lightnin'", song.Name);
-                            Assert.Equal(">", song.Transition);
+                            Assert.Equal(">", song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Supplication", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Brown Eyed Women", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Mama Tried", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Row Jimmy", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Dancing In The Street", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         }
                     );
                 },
@@ -98,37 +98,37 @@ namespace Setlistbot.Infrastructure.GratefulDead.UnitTests
                         song =>
                         {
                             Assert.Equal("Scarlet Begonias", song.Name);
-                            Assert.Equal(">", song.Transition);
+                            Assert.Equal(">", song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Fire On The Mountain", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Estimated Prophet", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Saint Stephen", song.Name);
-                            Assert.Equal(">", song.Transition);
+                            Assert.Equal(">", song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Not Fade Away", song.Name);
-                            Assert.Equal(">", song.Transition);
+                            Assert.Equal(">", song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Saint Stephen", song.Name);
-                            Assert.Equal(">", song.Transition);
+                            Assert.Equal(">", song.SongTransition);
                         },
                         song =>
                         {
                             Assert.Equal("Morning Dew", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         }
                     );
                 },
@@ -140,7 +140,7 @@ namespace Setlistbot.Infrastructure.GratefulDead.UnitTests
                         song =>
                         {
                             Assert.Equal("One More Saturday Night", song.Name);
-                            Assert.Empty(song.Transition);
+                            Assert.Empty(song.SongTransition);
                         }
                     );
                 }

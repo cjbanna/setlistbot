@@ -8,9 +8,13 @@ namespace Setlistbot.Domain.GratefulDead
 
         public string Build(IEnumerable<Setlist> setlists)
         {
-            return setlists.Count() == 1
-                ? BuildSingleSetlistReply(setlists.First())
-                : BuildMultipleSetlistReply(setlists);
+            var enumerable = setlists as Setlist[] ?? setlists.ToArray();
+            return enumerable switch
+            {
+                [] => string.Empty,
+                { Length: 1 } => BuildSingleSetlistReply(enumerable[0]),
+                [..] => BuildMultipleSetlistReply(enumerable),
+            };
         }
 
         private string BuildMultipleSetlistReply(IEnumerable<Setlist> setlists)
@@ -25,9 +29,9 @@ namespace Setlistbot.Domain.GratefulDead
                     $"[{setlist.Date.ToString("yyyy-MM-dd")}]({archiveOrgUrl}) {location} @ {setlist.Location.Venue}"
                 );
 
-                if (!string.IsNullOrWhiteSpace(setlist.SpotifyUrl))
+                if (setlist.SpotifyUrl.TryGetValue(out var spotifyUrl))
                 {
-                    reply.Append($" | [Spotify]({setlist.SpotifyUrl})");
+                    reply.Append($" | [Spotify]({spotifyUrl})");
                 }
 
                 reply.AppendLine();
@@ -56,14 +60,17 @@ namespace Setlistbot.Domain.GratefulDead
 
                 foreach (var song in set.Songs)
                 {
-                    if (song.Transition == ">")
-                    {
-                        reply.Append($"{song.Name} > ");
-                    }
-                    else
-                    {
-                        reply.Append($"{song.Name}, ");
-                    }
+                    // if (song.Transition == Transition.Immediate)
+                    // {
+                    //     reply.Append($"{song.Name} > ");
+                    // }
+                    // else
+                    // {
+                    //     reply.Append($"{song.Name}, ");
+                    // }
+
+                    var transition = TransitionFormatters.Default(song.SongTransition);
+                    reply.Append($"{song.Name}");
                 }
                 reply.Remove(reply.Length - 2, 1);
                 reply.AppendLine();
@@ -73,9 +80,9 @@ namespace Setlistbot.Domain.GratefulDead
             var archiveOrgUrl = GetArchiveOrgUrl(setlist);
             reply.Append($"[archive.org]({archiveOrgUrl})");
 
-            if (!string.IsNullOrWhiteSpace(setlist.SpotifyUrl))
+            if (setlist.SpotifyUrl.TryGetValue(out var spotifyUrl))
             {
-                reply.Append($" | [Spotify]({setlist.SpotifyUrl})");
+                reply.Append($" | [Spotify]({spotifyUrl})");
             }
 
             return reply.ToString();
