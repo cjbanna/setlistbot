@@ -5,7 +5,7 @@ namespace Setlistbot.Domain.CommentAggregate
 {
     public sealed class Comment
     {
-        private List<DateTime> _dates = [];
+        private List<DateOnly> _dates = [];
 
         public string Id { get; private set; } = string.Empty;
         public string Author { get; private set; } = string.Empty;
@@ -16,7 +16,7 @@ namespace Setlistbot.Domain.CommentAggregate
 
         public string ParentId => $"t1_{Id}";
 
-        public IReadOnlyCollection<DateTime> Dates
+        public IReadOnlyCollection<DateOnly> Dates
         {
             get
             {

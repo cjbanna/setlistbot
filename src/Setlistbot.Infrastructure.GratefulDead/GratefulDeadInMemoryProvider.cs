@@ -22,14 +22,16 @@ namespace Setlistbot.Infrastructure.GratefulDead
         public async Task<IEnumerable<domain.Setlist>> GetSetlists(DateOnly date)
         {
             return await Task.FromResult(
-                Setlists.Value.Where(s => s.ShowDate == date).Select(s => s.ToSetlist())
+                Setlists
+                    .Value.Where(s => DateOnly.FromDateTime(s.ShowDate) == date)
+                    .Select(s => s.ToSetlist())
             );
         }
     }
 
     public record Setlist
     {
-        public DateOnly ShowDate { get; init; }
+        public DateTime ShowDate { get; init; }
         public string Venue { get; init; } = string.Empty;
         public string Location { get; init; } = string.Empty;
         public string SpotifyUrl { get; set; } = string.Empty;

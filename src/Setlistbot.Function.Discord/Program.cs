@@ -57,6 +57,6 @@ var host = new HostBuilder()
     })
     .Build();
 
-host.Services.GetRequiredService<IDiscordService>().RegisterApplicationCommands();
+await host.Services.GetRequiredService<IDiscordService>().RegisterApplicationCommands();
 
 host.Run();

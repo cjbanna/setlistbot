@@ -41,11 +41,22 @@ namespace Setlistbot.Application.UnitTests
 
         private void Setup()
         {
-            var date = new DateTime(1995, 12, 31);
-            var location = new Location("Madison Square Garden", "New York", "NY", "USA");
+            var date = new DateOnly(1995, 12, 31);
+            var location = new Location(
+                new Venue("Madison Square Garden"),
+                new City("New York"),
+                new State("NY"),
+                new Country("USA")
+            );
             var setlists = new List<Setlist>
             {
-                Setlist.NewSetlist("phish", "Phish", date, location, string.Empty),
+                Setlist.NewSetlist(
+                    new ArtistId("phish"),
+                    new ArtistName("Phish"),
+                    date,
+                    location,
+                    string.Empty
+                ),
             };
 
             var setlistProvider = new Mock<ISetlistProvider>();

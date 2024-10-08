@@ -25,7 +25,7 @@ namespace Setlistbot.Infrastructure.GratefulDead.Extensions
             var setlist = domain.Setlist.NewSetlist(
                 new ArtistId("gd"),
                 new ArtistName("Grateful Dead"),
-                gdSetlist.ShowDate,
+                DateOnly.FromDateTime(gdSetlist.ShowDate),
                 location,
                 string.Empty
             );

@@ -1,10 +1,8 @@
-﻿using System.Runtime.Serialization;
-using Setlistbot.Domain.Formatters;
-using IFormatter = Setlistbot.Domain.Formatters.IFormatter;
+﻿using Setlistbot.Domain.Formatters;
 
 namespace Setlistbot.Domain.Kglw
 {
-    public sealed class KglwMultipleSetlistFormatter(IEnumerable<Setlist> setlists) : IFormatter
+    public sealed class SetlistsFormatter(IEnumerable<Setlist> setlists) : IFormatter
     {
         public string Format() =>
             setlists
@@ -19,17 +17,16 @@ namespace Setlistbot.Domain.Kglw
                 .Format();
     }
 
-    public sealed class KglwSetlistFormatter(Setlist setlist) : IFormatter
+    public sealed class SetlistFormatter(Setlist setlist) : IFormatter
     {
         public string Format() =>
             new CombinedFormatter(
-                new SetlistFormatter(setlist),
-                new NewLineFormatter(2),
-                new KglwAttributionFormatter(setlist)
+                new Formatters.SetlistFormatter(setlist),
+                new AttributionFormatter(setlist)
             ).Format();
     }
 
-    public sealed class KglwDiscordFormatter(Setlist setlist) : IFormatter
+    public sealed class DiscordFormatter(Setlist setlist) : IFormatter
     {
         public string Format() =>
             new CombinedFormatter(
@@ -41,11 +38,11 @@ namespace Setlistbot.Domain.Kglw
                     setlist.Sets.Select<Set, IFormatter>(s => new SetFormatter(s)).ToArray()
                 ),
                 new NewLineFormatter(2),
-                new KglwAttributionFormatter(setlist)
+                new AttributionFormatter(setlist)
             ).Format();
     }
 
-    public sealed class KglwAttributionFormatter(Setlist setlist) : IFormatter
+    public sealed class AttributionFormatter(Setlist setlist) : IFormatter
     {
         public string Format() =>
             new MarkdownQuoteFormatter(

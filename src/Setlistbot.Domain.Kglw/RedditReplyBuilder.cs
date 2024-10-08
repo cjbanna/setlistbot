@@ -12,8 +12,8 @@ namespace Setlistbot.Domain.Kglw
             IFormatter formatter = enumerable switch
             {
                 [] => new EmptyFormatter(),
-                { Length: 1 } => new KglwSetlistFormatter(enumerable[0]),
-                [..] => new KglwMultipleSetlistFormatter(enumerable),
+                { Length: 1 } => new SetlistFormatter(enumerable[0]),
+                [..] => new SetlistsFormatter(enumerable),
             };
             return formatter.Format();
         }

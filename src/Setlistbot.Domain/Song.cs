@@ -36,7 +36,7 @@ namespace Setlistbot.Domain
             : base(value) { }
     }
 
-    public record SongPosition
+    public record SongPosition : IComparable<SongPosition>
     {
         private readonly int _position = 0;
 
@@ -46,6 +46,13 @@ namespace Setlistbot.Domain
         }
 
         public static implicit operator int(SongPosition position) => position._position;
+
+        public static implicit operator SongPosition(int position) => new(position);
+
+        public int CompareTo(SongPosition? other)
+        {
+            return other is null ? 1 : _position.CompareTo(other._position);
+        }
     }
 
     public enum SongTransition
@@ -67,7 +74,7 @@ namespace Setlistbot.Domain
             };
 
         public static SongTransition ToSongTransition(this string symbol) =>
-            symbol switch
+            symbol.Trim() switch
             {
                 ">" => SongTransition.Immediate,
                 "->" => SongTransition.Segue,

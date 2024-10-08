@@ -56,12 +56,42 @@ namespace Setlistbot.Domain.Formatters
     }
 
     /// <summary>
-    /// Formats a Maybe as a string.
+    /// Formats a Maybe. If the Maybe is a Some, the inner value is formatted. If the Maybe is a None, the default
+    /// formatter is used.
     /// </summary>
-    public sealed class MaybeFormatter<T>(Maybe<T> maybe, string defaultValue = "") : IFormatter
+    public sealed class MaybeFormatter<T> : IFormatter
         where T : notnull
     {
-        public string Format() => maybe.Match(some => some.ToString()!, () => defaultValue);
+        private readonly Maybe<T> _maybe;
+        private readonly Func<IFormatter> _formatterProvider;
+        private readonly IFormatter? _defaultFormatter;
+
+        /// <summary>
+        /// Formats a Maybe. If the Maybe is a Some, the inner value is formatted. If the Maybe is a None, the default
+        /// formatter is used.
+        /// </summary>
+        public MaybeFormatter(
+            Maybe<T> maybe,
+            IFormatter formatter,
+            IFormatter? defaultFormatter = null
+        )
+        {
+            _maybe = maybe;
+            _formatterProvider = () => formatter;
+            _defaultFormatter = defaultFormatter;
+        }
+
+        public MaybeFormatter(Maybe<T> maybe, Func<IFormatter> formatterProvider)
+        {
+            _maybe = maybe;
+            _formatterProvider = formatterProvider;
+        }
+
+        public string Format() =>
+            _maybe.Match(
+                _ => _formatterProvider().Format(),
+                (_defaultFormatter ?? new EmptyFormatter()).Format
+            );
     }
 
     /// <summary>
@@ -117,15 +147,21 @@ namespace Setlistbot.Domain.Formatters
     /// <summary>
     /// Formats a list of formatters with a separator.
     /// </summary>
+    /// <example>
+    /// Using a comma separator: [formatter1, formatter2, formatter3] => "one,two,three"
+    /// </example>
     public sealed class SeparatedFormatter(IFormatter separator, IEnumerable<IFormatter> formatters)
         : IFormatter
     {
-        public string Format() =>
-            formatters
-                .Zip(Enumerable.Repeat(separator, formatters.Count()))
+        public string Format()
+        {
+            var count = formatters.Count();
+            return formatters
+                .Zip(Enumerable.Repeat(separator, count))
                 .SelectMany(z => new[] { z.First, z.Second })
-                .Take(formatters.Count() - 2) // Trim off the last separator and space
+                .Take(count * 2 - 1)
                 .Format();
+        }
     }
 
     /// <summary>

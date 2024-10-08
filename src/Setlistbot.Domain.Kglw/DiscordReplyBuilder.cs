@@ -12,7 +12,7 @@ namespace Setlistbot.Domain.Kglw
             var enumerable = setlists as Setlist[] ?? setlists.ToArray();
             IFormatter formatter = enumerable switch
             {
-                { Length: 1 } => new KglwDiscordFormatter(enumerable[0]),
+                { Length: 1 } => new DiscordFormatter(enumerable[0]),
                 _ => new EmptyFormatter(),
             };
             return formatter.Format();

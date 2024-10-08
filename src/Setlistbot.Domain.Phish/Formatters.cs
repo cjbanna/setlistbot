@@ -1,9 +1,8 @@
-﻿using System.ComponentModel;
-using Setlistbot.Domain.Formatters;
+﻿using Setlistbot.Domain.Formatters;
 
 namespace Setlistbot.Domain.Phish
 {
-    public sealed class PhishMultipleSetlistFormatter(IEnumerable<Setlist> setlists) : IFormatter
+    public sealed class SetlistsFormatter(IEnumerable<Setlist> setlists) : IFormatter
     {
         public string Format() =>
             setlists
@@ -18,22 +17,22 @@ namespace Setlistbot.Domain.Phish
                     new LocationFormatter(setlist.Location),
                     new NewLineFormatter(2)
                 ))
-                .Append<IFormatter>(new PhishAttributionFormatter())
+                .Append<IFormatter>(new AttributionFormatter())
                 .Format();
     }
 
-    public sealed class PhishSetlistFormatter(Setlist setlist) : IFormatter
+    public sealed class SetlistFormatter(Setlist setlist) : IFormatter
     {
         public string Format() =>
             new CombinedFormatter(
-                new SetlistFormatter(setlist),
-                new PhishLinksFormatter(setlist),
+                new Formatters.SetlistFormatter(setlist),
+                new LinksFormatter(setlist),
                 new NewLineFormatter(2),
-                new PhishAttributionFormatter()
+                new AttributionFormatter()
             ).Format();
     }
 
-    public sealed class PhishAttributionFormatter : IFormatter
+    public sealed class AttributionFormatter : IFormatter
     {
         public string Format() =>
             new MarkdownQuoteFormatter(
@@ -50,7 +49,7 @@ namespace Setlistbot.Domain.Phish
             ).Format();
     }
 
-    public sealed class PhishLinksFormatter(Setlist setlist) : IFormatter
+    public sealed class LinksFormatter(Setlist setlist) : IFormatter
     {
         public string Format() =>
             new SeparatedFormatter(
@@ -72,7 +71,7 @@ namespace Setlistbot.Domain.Phish
         : IFormatter
     {
         public string Format() =>
-            new MarkdownLinkFormatter(PhishUri.PhishIn(date), textFormatter).Format();
+            new MarkdownLinkFormatter(PhishUri.PhishTracks(date), textFormatter).Format();
     }
 
     public sealed class PhishInLinkFormatter(DateOnly date, IFormatter textFormatter) : IFormatter
@@ -90,11 +89,11 @@ namespace Setlistbot.Domain.Phish
     public static class PhishUri
     {
         public static Uri PhishNet(DateOnly date) =>
-            new Uri($"http://phish.net/setlists/?d={date:yyyy-MM-dd}");
+            new Uri($"https://phish.net/setlists/?d={date:yyyy-MM-dd}");
 
-        public static Uri PhishIn(DateOnly date) => new Uri($"http://phish.in/{date}");
+        public static Uri PhishIn(DateOnly date) => new Uri($"https://phish.in/{date:yyyy-MM-dd}");
 
         public static Uri PhishTracks(DateOnly date) =>
-            new Uri($"http://phishtracks.com/shows/{date:yyyy-MM-dd}");
+            new Uri($"https://phishtracks.com/shows/{date:yyyy-MM-dd}");
     }
 }

@@ -38,10 +38,10 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
             fixture.HttpTest.RespondWithJson(setlistResponse);
 
             // Act
-            var result = await fixture.KglwNetClient.GetSetlistAsync(new DateTime(2022, 10, 10));
+            var result = await fixture.KglwNetClient.GetSetlistAsync(new DateOnly(2022, 10, 10));
 
             // Assert
-            Assert.NotNull(result);
+            Assert.True(result.HasValue);
 
             fixture
                 .HttpTest.ShouldHaveCalled(

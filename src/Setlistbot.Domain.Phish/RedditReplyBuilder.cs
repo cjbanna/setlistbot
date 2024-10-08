@@ -12,8 +12,8 @@ namespace Setlistbot.Domain.Phish
             IFormatter formatter = enumerable switch
             {
                 [] => new EmptyFormatter(),
-                { Length: 1 } => new PhishSetlistFormatter(enumerable[0]),
-                [..] => new PhishMultipleSetlistFormatter(enumerable),
+                { Length: 1 } => new SetlistFormatter(enumerable[0]),
+                [..] => new SetlistsFormatter(enumerable),
             };
             return formatter.Format();
         }

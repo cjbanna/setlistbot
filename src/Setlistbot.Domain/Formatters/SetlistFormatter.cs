@@ -5,9 +5,8 @@
         public string Format() =>
             new CombinedFormatter(
                 new MarkdownHeaderFormatter(new SetlistHeaderFormatter(setlist)),
-                new CombinedFormatter(
-                    setlist.Sets.Select<Set, IFormatter>(s => new SetFormatter(s)).ToArray()
-                )
+                new NewLineFormatter(2),
+                new SetsFormatter(setlist.Sets)
             ).Format();
     }
 }

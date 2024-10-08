@@ -19,16 +19,4 @@ namespace Setlistbot.Domain
         public ArtistName(string value)
             : base(value) { }
     }
-
-    public abstract record StringNotNullOrWhiteSpace
-    {
-        private readonly string _value = string.Empty;
-
-        protected StringNotNullOrWhiteSpace(string value)
-        {
-            _value = EnsureArg.IsNotNullOrWhiteSpace(value, nameof(value));
-        }
-
-        public static implicit operator string(StringNotNullOrWhiteSpace value) => value._value;
-    }
 }

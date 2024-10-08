@@ -9,7 +9,7 @@ namespace Setlistbot.Domain.Phish.UnitTests
             var builder = new RedditReplyBuilder();
 
             // Act
-            var actual = RedditReplyBuilder.ArtistId;
+            var actual = builder.ArtistId;
 
             // Assert
             Assert.Equal("phish", actual);
@@ -20,32 +20,121 @@ namespace Setlistbot.Domain.Phish.UnitTests
         {
             // Arrange
             var setlist = Setlist.NewSetlist(
-                "phish",
-                "Phish",
-                new DateTime(1997, 11, 17),
-                new Location("McNichols Arena", "Denver", "CO", "USA"),
+                new ArtistId("phish"),
+                new ArtistName("Phish"),
+                new DateOnly(1997, 11, 17),
+                new Location(
+                    new Venue("McNichols Arena"),
+                    new City("Denver"),
+                    new State("CO"),
+                    new Country("USA")
+                ),
                 "show notes"
             );
 
-            var set1 = new Set("Set 1");
-            set1.AddSong(new Song("Tweezer", 1, ",", 0, string.Empty));
-            set1.AddSong(new Song("Reba", 2, ",", 0, string.Empty));
-            set1.AddSong(new Song("Train Song", 3, ",", 0, string.Empty));
-            set1.AddSong(new Song("Ghost", 4, ">", 0, string.Empty));
-            set1.AddSong(new Song("Fire", 5, ",", 0, string.Empty));
+            var set1 = new Set(new SetName("Set 1"));
+            set1.AddSong(
+                new Song(
+                    new SongName("Tweezer"),
+                    1,
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(new SongName("Reba"), 2, SongTransition.Stop, TimeSpan.Zero, string.Empty)
+            );
+            set1.AddSong(
+                new Song(
+                    new SongName("Train Song"),
+                    3,
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    new SongName("Ghost"),
+                    4,
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(new SongName("Fire"), 5, SongTransition.Stop, TimeSpan.Zero, string.Empty)
+            );
             setlist.AddSet(set1);
 
-            var set2 = new Set("Set 2");
-            set2.AddSong(new Song("Down with Disease", 1, "->", 0, string.Empty));
-            set2.AddSong(new Song("Olivia's Pool", 2, ">", 0, string.Empty));
-            set2.AddSong(new Song("Johnny B. Goode", 3, "->", 0, string.Empty));
-            set2.AddSong(new Song("Jesus Just Left Chicago", 4, ",", 0, string.Empty));
-            set2.AddSong(new Song("When the Cricus Comes", 5, ",", 0, string.Empty));
-            set2.AddSong(new Song("You Enjoy Myself", 6, ",", 0, string.Empty));
+            var set2 = new Set(new SetName("Set 2"));
+            set2.AddSong(
+                new Song(
+                    new SongName("Down with Disease"),
+                    1,
+                    SongTransition.Segue,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    new SongName("Olivia's Pool"),
+                    2,
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    new SongName("Johnny B. Goode"),
+                    3,
+                    SongTransition.Segue,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    new SongName("Jesus Just Left Chicago"),
+                    4,
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    new SongName("When the Circus Comes"),
+                    5,
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    new SongName("You Enjoy Myself"),
+                    6,
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
             setlist.AddSet(set2);
 
-            var encore = new Set("Encore");
-            encore.AddSong(new Song("Character Zero", 1, ",", 0, string.Empty));
+            var encore = new Set(new SetName("Encore"));
+            encore.AddSong(
+                new Song(
+                    new SongName("Character Zero"),
+                    1,
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
             setlist.AddSet(encore);
 
             var builder = new RedditReplyBuilder();

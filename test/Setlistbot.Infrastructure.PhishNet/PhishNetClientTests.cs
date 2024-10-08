@@ -44,10 +44,10 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
             fixture.HttpTest.RespondWithJson(setlistResponse);
 
             // Act
-            var result = await fixture.PhishNetClient.GetSetlistAsync(new DateTime(1997, 11, 22));
+            var result = await fixture.PhishNetClient.GetSetlistAsync(new DateOnly(1997, 11, 22));
 
             // Assert
-            Assert.NotNull(result);
+            Assert.True(result.HasValue);
 
             fixture
                 .HttpTest.ShouldHaveCalled(
