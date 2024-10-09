@@ -159,17 +159,8 @@ namespace Setlistbot.Domain.Formatters
             return formatters
                 .Zip(Enumerable.Repeat(separator, count))
                 .SelectMany(z => new[] { z.First, z.Second })
-                .Take(count * 2 - 1)
+                .Take(count * 2 - 1) // Trim the last separator
                 .Format();
         }
-    }
-
-    /// <summary>
-    /// Removes empty formatters from the list before formatting.
-    /// </summary>
-    public sealed class RemoveEmptyFormatter(IEnumerable<IFormatter> formatters) : IFormatter
-    {
-        public string Format() =>
-            formatters.Where(f => !string.IsNullOrWhiteSpace(f.Format())).Format();
     }
 }
