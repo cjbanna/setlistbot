@@ -32,7 +32,10 @@ namespace Setlistbot.Domain.Formatters
     /// </summary>
     public sealed class NewLineFormatter(int count = 1) : IFormatter
     {
-        public string Format() => string.Concat(Enumerable.Repeat(Environment.NewLine, count));
+        public string Format() =>
+            count == 1
+                ? Environment.NewLine
+                : string.Concat(Enumerable.Repeat(Environment.NewLine, count));
     }
 
     /// <summary>
@@ -41,10 +44,12 @@ namespace Setlistbot.Domain.Formatters
     public sealed class SpaceFormatter(int count = 1) : IFormatter
     {
         public string Format() =>
-            Enumerable
-                .Repeat(" ", count)
-                .Aggregate(new StringBuilder(), (acc, s) => acc.Append(s))
-                .ToString();
+            count == 1
+                ? " "
+                : Enumerable
+                    .Repeat(" ", count)
+                    .Aggregate(new StringBuilder(), (acc, s) => acc.Append(s))
+                    .ToString();
     }
 
     /// <summary>
