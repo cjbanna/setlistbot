@@ -14,9 +14,5 @@ namespace Setlistbot.Domain
         public static implicit operator string(ArtistId artistId) => artistId._artistId;
     }
 
-    public record ArtistName : StringNotNullOrWhiteSpace
-    {
-        public ArtistName(string value)
-            : base(value) { }
-    }
+    public record ArtistName(NonEmptyString Name);
 }

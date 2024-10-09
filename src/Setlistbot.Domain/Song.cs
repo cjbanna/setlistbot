@@ -30,10 +30,9 @@ namespace Setlistbot.Domain
         public string Footnote { get; }
     }
 
-    public record SongName : StringNotNullOrWhiteSpace
+    public record SongName(NonEmptyString Value)
     {
-        public SongName(string value)
-            : base(value) { }
+        public static implicit operator string(SongName songName) => songName.Value;
     }
 
     public record SongPosition : IComparable<SongPosition>

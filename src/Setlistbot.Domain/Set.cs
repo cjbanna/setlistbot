@@ -4,7 +4,7 @@ namespace Setlistbot.Domain
 {
     public class Set
     {
-        private readonly List<Song> _songs = new();
+        private readonly List<Song> _songs = [];
 
         public SetName Name { get; private set; }
         public IReadOnlyList<Song> Songs => _songs.OrderBy(s => s.Position).ToList();
@@ -34,9 +34,8 @@ namespace Setlistbot.Domain
         }
     }
 
-    public record SetName : StringNotNullOrWhiteSpace
+    public record SetName(NonEmptyString Value)
     {
-        public SetName(string value)
-            : base(value) { }
+        public static implicit operator string(SetName setName) => setName.Value;
     }
 }

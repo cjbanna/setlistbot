@@ -4,27 +4,23 @@ namespace Setlistbot.Domain
 {
     public record Location(Maybe<Venue> Venue, City City, Maybe<State> State, Country Country);
 
-    public record State : StringNotNullOrWhiteSpace
+    public record State(NonEmptyString Value)
     {
-        public State(string value)
-            : base(value) { }
+        public static implicit operator string(State state) => state.Value;
     }
 
-    public record Venue : StringNotNullOrWhiteSpace
+    public record Venue(NonEmptyString Value)
     {
-        public Venue(string value)
-            : base(value) { }
+        public static implicit operator string(Venue venue) => venue.Value;
     }
 
-    public record City : StringNotNullOrWhiteSpace
+    public record City(NonEmptyString Value)
     {
-        public City(string value)
-            : base(value) { }
+        public static implicit operator string(City city) => city.Value;
     }
 
-    public record Country : StringNotNullOrWhiteSpace
+    public record Country(NonEmptyString Value)
     {
-        public Country(string value)
-            : base(value) { }
+        public static implicit operator string(Country country) => country.Value;
     }
 }

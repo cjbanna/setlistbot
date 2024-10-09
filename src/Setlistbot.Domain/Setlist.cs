@@ -5,7 +5,7 @@ namespace Setlistbot.Domain
 {
     public sealed class Setlist
     {
-        private readonly List<Set> _sets = new();
+        private readonly List<Set> _sets = [];
 
         public IReadOnlyList<Set> Sets => _sets.AsReadOnly();
 
