@@ -25,27 +25,15 @@
     {
         public string Format()
         {
-            Func<Song, IEnumerable<IFormatter>> getFormatters = (song) =>
-                song.SongTransition switch
+            var formatters = songs.SelectMany(s =>
+                new IFormatter[]
                 {
-                    SongTransition.Stop =>
-                    [
-                        new LiteralFormatter(song.Name),
-                        new SongTransitionFormatter(song.SongTransition),
-                        new SpaceFormatter(),
-                    ],
-                    _ =>
-                    [
-                        new LiteralFormatter(song.Name),
-                        new SpaceFormatter(),
-                        new SongTransitionFormatter(song.SongTransition),
-                        new SpaceFormatter(),
-                    ],
-                };
-
-            var formatters = songs.SelectMany<Song, IFormatter>(s => getFormatters(s));
-
-            return formatters.Take(formatters.Count() - 2).Format();
+                    new LiteralFormatter(s.Name),
+                    new SongTransitionSuffixFormatter(s.SongTransition),
+                }
+            );
+            // Trim the trailing transition formatter
+            return formatters.Take(formatters.Count() - 1).Format();
         }
     }
 }
