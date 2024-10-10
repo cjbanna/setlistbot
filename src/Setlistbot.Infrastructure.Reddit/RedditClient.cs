@@ -1,6 +1,7 @@
-﻿using EnsureThat;
+﻿using CSharpFunctionalExtensions;
 using Flurl.Http;
 using Microsoft.Extensions.Logging;
+using Setlistbot.Domain;
 using Setlistbot.Infrastructure.Reddit.Models;
 
 namespace Setlistbot.Infrastructure.Reddit
@@ -11,25 +12,20 @@ namespace Setlistbot.Infrastructure.Reddit
 
         public RedditClient(ILogger<RedditClient> logger)
         {
-            _logger = Ensure.Any.IsNotNull(logger, nameof(logger));
+            _logger = logger;
         }
 
         /// <summary>
         /// Gets a reddit auth token
         /// </summary>
         /// <returns>An auth token if successful</returns>
-        public async Task<string?> GetAuthToken(
-            string username,
-            string password,
-            string key,
-            string secret
+        public async Task<Maybe<RedditToken>> GetAuthToken(
+            NonEmptyString username,
+            NonEmptyString password,
+            NonEmptyString key,
+            NonEmptyString secret
         )
         {
-            Ensure.That(username, nameof(username)).IsNotNullOrWhiteSpace();
-            Ensure.That(password, nameof(password)).IsNotNullOrWhiteSpace();
-            Ensure.That(key, nameof(key)).IsNotNullOrWhiteSpace();
-            Ensure.That(secret, nameof(secret)).IsNotNullOrWhiteSpace();
-
             var token = default(string);
 
             try
@@ -56,31 +52,25 @@ namespace Setlistbot.Infrastructure.Reddit
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to get auth token");
+                _logger.LogError(ex, "Failed to get Reddit auth token");
             }
 
-            return token;
+            return token is not null ? new RedditToken(token) : default;
         }
 
         /// <summary>
         /// Gets the last 25 comments for a subreddit
         /// </summary>
+        /// <param name="token">A valid auth token</param>
         /// <param name="subreddit">The name of the subreddit</param>
         /// <param name="limit">The number of comments to take</param>
         /// <returns>The deserialized response from the API if successful</returns>
-        public async Task<SubredditCommentsResponse?> GetComments(
-            string token,
-            string subreddit,
-            int? limit = default
+        public async Task<Maybe<SubredditCommentsResponse>> GetComments(
+            RedditToken token,
+            Subreddit subreddit,
+            Maybe<PositiveInt> limit
         )
         {
-            Ensure.That(subreddit, nameof(subreddit)).IsNotNullOrWhiteSpace();
-
-            if (limit.HasValue)
-            {
-                Ensure.That(limit.Value, nameof(limit)).IsGt(0);
-            }
-
             var response = default(SubredditCommentsResponse);
 
             try
@@ -90,7 +80,7 @@ namespace Setlistbot.Infrastructure.Reddit
 
                 if (limit.HasValue)
                 {
-                    url += $"?limit={limit}";
+                    url += $"?limit={limit.Value}";
                 }
 
                 response = await url.WithHeader("User-Agent", "setlistbot")
@@ -104,7 +94,11 @@ namespace Setlistbot.Infrastructure.Reddit
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Failed to get comments for subreddit [{subreddit}]");
+                _logger.LogError(
+                    ex,
+                    "Failed to get comments for subreddit: {subreddit}",
+                    subreddit
+                );
             }
 
             return response;
@@ -116,10 +110,11 @@ namespace Setlistbot.Infrastructure.Reddit
         /// <param name="token"></param>
         /// <param name="subreddit"></param>
         /// <returns></returns>
-        public async Task<SubredditPostsResponse?> GetPosts(string token, string subreddit)
+        public async Task<Maybe<SubredditPostsResponse>> GetPosts(
+            RedditToken token,
+            Subreddit subreddit
+        )
         {
-            Ensure.That(subreddit, nameof(subreddit)).IsNotNullOrWhiteSpace();
-
             var response = default(SubredditPostsResponse);
 
             try
@@ -133,11 +128,11 @@ namespace Setlistbot.Infrastructure.Reddit
             catch (FlurlHttpException ex)
             {
                 var content = await ex.GetResponseStringAsync();
-                _logger.LogError(ex, content);
+                _logger.LogError(ex, "Failed HTTP call response: {content}", content);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Failed to get posts for subreddit [{subreddit}]");
+                _logger.LogError(ex, "Failed to get posts for subreddit: {subreddit}", subreddit);
             }
 
             return response;
@@ -150,10 +145,10 @@ namespace Setlistbot.Infrastructure.Reddit
         /// <param name="parent">The comment's parent</param>
         /// <param name="text">The comment text, markdown supported</param>
         /// <returns></returns>
-        public async Task<PostCommentResponse?> PostComment(
-            string token,
-            string parent,
-            string text
+        public async Task<Maybe<PostCommentResponse>> PostComment(
+            RedditToken token,
+            NonEmptyString parent,
+            NonEmptyString text
         )
         {
             var response = default(PostCommentResponse);

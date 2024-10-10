@@ -1,8 +1,10 @@
-﻿namespace Setlistbot.Domain.PostAggregate
+﻿using CSharpFunctionalExtensions;
+
+namespace Setlistbot.Domain.PostAggregate
 {
     public interface IPostRepository
     {
-        Task<Post?> Get(string id);
+        Task<Maybe<Post>> Get(NonEmptyString id);
 
         Task<IEnumerable<Post>> GetAll();
 

@@ -27,6 +27,30 @@ namespace Setlistbot.Domain.CommentAggregate
 
         private Comment() { }
 
+        public Comment(
+            string id,
+            string author,
+            string body,
+            string permalink,
+            string artistId,
+            string reply
+        )
+        {
+            Ensure.String.IsNotNullOrWhiteSpace(id, nameof(id));
+            Ensure.String.IsNotNullOrEmpty(body, nameof(body));
+            Ensure.String.IsNotNullOrWhiteSpace(permalink, nameof(permalink));
+            Ensure.String.IsNotNullOrWhiteSpace(author, nameof(author));
+            Ensure.String.IsNotEmptyOrWhiteSpace(artistId, nameof(artistId));
+            Ensure.String.IsNotNullOrWhiteSpace(reply, nameof(reply));
+
+            Id = id;
+            Author = author;
+            Body = body;
+            Permalink = permalink;
+            ArtistId = artistId;
+            Reply = reply;
+        }
+
         public static Comment NewComment(
             string id,
             string author,
@@ -49,33 +73,6 @@ namespace Setlistbot.Domain.CommentAggregate
                 Permalink = permalink,
                 ArtistId = artistId,
                 Reply = string.Empty,
-            };
-        }
-
-        public static Comment Hydrate(
-            string id,
-            string author,
-            string body,
-            string permalink,
-            string artistId,
-            string reply
-        )
-        {
-            Ensure.String.IsNotNullOrWhiteSpace(id, nameof(id));
-            Ensure.String.IsNotNullOrEmpty(body, nameof(body));
-            Ensure.String.IsNotNullOrWhiteSpace(permalink, nameof(permalink));
-            Ensure.String.IsNotNullOrWhiteSpace(author, nameof(author));
-            Ensure.String.IsNotEmptyOrWhiteSpace(artistId, nameof(artistId));
-            Ensure.String.IsNotNullOrWhiteSpace(reply, nameof(reply));
-
-            return new Comment()
-            {
-                Id = id,
-                Author = author,
-                Body = body,
-                Permalink = permalink,
-                ArtistId = artistId,
-                Reply = reply,
             };
         }
 

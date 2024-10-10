@@ -46,8 +46,8 @@ namespace Setlistbot.Infrastructure.GratefulDead.Extensions
                         new SongName(gdSong.Name),
                         new SongPosition(position),
                         transition.ToSongTransition(),
-                        duration: TimeSpan.Zero,
-                        footnote: string.Empty
+                        TimeSpan.Zero,
+                        string.Empty
                     );
                     set.AddSong(song);
                     position++;

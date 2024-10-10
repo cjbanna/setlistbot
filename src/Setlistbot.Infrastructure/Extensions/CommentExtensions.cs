@@ -1,4 +1,5 @@
-﻿using EnsureThat;
+﻿using CSharpFunctionalExtensions;
+using EnsureThat;
 using Setlistbot.Domain.CommentAggregate;
 using Setlistbot.Infrastructure.Data;
 
@@ -22,18 +23,14 @@ namespace Setlistbot.Infrastructure.Extensions
             };
         }
 
-        public static Comment? ToDomain(this CommentEntity? entity)
-        {
-            return entity == null
-                ? null
-                : Comment.Hydrate(
-                    entity.RowKey,
-                    entity.Author,
-                    entity.Comment,
-                    entity.Permalink,
-                    entity.PartitionKey,
-                    entity.Reply
-                );
-        }
+        public static Comment ToDomain(this CommentEntity entity) =>
+            new(
+                entity.RowKey,
+                entity.Author,
+                entity.Comment,
+                entity.Permalink,
+                entity.PartitionKey,
+                entity.Reply
+            );
     }
 }

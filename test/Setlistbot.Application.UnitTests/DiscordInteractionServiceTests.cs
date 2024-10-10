@@ -84,8 +84,8 @@ namespace Setlistbot.Application.UnitTests
             var response = await fixture.DiscordInteractionService.GetResponse(interaction);
 
             // Assert
-            Assert.NotNull(response);
-            Assert.Equal(InteractionCallbackType.Pong, response.Type);
+            Assert.True(response.HasValue);
+            Assert.Equal(InteractionCallbackType.Pong, response.Value.Type);
         }
 
         [Fact]
@@ -112,10 +112,10 @@ namespace Setlistbot.Application.UnitTests
             var response = await fixture.DiscordInteractionService.GetResponse(interaction);
 
             // Assert
-            Assert.NotNull(response);
-            Assert.Equal(InteractionCallbackType.ChannelMessageWithSource, response.Type);
-            Assert.NotNull(response.Data);
-            Assert.Equal("Some setlist", response.Data.Content);
+            Assert.True(response.HasValue);
+            Assert.Equal(InteractionCallbackType.ChannelMessageWithSource, response.Value.Type);
+            Assert.NotNull(response.Value.Data);
+            Assert.Equal("Some setlist", response.Value.Data.Content);
         }
 
         [Fact]
@@ -142,12 +142,12 @@ namespace Setlistbot.Application.UnitTests
             var response = await fixture.DiscordInteractionService.GetResponse(interaction);
 
             // Assert
-            Assert.NotNull(response);
-            Assert.Equal(InteractionCallbackType.ChannelMessageWithSource, response.Type);
-            Assert.NotNull(response.Data);
+            Assert.True(response.HasValue);
+            Assert.Equal(InteractionCallbackType.ChannelMessageWithSource, response.Value.Type);
+            Assert.NotNull(response.Value.Data);
             Assert.Equal(
                 $"Failed to parse date: 'not a date'. Try using mm/dd/yy or yyyy-mm-dd.",
-                response.Data.Content
+                response.Value.Data.Content
             );
         }
 
@@ -175,12 +175,12 @@ namespace Setlistbot.Application.UnitTests
             var response = await fixture.DiscordInteractionService.GetResponse(interaction);
 
             // Assert
-            Assert.NotNull(response);
-            Assert.Equal(InteractionCallbackType.ChannelMessageWithSource, response.Type);
-            Assert.NotNull(response.Data);
+            Assert.True(response.HasValue);
+            Assert.Equal(InteractionCallbackType.ChannelMessageWithSource, response.Value.Type);
+            Assert.NotNull(response.Value.Data);
             Assert.Equal(
                 $"No setlist found for phish on 1980-01-01. Please try again with a different date or artist.",
-                response.Data.Content
+                response.Value.Data.Content
             );
         }
     }

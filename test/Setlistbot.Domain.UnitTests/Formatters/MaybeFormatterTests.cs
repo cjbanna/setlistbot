@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 using Setlistbot.Domain.Formatters;
 using Xunit;
 
-namespace Setlist.Domain.UnitTests.Formatters
+namespace Setlistbot.Domain.UnitTests.Formatters
 {
     public class MaybeFormatterTests
     {

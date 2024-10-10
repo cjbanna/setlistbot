@@ -45,9 +45,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Setlistbot.Infrastructure.G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Setlistbot.Domain.Phish.UnitTests", "test\Setlistbot.Domain.Phish.UnitTests\Setlistbot.Domain.Phish.UnitTests.csproj", "{D65FDAB6-B4D8-4A90-B2F0-45D4CCC9D6AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setlist.Domain.UnitTests", "test\Setlist.Domain.UnitTests\Setlist.Domain.UnitTests.csproj", "{1D0C9860-C617-4A01-BA7B-C10E5915F276}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setlistbot.Domain.UnitTests", "test\Setlistbot.Domain.UnitTests\Setlistbot.Domain.UnitTests.csproj", "{1D0C9860-C617-4A01-BA7B-C10E5915F276}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1E2FB122-C560-4BEB-A1F7-BAB4F46CE540}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setlistbot.Infrastructure.Reddit.UnitTests", "test\Setlistbot.Infrastructure.Reddit.UnitTests\Setlistbot.Infrastructure.Reddit.UnitTests.csproj", "{75BB4C41-CF86-439D-8497-CF37FF50C10E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +141,10 @@ Global
 		{1D0C9860-C617-4A01-BA7B-C10E5915F276}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D0C9860-C617-4A01-BA7B-C10E5915F276}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D0C9860-C617-4A01-BA7B-C10E5915F276}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75BB4C41-CF86-439D-8497-CF37FF50C10E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75BB4C41-CF86-439D-8497-CF37FF50C10E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75BB4C41-CF86-439D-8497-CF37FF50C10E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75BB4C41-CF86-439D-8497-CF37FF50C10E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -165,6 +171,7 @@ Global
 		{4A23B5AE-2773-434D-84A4-1695181087F7} = {1E2FB122-C560-4BEB-A1F7-BAB4F46CE540}
 		{BD168A74-6D7F-41DE-890A-CC37CB9E2FE9} = {1E2FB122-C560-4BEB-A1F7-BAB4F46CE540}
 		{05A4A283-798A-4A07-94CA-8D4B86F2E12A} = {1E2FB122-C560-4BEB-A1F7-BAB4F46CE540}
+		{75BB4C41-CF86-439D-8497-CF37FF50C10E} = {252ED6DC-C74D-4CDB-9D86-7827A870FEF8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {226663E9-92BC-4DCE-9A71-EB12AAAE94A1}

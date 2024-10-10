@@ -2,7 +2,7 @@
 
 namespace Setlistbot.Domain
 {
-    public record ArtistId
+    public sealed record ArtistId
     {
         private readonly string _artistId = string.Empty;
 
@@ -14,5 +14,8 @@ namespace Setlistbot.Domain
         public static implicit operator string(ArtistId artistId) => artistId._artistId;
     }
 
-    public record ArtistName(NonEmptyString Name);
+    public record ArtistName(NonEmptyString Name)
+    {
+        public static implicit operator string(ArtistName artistName) => artistName.Name;
+    }
 }

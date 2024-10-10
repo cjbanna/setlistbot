@@ -1,18 +1,23 @@
-﻿using EnsureThat;
-
-namespace Setlistbot.Domain
+﻿namespace Setlistbot.Domain
 {
-    public class Set
+    public sealed class Set
     {
-        private readonly List<Song> _songs = [];
+        private readonly Dictionary<SongPosition, Song> _songs = [];
 
         public SetName Name { get; private set; }
-        public IReadOnlyList<Song> Songs => _songs.OrderBy(s => s.Position).ToList();
-        public TimeSpan Duration => _songs.Aggregate(TimeSpan.Zero, (acc, s) => acc + s.Duration);
+        public IReadOnlyList<Song> Songs => _songs.Values.OrderBy(s => s.Position).ToList();
+        public TimeSpan Duration =>
+            _songs.Aggregate(TimeSpan.Zero, (acc, s) => acc + s.Value.Duration);
 
         public Set(SetName name)
         {
             Name = name;
+        }
+
+        public Set(SetName name, IEnumerable<Song> songs)
+        {
+            Name = name;
+            AddSongs(songs);
         }
 
         public void AddSongs(IEnumerable<Song> songs)
@@ -25,17 +30,14 @@ namespace Setlistbot.Domain
 
         public void AddSong(Song song)
         {
-            if (Songs.Any(s => s.Position == song.Position))
-            {
-                throw new InvalidOperationException($"Position {song.Position} must be unique");
-            }
-
-            _songs.Add(song);
+            _songs.Add(song.Position, song);
         }
     }
 
-    public record SetName(NonEmptyString Value)
+    public sealed record SetName(NonEmptyString Value)
     {
         public static implicit operator string(SetName setName) => setName.Value;
+
+        public static implicit operator SetName(string setName) => new(new NonEmptyString(setName));
     }
 }

@@ -102,7 +102,7 @@ namespace Setlistbot.Application.Reddit
 
         private async Task ReplyToComments()
         {
-            var comments = await _redditService.GetComments(_botOptions.Subreddit);
+            var comments = await _redditService.GetComments(new Subreddit(_botOptions.Subreddit));
 
             foreach (var comment in comments)
             {
@@ -165,7 +165,7 @@ namespace Setlistbot.Application.Reddit
             );
 
             var reply = await _commentRepository.Get(comment.Id);
-            var alreadyReplied = reply != null;
+            var alreadyReplied = reply.HasValue;
 
             return mentioned && hasDates && !isBotReply && !alreadyReplied;
         }
@@ -189,7 +189,7 @@ namespace Setlistbot.Application.Reddit
 
         private async Task ReplyToPosts()
         {
-            var posts = await _redditService.GetPosts(_botOptions.Subreddit);
+            var posts = await _redditService.GetPosts(new Subreddit(_botOptions.Subreddit));
 
             foreach (var post in posts)
             {

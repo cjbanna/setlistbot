@@ -1,16 +1,27 @@
-﻿using Setlistbot.Infrastructure.Reddit.Models;
+﻿using CSharpFunctionalExtensions;
+using Setlistbot.Domain;
+using Setlistbot.Infrastructure.Reddit.Models;
 
 namespace Setlistbot.Infrastructure.Reddit
 {
     public interface IRedditClient
     {
-        Task<string?> GetAuthToken(string username, string password, string key, string secret);
-        Task<SubredditCommentsResponse?> GetComments(
-            string token,
-            string subreddit,
-            int? limit = default
+        Task<Maybe<RedditToken>> GetAuthToken(
+            NonEmptyString username,
+            NonEmptyString password,
+            NonEmptyString key,
+            NonEmptyString secret
         );
-        Task<PostCommentResponse?> PostComment(string token, string parent, string text);
-        Task<SubredditPostsResponse?> GetPosts(string token, string subreddit);
+        Task<Maybe<SubredditCommentsResponse>> GetComments(
+            RedditToken token,
+            Subreddit subreddit,
+            Maybe<PositiveInt> limit = default
+        );
+        Task<Maybe<PostCommentResponse>> PostComment(
+            RedditToken token,
+            NonEmptyString parent,
+            NonEmptyString text
+        );
+        Task<Maybe<SubredditPostsResponse>> GetPosts(RedditToken token, Subreddit subreddit);
     }
 }

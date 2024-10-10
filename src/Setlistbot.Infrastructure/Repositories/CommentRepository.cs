@@ -1,4 +1,6 @@
-﻿using EnsureThat;
+﻿using CSharpFunctionalExtensions;
+using EnsureThat;
+using Setlistbot.Domain;
 using Setlistbot.Domain.CommentAggregate;
 using Setlistbot.Infrastructure.Data;
 using Setlistbot.Infrastructure.Extensions;
@@ -15,12 +17,10 @@ namespace Setlistbot.Infrastructure.Repositories
             _subreddit = Ensure.String.IsNotNullOrWhiteSpace(subreddit, nameof(subreddit));
         }
 
-        public async Task<Comment?> Get(string id)
+        public async Task<Maybe<Comment>> Get(NonEmptyString id)
         {
-            Ensure.That(id, nameof(id)).IsNotNullOrWhiteSpace();
-
             var entity = await GetAsync(_subreddit, id);
-            return entity.ToDomain();
+            return entity.Match(some => some.ToDomain(), () => Maybe<Comment>.None);
         }
 
         public async Task Add(Comment comment)
@@ -38,7 +38,7 @@ namespace Setlistbot.Infrastructure.Repositories
         public async Task<IEnumerable<Comment>> GetAll()
         {
             var comments = await GetAllAsync();
-            return comments.Where(c => c != null).Select(c => c.ToDomain()!);
+            return comments.Select(c => c.ToDomain());
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿namespace Setlistbot.Domain.CommentAggregate
+﻿using CSharpFunctionalExtensions;
+
+namespace Setlistbot.Domain.CommentAggregate
 {
     public interface ICommentRepository
     {
-        Task<Comment?> Get(string id);
+        Task<Maybe<Comment>> Get(NonEmptyString id);
         Task<IEnumerable<Comment>> GetAll();
         Task Add(Comment comment);
         Task Delete(Comment comment);

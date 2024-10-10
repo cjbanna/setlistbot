@@ -26,8 +26,8 @@ namespace Setlistbot.Infrastructure.Extensions
                 .GetRequiredService<IOptions<AzureTableOptions>>()
                 .Value;
 
-            var commentsTableName = "comments";
-            var postsTableName = "posts";
+            const string commentsTableName = "comments";
+            const string postsTableName = "posts";
 
             // Ensure the tables exist
             var serviceClient = new TableServiceClient(options.ConnectionString);

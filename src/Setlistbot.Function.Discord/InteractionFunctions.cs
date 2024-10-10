@@ -1,4 +1,5 @@
 using System.Net;
+using CSharpFunctionalExtensions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -31,20 +32,19 @@ namespace Setlistbot.Function.Discord
             try
             {
                 var interaction = await httpRequest.DeserializeJsonBodyAsync<Interaction>();
-                if (interaction == null)
+                if (interaction.HasNoValue)
                 {
                     throw new Exception($"Could not parse interaction from HTTP request body");
                 }
 
-                var interactionResponse = await _discordInteractionService.GetResponse(interaction);
-                if (interactionResponse == null)
-                {
-                    throw new Exception("No interaction response returned");
-                }
+                var interactionResponse = await _discordInteractionService.GetResponse(
+                    interaction.Value
+                );
 
-                var httpResponse = httpRequest.CreateResponse(HttpStatusCode.OK);
-                await httpResponse.SerializeJsonBodyAsync(interactionResponse);
-                return httpResponse;
+                return await interactionResponse.Match(
+                    async some => await GetHttpResponse(some),
+                    () => throw new Exception("No interaction response returned")
+                );
             }
             catch (Exception ex)
             {
@@ -53,6 +53,13 @@ namespace Setlistbot.Function.Discord
                 var body = await httpRequest.ReadAsStringAsync();
                 _logger.LogInformation("HTTP body: {Body}", body);
                 return httpRequest.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+
+            async Task<HttpResponseData> GetHttpResponse(InteractionResponse some)
+            {
+                var httpResponse = httpRequest.CreateResponse(HttpStatusCode.OK);
+                await httpResponse.SerializeJsonBodyAsync(some);
+                return httpResponse;
             }
         }
     }

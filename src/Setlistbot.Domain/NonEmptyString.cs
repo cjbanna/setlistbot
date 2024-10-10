@@ -5,7 +5,7 @@ namespace Setlistbot.Domain
     /// <summary>
     /// A non-empty string.
     /// </summary>
-    public record struct NonEmptyString
+    public readonly record struct NonEmptyString
     {
         private readonly string _value = string.Empty;
 
