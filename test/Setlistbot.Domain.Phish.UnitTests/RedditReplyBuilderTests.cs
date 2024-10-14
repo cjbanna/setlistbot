@@ -12,7 +12,7 @@ namespace Setlistbot.Domain.Phish.UnitTests
             var actual = builder.ArtistId;
 
             // Assert
-            Assert.Equal("phish", actual);
+            actual.Should().Be("phish");
         }
 
         [Fact]
@@ -156,7 +156,7 @@ namespace Setlistbot.Domain.Phish.UnitTests
 
             // Assert
             var expected = TestDataHelper.GetTestData("TestData/1997-11-17-reply.md");
-            Assert.Equal(expected, actual);
+            actual.Should().Be(expected);
         }
     }
 }

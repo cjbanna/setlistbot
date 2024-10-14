@@ -1,6 +1,5 @@
 using CSharpFunctionalExtensions;
 using Newtonsoft.Json;
-using Xunit;
 
 namespace Setlistbot.Domain.UnitTests
 {

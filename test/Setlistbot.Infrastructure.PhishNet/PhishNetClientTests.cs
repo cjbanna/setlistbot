@@ -1,4 +1,3 @@
-using FluentAssertions;
 using Flurl.Http.Testing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -17,8 +16,15 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
         public PhishNetClientTestFixture()
         {
             Options = new Mock<IOptions<PhishNetOptions>>();
+            Logger = new Mock<ILogger<PhishNetClient>>();
+            PhishNetClient = new PhishNetClient(Logger.Object, Options.Object);
+            HttpTest = new HttpTest();
+        }
+
+        public PhishNetClientTestFixture GivenValidOptions()
+        {
             Options
-                .SetupGet(o => o.Value)
+                .SetupGet(x => x.Value)
                 .Returns(
                     new PhishNetOptions
                     {
@@ -27,9 +33,7 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
                     }
                 );
 
-            Logger = new Mock<ILogger<PhishNetClient>>();
-            PhishNetClient = new PhishNetClient(Logger.Object, Options.Object);
-            HttpTest = new HttpTest();
+            return this;
         }
     }
 
@@ -39,7 +43,7 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
         public async Task GetSetlistAsync_WhenNoError_ExpectSuccessResponse()
         {
             // Arrange
-            var fixture = new PhishNetClientTestFixture();
+            var fixture = new PhishNetClientTestFixture().GivenValidOptions();
 
             var setlistResponse = TestData.GetSetlistResponseTestData();
             fixture.HttpTest.RespondWithJson(setlistResponse);

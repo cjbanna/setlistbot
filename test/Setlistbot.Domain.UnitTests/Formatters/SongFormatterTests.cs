@@ -1,6 +1,4 @@
-using FluentAssertions;
 using Setlistbot.Domain.Formatters;
-using Xunit;
 
 namespace Setlistbot.Domain.UnitTests.Formatters
 {

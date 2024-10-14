@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using EnsureThat;
 using Flurl;
 using Flurl.Http;
 using Microsoft.Extensions.Logging;
@@ -11,12 +10,12 @@ namespace Setlistbot.Infrastructure.PhishNet
     public class PhishNetClient : IPhishNetClient
     {
         private readonly ILogger<PhishNetClient> _logger;
-        private readonly PhishNetOptions _options;
+        private readonly IOptions<PhishNetOptions> _options;
 
         public PhishNetClient(ILogger<PhishNetClient> logger, IOptions<PhishNetOptions> options)
         {
             _logger = logger;
-            _options = Ensure.Any.IsNotNull(options, nameof(options)).Value;
+            _options = options;
         }
 
         public async Task<Result<SetlistResponse>> GetSetlistAsync(DateOnly date)
@@ -28,12 +27,12 @@ namespace Setlistbot.Infrastructure.PhishNet
                 // https://api.phish.net/v5/setlists/showdate/1997-11-22.json?apikey=YourApiKey
 
                 url = Url.Combine(
-                        _options.BaseUrl,
+                        _options.Value.BaseUrl,
                         "setlists",
                         "showdate",
                         date.ToString("yyyy-MM-dd") + ".json"
                     )
-                    .SetQueryParam("apikey", _options.ApiKey);
+                    .SetQueryParam("apikey", _options.Value.ApiKey);
 
                 var response = await url.GetJsonAsync<SetlistResponse>();
 

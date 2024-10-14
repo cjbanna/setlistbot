@@ -2,7 +2,6 @@ using System.Net;
 using System.Text;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Moq;
 using Newtonsoft.Json;
 using Setlistbot.Application.Discord;
 using Setlistbot.Infrastructure.Discord.Interactions;
@@ -57,12 +56,15 @@ namespace Setlistbot.Function.Discord.UnitTests
             var response = await fixture.InteractionFunction.HandleInteraction(httpRequest);
 
             // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Position = 0;
-            var responseBody = new StreamReader(response.Body).ReadToEnd();
-            Assert.Equal("{\"type\":1}", responseBody);
-            var contentTypeHeader = Assert.Single(response.Headers, h => h.Key == "Content-Type");
-            Assert.Equal("application/json", contentTypeHeader.Value.First());
+            var responseBody = await new StreamReader(response.Body).ReadToEndAsync();
+            responseBody.Should().Be("{\"type\":1}");
+            response
+                .Headers.Should()
+                .ContainSingle(h => h.Key == "Content-Type")
+                .Which.Value.Should()
+                .Contain("application/json");
         }
     }
 }

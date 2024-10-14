@@ -1,7 +1,5 @@
-using FluentAssertions;
 using Newtonsoft.Json;
 using Vogen;
-using Xunit;
 
 namespace Setlistbot.Domain.UnitTests
 {
@@ -173,7 +171,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = nonEmptyString.ToString();
 
             // Assert
-            Assert.Equal(value, result);
+            result.Should().Be(value);
         }
 
         [Fact]

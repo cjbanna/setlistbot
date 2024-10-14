@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Xunit;
-
 namespace Setlistbot.Domain.UnitTests
 {
     public class SetlistTests

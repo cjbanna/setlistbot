@@ -11,12 +11,12 @@ namespace Setlistbot.Infrastructure.KglwNet
     public class KglwNetClient : IKglwNetClient
     {
         private readonly ILogger<KglwNetClient> _logger;
-        private readonly KglwNetOptions _options;
+        private readonly IOptions<KglwNetOptions> _options;
 
         public KglwNetClient(ILogger<KglwNetClient> logger, IOptions<KglwNetOptions> options)
         {
             _logger = logger;
-            _options = Ensure.Any.IsNotNull(options, nameof(options)).Value;
+            _options = Ensure.Any.IsNotNull(options, nameof(options));
         }
 
         public async Task<Maybe<SetlistResponse>> GetSetlistAsync(DateOnly date)
@@ -26,7 +26,7 @@ namespace Setlistbot.Infrastructure.KglwNet
                 // https://kglw.songfishapp.com/api/v1/setlists/showdate/2022-10-10.json
 
                 var url = Url.Combine(
-                    _options.BaseUrl,
+                    _options.Value.BaseUrl,
                     "setlists",
                     "showdate",
                     date.ToString("yyyy-MM-dd") + ".json"

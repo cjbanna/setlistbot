@@ -16,13 +16,15 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
         public KglwNetClientTestFixture()
         {
             Options = new Mock<IOptions<KglwNetOptions>>();
-            Options
-                .SetupGet(o => o.Value)
-                .Returns(new KglwNetOptions { BaseUrl = "https://kglw.songfishapp.com/api/v1" });
-
             Logger = new Mock<ILogger<KglwNetClient>>();
             KglwNetClient = new KglwNetClient(Logger.Object, Options.Object);
             HttpTest = new HttpTest();
+        }
+
+        public KglwNetClientTestFixture GivenBaseUrl(string baseUrl)
+        {
+            Options.Setup(o => o.Value).Returns(new KglwNetOptions { BaseUrl = baseUrl });
+            return this;
         }
     }
 
@@ -32,7 +34,9 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
         public async Task GetSetlistAsync_WhenNoError_ExpectSuccessResponse()
         {
             // Arrange
-            var fixture = new KglwNetClientTestFixture();
+            var fixture = new KglwNetClientTestFixture().GivenBaseUrl(
+                "https://kglw.songfishapp.com/api/v1"
+            );
 
             var setlistResponse = TestData.GetSetlistResponseTestData();
             fixture.HttpTest.RespondWithJson(setlistResponse);
@@ -41,7 +45,7 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
             var result = await fixture.KglwNetClient.GetSetlistAsync(new DateOnly(2022, 10, 10));
 
             // Assert
-            Assert.True(result.HasValue);
+            result.HasValue.Should().BeTrue();
 
             fixture
                 .HttpTest.ShouldHaveCalled(

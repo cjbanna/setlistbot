@@ -12,7 +12,7 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             var actual = builder.ArtistId;
 
             // Assert
-            Assert.Equal("kglw", actual);
+            actual.Should().Be("kglw");
         }
 
         [Fact]
@@ -336,11 +336,11 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             var builder = new RedditReplyBuilder();
 
             // Act
-            var actual = builder.Build(new[] { setlist });
+            var actual = builder.Build([setlist]);
 
             // Assert
             var expected = TestDataHelper.GetTestData("TestData/2022-10-11-reply.md");
-            Assert.Equal(expected, actual);
+            actual.Should().Be(expected);
         }
     }
 }
