@@ -40,7 +40,7 @@ namespace Setlistbot.Infrastructure.Reddit
 
                 var response = await "https://www.reddit.com/api/v1/access_token"
                     .WithHeader("User-Agent", "setlistbot")
-                    .WithBasicAuth(key, secret)
+                    .WithBasicAuth(key.Value, secret.Value)
                     .PostUrlEncodedAsync(request)
                     .ReceiveJson<AuthTokenResponse>();
 
@@ -57,7 +57,7 @@ namespace Setlistbot.Infrastructure.Reddit
             }
 
             return token is not null
-                ? new RedditToken(token)
+                ? RedditToken.From(token)
                 : Result.Failure<RedditToken>("Failed to get Reddit auth token");
         }
 
@@ -87,7 +87,7 @@ namespace Setlistbot.Infrastructure.Reddit
                 }
 
                 response = await url.WithHeader("User-Agent", "setlistbot")
-                    .WithOAuthBearerToken(token)
+                    .WithOAuthBearerToken(token.Value)
                     .GetJsonAsync<SubredditCommentsResponse>();
             }
             catch (FlurlHttpException ex)
@@ -127,7 +127,7 @@ namespace Setlistbot.Infrastructure.Reddit
                 var url = $"https://oauth.reddit.com/r/{subreddit}/new";
 
                 response = await url.WithHeader("User-Agent", "setlistbot")
-                    .WithOAuthBearerToken(token)
+                    .WithOAuthBearerToken(token.Value)
                     .GetJsonAsync<SubredditPostsResponse>();
             }
             catch (FlurlHttpException ex)
@@ -169,7 +169,7 @@ namespace Setlistbot.Infrastructure.Reddit
 
                 var flurlResponse = await "https://oauth.reddit.com/api/comment"
                     .WithHeader("User-Agent", "setlistbot")
-                    .WithOAuthBearerToken(token)
+                    .WithOAuthBearerToken(token.Value)
                     .PostUrlEncodedAsync(data);
 
                 return await flurlResponse.GetJsonAsync<PostCommentResponse>();

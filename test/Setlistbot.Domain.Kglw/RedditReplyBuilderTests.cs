@@ -20,35 +20,23 @@ namespace Setlistbot.Domain.Kglw.UnitTests
         {
             // Arrange
             var setlist = Setlist.NewSetlist(
-                new ArtistId("kglw"),
-                new ArtistName("King Gizzard & the Lizard Wizard"),
+                ArtistId.From("kglw"),
+                ArtistName.From("King Gizzard & the Lizard Wizard"),
                 new DateOnly(2022, 10, 11),
                 new Location(
-                    new Venue("Red Rocks"),
-                    new City("Morrison"),
-                    new State("CO"),
-                    new Country("USA")
+                    Venue.From("Red Rocks"),
+                    City.From("Morrison"),
+                    State.From("CO"),
+                    Country.From("USA")
                 ),
                 "show notes"
             );
 
-            var set1 = new Set(new SetName("Set 1"));
+            var set1 = new Set(SetName.From("Set 1"));
             set1.AddSong(
                 new Song(
-                    new SongName("The Dripping Tap"),
-                    1,
-                    SongTransition.Stop,
-                    TimeSpan.Zero,
-                    string.Empty
-                )
-            );
-            set1.AddSong(
-                new Song(new SongName("Gaia"), 2, SongTransition.Stop, TimeSpan.Zero, string.Empty)
-            );
-            set1.AddSong(
-                new Song(
-                    new SongName("Predator X"),
-                    3,
+                    SongName.From("The Dripping Tap"),
+                    SongPosition.From(1),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -56,8 +44,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set1.AddSong(
                 new Song(
-                    new SongName("Organ Farmer"),
-                    4,
+                    SongName.From("Gaia"),
+                    SongPosition.From(2),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -65,8 +53,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set1.AddSong(
                 new Song(
-                    new SongName("Pleura"),
-                    5,
+                    SongName.From("Predator X"),
+                    SongPosition.From(3),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -74,8 +62,26 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set1.AddSong(
                 new Song(
-                    new SongName("Oddlife"),
-                    6,
+                    SongName.From("Organ Farmer"),
+                    SongPosition.From(4),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Pleura"),
+                    SongPosition.From(5),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Oddlife"),
+                    SongPosition.From(6),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -83,8 +89,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set1.AddSong(
                 new Song(
-                    new SongName("Doom City"),
-                    7,
+                    SongName.From("Doom City"),
+                    SongPosition.From(7),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -92,8 +98,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set1.AddSong(
                 new Song(
-                    new SongName("K.G.L.W. (Outro)"),
-                    8,
+                    SongName.From("K.G.L.W. (Outro)"),
+                    SongPosition.From(8),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -101,8 +107,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set1.AddSong(
                 new Song(
-                    new SongName("Boogiman Sam"),
-                    9,
+                    SongName.From("Boogiman Sam"),
+                    SongPosition.From(9),
                     SongTransition.Segue,
                     TimeSpan.Zero,
                     string.Empty
@@ -110,8 +116,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set1.AddSong(
                 new Song(
-                    new SongName("Sleepwalker"),
-                    10,
+                    SongName.From("Sleepwalker"),
+                    SongPosition.From(10),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -119,8 +125,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set1.AddSong(
                 new Song(
-                    new SongName("Sea of Trees"),
-                    11,
+                    SongName.From("Sea of Trees"),
+                    SongPosition.From(11),
                     SongTransition.Segue,
                     TimeSpan.Zero,
                     string.Empty
@@ -128,8 +134,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set1.AddSong(
                 new Song(
-                    new SongName("The Bitter Boogie"),
-                    12,
+                    SongName.From("The Bitter Boogie"),
+                    SongPosition.From(12),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -137,11 +143,11 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             setlist.AddSet(set1);
 
-            var set2 = new Set(new SetName("Set 2"));
+            var set2 = new Set(SetName.From("Set 2"));
             set2.AddSong(
                 new Song(
-                    new SongName("Perihelion"),
-                    1,
+                    SongName.From("Perihelion"),
+                    SongPosition.From(1),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -149,8 +155,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("I'm in Your Mind"),
-                    2,
+                    SongName.From("I'm in Your Mind"),
+                    SongPosition.From(2),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -158,8 +164,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("I'm Not in Your Mind"),
-                    3,
+                    SongName.From("I'm Not in Your Mind"),
+                    SongPosition.From(3),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -167,8 +173,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Cellophane"),
-                    4,
+                    SongName.From("Cellophane"),
+                    SongPosition.From(4),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -176,8 +182,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("I'm in Your Mind Fuzz"),
-                    5,
+                    SongName.From("I'm in Your Mind Fuzz"),
+                    SongPosition.From(5),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -185,8 +191,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Tezeta"),
-                    6,
+                    SongName.From("Tezeta"),
+                    SongPosition.From(6),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -194,8 +200,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("A New World"),
-                    7,
+                    SongName.From("A New World"),
+                    SongPosition.From(7),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -203,8 +209,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Altered Beast I"),
-                    8,
+                    SongName.From("Altered Beast I"),
+                    SongPosition.From(8),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -212,8 +218,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Alter Me I"),
-                    9,
+                    SongName.From("Alter Me I"),
+                    SongPosition.From(9),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -221,8 +227,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Altered Beast II"),
-                    10,
+                    SongName.From("Altered Beast II"),
+                    SongPosition.From(10),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -230,8 +236,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Alter Me II"),
-                    11,
+                    SongName.From("Alter Me II"),
+                    SongPosition.From(11),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -239,8 +245,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Altered Beast III"),
-                    12,
+                    SongName.From("Altered Beast III"),
+                    SongPosition.From(12),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -248,8 +254,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Ambergris"),
-                    13,
+                    SongName.From("Ambergris"),
+                    SongPosition.From(13),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -257,8 +263,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Muddy Water"),
-                    14,
+                    SongName.From("Muddy Water"),
+                    SongPosition.From(14),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -266,8 +272,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Iron Lung"),
-                    15,
+                    SongName.From("Iron Lung"),
+                    SongPosition.From(15),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -275,8 +281,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Robot Stop"),
-                    16,
+                    SongName.From("Robot Stop"),
+                    SongPosition.From(16),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -284,8 +290,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Gamma Knife"),
-                    17,
+                    SongName.From("Gamma Knife"),
+                    SongPosition.From(17),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -293,8 +299,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("People-Vultures"),
-                    18,
+                    SongName.From("People-Vultures"),
+                    SongPosition.From(18),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -302,8 +308,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Mr. Beat"),
-                    19,
+                    SongName.From("Mr. Beat"),
+                    SongPosition.From(19),
                     SongTransition.Segue,
                     TimeSpan.Zero,
                     string.Empty
@@ -311,8 +317,8 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Iron Lung"),
-                    20,
+                    SongName.From("Iron Lung"),
+                    SongPosition.From(20),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty

@@ -57,18 +57,18 @@ namespace Setlistbot.Infrastructure.PhishNet
                 foreach (var showGrouping in phishSetlists)
                 {
                     var setlist = Setlist.NewSetlist(
-                        new ArtistId("phish"),
-                        new ArtistName("Phish"),
+                        Domain.ArtistId.From("phish"),
+                        ArtistName.From("Phish"),
                         DateOnly.Parse(showGrouping.Key.ShowDate),
                         new Location(
                             string.IsNullOrWhiteSpace(showGrouping.Key.Venue)
                                 ? Maybe.None
-                                : Maybe.From(new Venue(showGrouping.Key.Venue)),
-                            new City(showGrouping.Key.City),
+                                : Maybe.From(Venue.From(showGrouping.Key.Venue)),
+                            City.From(showGrouping.Key.City),
                             string.IsNullOrWhiteSpace(showGrouping.Key.State)
                                 ? Maybe.None
-                                : Maybe.From(new State(showGrouping.Key.State)),
-                            new Country(showGrouping.Key.Country)
+                                : Maybe.From(State.From(showGrouping.Key.State)),
+                            Country.From(showGrouping.Key.Country)
                         ),
                         showGrouping.Key.SetlistNotes
                     );
@@ -76,7 +76,7 @@ namespace Setlistbot.Infrastructure.PhishNet
                     foreach (var setGrouping in showGrouping.GroupBy(x => x.Set))
                     {
                         var setName = GetSetName(setGrouping.Key);
-                        var set = new Set(new SetName(setName));
+                        var set = new Set(SetName.From(setName));
 
                         var orderedSongResponses = setGrouping
                             .OrderBy(x => x.Position)
@@ -94,8 +94,8 @@ namespace Setlistbot.Infrastructure.PhishNet
                         foreach (var songResponse in orderedSongResponses)
                         {
                             var song = new Song(
-                                new SongName(songResponse.Song),
-                                new SongPosition(songResponse.Index),
+                                SongName.From(songResponse.Song),
+                                SongPosition.From(songResponse.Index),
                                 songResponse.Transition.ToSongTransition(),
                                 default,
                                 songResponse.Footnote

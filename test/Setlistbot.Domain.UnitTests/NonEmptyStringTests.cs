@@ -1,4 +1,6 @@
+using FluentAssertions;
 using Newtonsoft.Json;
+using Vogen;
 using Xunit;
 
 namespace Setlistbot.Domain.UnitTests
@@ -12,10 +14,10 @@ namespace Setlistbot.Domain.UnitTests
             var value = string.Empty;
 
             // Act
-            void Action() => new NonEmptyString(value);
+            Action act = () => NonEmptyString.From(value);
 
             // Assert
-            Assert.Throws<ArgumentException>(Action);
+            act.Should().ThrowExactly<ValueObjectValidationException>();
         }
 
         [Fact]
@@ -25,65 +27,65 @@ namespace Setlistbot.Domain.UnitTests
             var value = " ";
 
             // Act
-            void Action() => new NonEmptyString(value);
+            Action act = () => NonEmptyString.From(value);
 
             // Assert
-            Assert.Throws<ArgumentException>(Action);
+            act.Should().ThrowExactly<ValueObjectValidationException>();
         }
 
         [Fact]
         public void NonEmptyString_WhenValueIsNotNullOrWhiteSpace_ReturnsNonEmptyString()
         {
             // Arrange
-            var value = "value";
+            const string value = "value";
 
             // Act
-            var nonEmptyString = new NonEmptyString(value);
+            var nonEmptyString = NonEmptyString.From(value);
 
             // Assert
-            Assert.Equal(value, nonEmptyString);
+            nonEmptyString.Should().Be(NonEmptyString.From(value));
         }
 
         [Fact]
         public void CompareTo_WhenValueIsEqual_ReturnsZero()
         {
             // Arrange
-            var value = "value";
-            var nonEmptyString = new NonEmptyString(value);
+            var value = NonEmptyString.From("value");
+            var other = NonEmptyString.From("value");
 
             // Act
-            var result = nonEmptyString.CompareTo(value);
+            var result = value.CompareTo(other);
 
             // Assert
-            Assert.Equal(0, result);
+            result.Should().Be(0);
         }
 
         [Fact]
         public void CompareTo_WhenValueIsNotEqual_ReturnsNonZero()
         {
             // Arrange
-            var value = "value";
-            var nonEmptyString = new NonEmptyString(value);
+            var value = NonEmptyString.From("value");
+            var other = NonEmptyString.From("other");
 
             // Act
-            var result = nonEmptyString.CompareTo("other");
+            var result = value.CompareTo(other);
 
             // Assert
-            Assert.NotEqual(0, result);
+            result.Should().NotBe(0);
         }
 
         [Fact]
         public void Equals_WhenValueIsEqual_ReturnsTrue()
         {
             // Arrange
-            var value = "value";
-            var nonEmptyString = new NonEmptyString(value);
+            var nonEmptyString = NonEmptyString.From("value");
+            var other = NonEmptyString.From("value");
 
             // Act
-            var result = nonEmptyString.Equals(value);
+            var result = nonEmptyString.Equals(other);
 
             // Assert
-            Assert.True(result);
+            result.Should().BeTrue();
         }
 
         [Fact]
@@ -91,13 +93,13 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var value = "value";
-            var nonEmptyString = new NonEmptyString(value);
+            var nonEmptyString = NonEmptyString.From(value);
 
             // Act
             var result = nonEmptyString.Equals("other");
 
             // Assert
-            Assert.False(result);
+            result.Should().BeFalse();
         }
 
         [Fact]
@@ -105,14 +107,14 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var value = "value";
-            var nonEmptyString1 = new NonEmptyString(value);
-            var nonEmptyString2 = new NonEmptyString(value);
+            var nonEmptyString1 = NonEmptyString.From(value);
+            var nonEmptyString2 = NonEmptyString.From(value);
 
             // Act
             var result = nonEmptyString1 == nonEmptyString2;
 
             // Assert
-            Assert.True(result);
+            result.Should().BeTrue();
         }
 
         [Fact]
@@ -120,14 +122,14 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var value = "value";
-            var nonEmptyString1 = new NonEmptyString(value);
-            var nonEmptyString2 = new NonEmptyString("other");
+            var nonEmptyString1 = NonEmptyString.From(value);
+            var nonEmptyString2 = NonEmptyString.From("other");
 
             // Act
             var result = nonEmptyString1 == nonEmptyString2;
 
             // Assert
-            Assert.False(result);
+            result.Should().BeFalse();
         }
 
         [Fact]
@@ -135,14 +137,14 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var value = "value";
-            var nonEmptyString = new NonEmptyString(value);
+            var nonEmptyString = NonEmptyString.From(value);
 
             // Act
             var result1 = nonEmptyString.GetHashCode();
-            var result2 = new NonEmptyString(value).GetHashCode();
+            var result2 = NonEmptyString.From(value).GetHashCode();
 
             // Assert
-            Assert.Equal(result1, result2);
+            result2.Should().Be(result1);
         }
 
         [Fact]
@@ -150,14 +152,14 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var value = "value";
-            var nonEmptyString = new NonEmptyString(value);
+            var nonEmptyString = NonEmptyString.From(value);
 
             // Act
             var result1 = nonEmptyString.GetHashCode();
-            var result2 = new NonEmptyString("other").GetHashCode();
+            var result2 = NonEmptyString.From("other").GetHashCode();
 
             // Assert
-            Assert.NotEqual(result1, result2);
+            result2.Should().NotBe(result1);
         }
 
         [Fact]
@@ -165,37 +167,10 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var value = "value";
-            var nonEmptyString = new NonEmptyString(value);
+            var nonEmptyString = NonEmptyString.From(value);
 
             // Act
             var result = nonEmptyString.ToString();
-
-            // Assert
-            Assert.Equal(value, result);
-        }
-
-        [Fact]
-        public void ImplicitOperator_WhenValueIsNotNullOrWhiteSpace_ReturnsValue()
-        {
-            // Arrange
-            var value = "value";
-            var nonEmptyString = new NonEmptyString(value);
-
-            // Act
-            string result = nonEmptyString;
-
-            // Assert
-            Assert.Equal(value, result);
-        }
-
-        [Fact]
-        public void ImplicitOperator_WhenValueIsNotNullOrWhiteSpace_ReturnsNonEmptyString()
-        {
-            // Arrange
-            var value = "value";
-
-            // Act
-            NonEmptyString result = value;
 
             // Assert
             Assert.Equal(value, result);
@@ -206,13 +181,13 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var value = "value";
-            var nonEmptyString = new NonEmptyString(value);
+            var nonEmptyString = NonEmptyString.From(value);
 
             // Act
             var result = JsonConvert.SerializeObject(nonEmptyString);
 
             // Assert
-            Assert.Equal($"\"{value}\"", result);
+            result.Should().Be($"\"{value}\"");
         }
 
         [Fact]
@@ -226,7 +201,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = JsonConvert.DeserializeObject<NonEmptyString>(json);
 
             // Assert
-            Assert.Equal(value, result);
+            result.Value.Should().Be(value);
         }
     }
 }

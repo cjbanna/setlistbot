@@ -9,16 +9,7 @@ namespace Setlistbot.Domain.UnitTests
         [Fact]
         public void Test()
         {
-            ArtistName name = "Foo";
-            ArtistId id = "Foo";
-            var equal = name == id;
-            var equal2 = name.Equals(id);
-            var equal3 = Equals(name, id);
-
-            Assert.True(equal);
-            Assert.False(equal2);
-            Assert.False(equal3);
-
+            // TODO
             var maybe = Maybe<string>.From("Bar");
             var testType = new TestType(maybe);
             var json = JsonConvert.SerializeObject(

@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Setlistbot.Domain.Formatters;
 using Xunit;
 
@@ -10,10 +11,10 @@ namespace Setlistbot.Domain.UnitTests.Formatters
         {
             // Arrange
             var location = new Location(
-                new Venue("McNichols Arena"),
-                new City("Denver"),
-                new State("CO"),
-                new Country("USA")
+                Venue.From("McNichols Arena"),
+                City.From("Denver"),
+                State.From("CO"),
+                Country.From("USA")
             );
 
             var formatter = new LocationFormatter(location);
@@ -22,7 +23,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            Assert.Equal("McNichols Arena, Denver, CO, USA", actual);
+            actual.Should().Be("McNichols Arena, Denver, CO, USA");
         }
     }
 }

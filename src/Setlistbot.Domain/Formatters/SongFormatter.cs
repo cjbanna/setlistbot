@@ -7,11 +7,11 @@
             var formatter = song.SongTransition switch
             {
                 SongTransition.Stop => new CombinedFormatter(
-                    new LiteralFormatter(song.Name),
+                    new LiteralFormatter(song.Name.Value),
                     new SongTransitionFormatter(song.SongTransition)
                 ),
                 _ => new CombinedFormatter(
-                    new LiteralFormatter(song.Name),
+                    new LiteralFormatter(song.Name.Value),
                     new SpaceFormatter(),
                     new SongTransitionFormatter(song.SongTransition)
                 ),
@@ -28,7 +28,7 @@
             var formatters = songs.SelectMany(s =>
                 new IFormatter[]
                 {
-                    new LiteralFormatter(s.Name),
+                    new LiteralFormatter(s.Name.Value),
                     new SongTransitionSuffixFormatter(s.SongTransition),
                 }
             );

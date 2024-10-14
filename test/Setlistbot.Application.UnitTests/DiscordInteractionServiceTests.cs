@@ -43,16 +43,16 @@ namespace Setlistbot.Application.UnitTests
         {
             var date = new DateOnly(1995, 12, 31);
             var location = new Location(
-                new Venue("Madison Square Garden"),
-                new City("New York"),
-                new State("NY"),
-                new Country("USA")
+                Venue.From("Madison Square Garden"),
+                City.From("New York"),
+                State.From("NY"),
+                Country.From("USA")
             );
             var setlists = new List<Setlist>
             {
                 Setlist.NewSetlist(
-                    new ArtistId("phish"),
-                    new ArtistName("Phish"),
+                    ArtistId.From("phish"),
+                    ArtistName.From("Phish"),
                     date,
                     location,
                     string.Empty

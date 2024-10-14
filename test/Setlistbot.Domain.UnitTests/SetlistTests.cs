@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Xunit;
 
 namespace Setlistbot.Domain.UnitTests
@@ -8,14 +9,14 @@ namespace Setlistbot.Domain.UnitTests
         public void NewSetlist_WhenCalled_ExpectSetlist()
         {
             // Arrange
-            var artistId = new ArtistId("phish");
-            var artistName = new ArtistName("Phish");
+            var artistId = ArtistId.From("phish");
+            var artistName = ArtistName.From("Phish");
             var date = new DateOnly(2021, 1, 1);
             var location = new Location(
-                new Venue("Venue"),
-                new City("City"),
-                new State("State"),
-                new Country("Country")
+                Venue.From("Venue"),
+                City.From("City"),
+                State.From("State"),
+                Country.From("Country")
             );
             const string notes = "Notes";
 
@@ -23,11 +24,11 @@ namespace Setlistbot.Domain.UnitTests
             var setlist = Setlist.NewSetlist(artistId, artistName, date, location, notes);
 
             // Assert
-            Assert.Equal(artistId, setlist.ArtistId);
-            Assert.Equal(artistName, setlist.ArtistName);
-            Assert.Equal(date, setlist.Date);
-            Assert.Equal(location, setlist.Location);
-            Assert.Equal(notes, setlist.Notes);
+            setlist.ArtistId.Should().Be(artistId);
+            setlist.ArtistName.Should().Be(artistName);
+            setlist.Date.Should().Be(date);
+            setlist.Location.Should().Be(location);
+            setlist.Notes.Should().Be(notes);
         }
 
         [Fact]
@@ -35,24 +36,24 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var setlist = Setlist.NewSetlist(
-                new ArtistId("phish"),
-                new ArtistName("Phish"),
+                ArtistId.From("phish"),
+                ArtistName.From("Phish"),
                 new DateOnly(2021, 1, 1),
                 new Location(
-                    new Venue("Venue"),
-                    new City("City"),
-                    new State("State"),
-                    new Country("Country")
+                    Venue.From("Venue"),
+                    City.From("City"),
+                    State.From("State"),
+                    Country.From("Country")
                 ),
                 "Notes"
             );
-            var set = new Set(new SetName("Set"));
+            var set = new Set(SetName.From("Set"));
 
             // Act
             setlist.AddSet(set);
 
             // Assert
-            Assert.Contains(set, setlist.Sets);
+            setlist.Sets.Should().Contain(set);
         }
 
         [Fact]
@@ -60,26 +61,26 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var setlist = Setlist.NewSetlist(
-                new ArtistId("phish"),
-                new ArtistName("Phish"),
+                ArtistId.From("phish"),
+                ArtistName.From("Phish"),
                 new DateOnly(2021, 1, 1),
                 new Location(
-                    new Venue("Venue"),
-                    new City("City"),
-                    new State("State"),
-                    new Country("Country")
+                    Venue.From("Venue"),
+                    City.From("City"),
+                    State.From("State"),
+                    Country.From("Country")
                 ),
                 "Notes"
             );
 
-            var set1 = new Set(new SetName("Set 1"));
-            var set2 = new Set(new SetName("Set 2"));
+            var set1 = new Set(SetName.From("Set 1"));
+            var set2 = new Set(SetName.From("Set 2"));
 
             // Act
             setlist.AddSets(new[] { set1, set2 });
 
             // Assert
-            Assert.Contains(set1, setlist.Sets);
+            setlist.Sets.Should().Contain(set1);
         }
 
         [Fact]
@@ -87,27 +88,27 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var setlist = Setlist.NewSetlist(
-                new ArtistId("phish"),
-                new ArtistName("Phish"),
+                ArtistId.From("phish"),
+                ArtistName.From("Phish"),
                 new DateOnly(2021, 1, 1),
                 new Location(
-                    new Venue("Venue"),
-                    new City("City"),
-                    new State("State"),
-                    new Country("Country")
+                    Venue.From("Venue"),
+                    City.From("City"),
+                    State.From("State"),
+                    Country.From("Country")
                 ),
                 "Notes"
             );
-            var set = new Set(new SetName("Set"));
+            var set = new Set(SetName.From("Set"));
             setlist.AddSet(set);
 
-            var duplicateSet = new Set(new SetName("Set"));
+            var duplicateSet = new Set(SetName.From("Set"));
 
             // Act
-            void Act() => setlist.AddSet(duplicateSet);
+            var result = setlist.AddSet(duplicateSet);
 
             // Assert
-            Assert.Throws<ArgumentException>(Act);
+            result.Should().Fail();
         }
 
         [Fact]
@@ -115,14 +116,14 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var setlist = Setlist.NewSetlist(
-                new ArtistId("phish"),
-                new ArtistName("Phish"),
+                ArtistId.From("phish"),
+                ArtistName.From("Phish"),
                 new DateOnly(2021, 1, 1),
                 new Location(
-                    new Venue("Venue"),
-                    new City("City"),
-                    new State("State"),
-                    new Country("Country")
+                    Venue.From("Venue"),
+                    City.From("City"),
+                    State.From("State"),
+                    Country.From("Country")
                 ),
                 "Notes"
             );
@@ -132,7 +133,7 @@ namespace Setlistbot.Domain.UnitTests
             setlist.AddSpotifyUrl(url);
 
             // Assert
-            Assert.Equal(url.ToString(), setlist.SpotifyUrl.Value);
+            setlist.SpotifyUrl.Value.Should().Be(url.ToString());
         }
 
         [Fact]
@@ -140,14 +141,14 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var setlist = Setlist.NewSetlist(
-                new ArtistId("phish"),
-                new ArtistName("Phish"),
+                ArtistId.From("phish"),
+                ArtistName.From("Phish"),
                 new DateOnly(2021, 1, 1),
                 new Location(
-                    new Venue("Venue"),
-                    new City("City"),
-                    new State("State"),
-                    new Country("Country")
+                    Venue.From("Venue"),
+                    City.From("City"),
+                    State.From("State"),
+                    Country.From("Country")
                 ),
                 "Notes"
             );
@@ -157,7 +158,7 @@ namespace Setlistbot.Domain.UnitTests
             setlist.AddPermalink(url);
 
             // Assert
-            Assert.Equal(url.ToString(), setlist.Permalink.Value);
+            setlist.Permalink.Value.Should().Be(url.ToString());
         }
 
         [Fact]
@@ -165,35 +166,41 @@ namespace Setlistbot.Domain.UnitTests
         {
             // Arrange
             var setlist = Setlist.NewSetlist(
-                new ArtistId("phish"),
-                new ArtistName("Phish"),
+                ArtistId.From("phish"),
+                ArtistName.From("Phish"),
                 new DateOnly(2021, 1, 1),
                 new Location(
-                    new Venue("Venue"),
-                    new City("City"),
-                    new State("State"),
-                    new Country("Country")
+                    Venue.From("Venue"),
+                    City.From("City"),
+                    State.From("State"),
+                    Country.From("Country")
                 ),
                 "Notes"
             );
-            var set1 = new Set(new SetName("Set 1"));
-            set1.AddSong(
-                new Song("Song 1", 1, SongTransition.Stop, TimeSpan.FromMinutes(5), string.Empty)
-            );
+            var set1 = new Set(SetName.From("Set 1"));
             set1.AddSong(
                 new Song(
-                    new SongName("Song 2"),
-                    2,
+                    SongName.From("Song 1"),
+                    SongPosition.From(1),
                     SongTransition.Stop,
                     TimeSpan.FromMinutes(5),
                     string.Empty
                 )
             );
-            var set2 = new Set(new SetName("Set 2"));
+            set1.AddSong(
+                new Song(
+                    SongName.From("Song 2"),
+                    SongPosition.From(2),
+                    SongTransition.Stop,
+                    TimeSpan.FromMinutes(5),
+                    string.Empty
+                )
+            );
+            var set2 = new Set(SetName.From("Set 2"));
             set2.AddSong(
                 new Song(
-                    new SongName("Song 3"),
-                    3,
+                    SongName.From("Song 3"),
+                    SongPosition.From(3),
                     SongTransition.Stop,
                     TimeSpan.FromMinutes(5),
                     string.Empty
@@ -201,8 +208,8 @@ namespace Setlistbot.Domain.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Song 4"),
-                    4,
+                    SongName.From("Song 4"),
+                    SongPosition.From(4),
                     SongTransition.Stop,
                     TimeSpan.FromMinutes(5),
                     string.Empty
@@ -214,7 +221,7 @@ namespace Setlistbot.Domain.UnitTests
             var duration = setlist.Duration;
 
             // Assert
-            Assert.Equal(20, duration.TotalMinutes);
+            duration.TotalMinutes.Should().Be(20);
         }
     }
 }

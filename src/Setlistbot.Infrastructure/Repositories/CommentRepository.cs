@@ -19,7 +19,7 @@ namespace Setlistbot.Infrastructure.Repositories
 
         public async Task<Maybe<Comment>> Get(NonEmptyString id)
         {
-            var entity = await GetAsync(_subreddit, id);
+            var entity = await GetAsync(_subreddit, id.Value);
             return entity.Match(some => some.ToDomain(), () => Maybe<Comment>.None);
         }
 

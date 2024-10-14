@@ -1,11 +1,13 @@
-using Setlistbot.Domain;
-using StronglyTypedPrimitives.Attributes;
+using Vogen;
 
 namespace Setlistbot.Infrastructure.Reddit
 {
-    [StronglyTyped(Template.String)]
+    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
     public readonly partial struct RedditToken
     {
-        public RedditToken(NonEmptyString value) => _value = value;
+        private static Validation Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? Validation.Invalid("Value cannot be null or whitespace.")
+                : Validation.Ok;
     }
 }

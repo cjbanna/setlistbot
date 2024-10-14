@@ -1,12 +1,11 @@
-using EnsureThat;
-using StronglyTypedPrimitives;
-using StronglyTypedPrimitives.Attributes;
+using Vogen;
 
 namespace Setlistbot.Domain
 {
-    [StronglyTyped(Template.Int)]
+    [ValueObject<int>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
     public readonly partial struct PositiveInt
     {
-        public PositiveInt(int value) => _value = EnsureArg.IsGt(value, 0, nameof(value));
+        private static Validation Validate(int value) =>
+            value > 0 ? Validation.Ok : Validation.Invalid("Value must be greater than 0.");
     }
 }

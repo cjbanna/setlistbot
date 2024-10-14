@@ -35,7 +35,7 @@ namespace Setlistbot.Infrastructure.Reddit
             RedditToken token
         ) =>
             await _client
-                .GetComments(token, subreddit, new PositiveInt(_redditOptions.Value.CommentsLimit))
+                .GetComments(token, subreddit, PositiveInt.From(_redditOptions.Value.CommentsLimit))
                 .Map(response =>
                     response.Data.Children.Select(c =>
                         Comment.NewComment(
@@ -43,7 +43,7 @@ namespace Setlistbot.Infrastructure.Reddit
                             c.Data.Author,
                             c.Data.Body,
                             c.Data.Permalink,
-                            subreddit
+                            subreddit.Value
                         )
                     )
                 )
@@ -66,7 +66,7 @@ namespace Setlistbot.Infrastructure.Reddit
                             c.Data.Title,
                             c.Data.SelfText,
                             c.Data.Permalink,
-                            subreddit
+                            subreddit.Value
                         )
                     )
                 )
@@ -82,10 +82,10 @@ namespace Setlistbot.Infrastructure.Reddit
 
         private async Task<Result<RedditToken>> GetAuthToken() =>
             await _client.GetAuthToken(
-                _redditOptions.Value.Username,
-                _redditOptions.Value.Password,
-                _redditOptions.Value.Key,
-                _redditOptions.Value.Secret
+                NonEmptyString.From(_redditOptions.Value.Username),
+                NonEmptyString.From(_redditOptions.Value.Password),
+                NonEmptyString.From(_redditOptions.Value.Key),
+                NonEmptyString.From(_redditOptions.Value.Secret)
             );
     }
 }

@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Setlistbot.Domain.Formatters;
 using Xunit;
 
@@ -9,15 +10,15 @@ namespace Setlistbot.Domain.UnitTests.Formatters
         public void Format_WhenSongName_ExpectSongName()
         {
             // Arrange
-            var songName = new SongName("Song Name");
+            var songName = SongName.From("Song Name");
 
-            var formatter = new LiteralFormatter(songName);
+            var formatter = new LiteralFormatter(songName.Value);
 
             // Act
             var actual = formatter.Format();
 
             // Assert
-            Assert.Equal("Song Name", actual);
+            actual.Should().Be("Song Name");
         }
 
         [Fact]
@@ -25,8 +26,8 @@ namespace Setlistbot.Domain.UnitTests.Formatters
         {
             // Arrange
             var song = new Song(
-                new SongName("Song Name"),
-                1,
+                SongName.From("Song Name"),
+                SongPosition.From(1),
                 SongTransition.Stop,
                 TimeSpan.Zero,
                 string.Empty
@@ -38,7 +39,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            Assert.Equal("Song Name,", actual);
+            actual.Should().Be("Song Name,");
         }
     }
 }

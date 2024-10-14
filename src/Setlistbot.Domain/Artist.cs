@@ -1,16 +1,22 @@
-﻿using StronglyTypedPrimitives.Attributes;
+﻿using Vogen;
 
 namespace Setlistbot.Domain
 {
-    [StronglyTyped(Template.String)]
+    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
     public readonly partial struct ArtistId
     {
-        public ArtistId(NonEmptyString value) => _value = value;
+        private static Validation Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? Validation.Invalid("Artist ID cannot be empty.")
+                : Validation.Ok;
     }
 
-    [StronglyTyped(Template.String)]
+    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
     public readonly partial struct ArtistName
     {
-        public ArtistName(NonEmptyString value) => _value = value;
+        private static Validation Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? Validation.Invalid("Artist name cannot be empty.")
+                : Validation.Ok;
     }
 }

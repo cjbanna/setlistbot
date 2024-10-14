@@ -55,7 +55,7 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
                         It.IsAny<NonEmptyString>()
                     )
                 )
-                .ReturnsAsync(Result.Success(new RedditToken("token")));
+                .ReturnsAsync(Result.Success(RedditToken.From("token")));
             return this;
         }
 
@@ -82,8 +82,8 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
         public async Task PostComment_WhenClientReturnsSuccess_ReturnsSuccess()
         {
             // Arrange
-            var parent = "parent";
-            var text = "text";
+            var parent = NonEmptyString.From("parent");
+            var text = NonEmptyString.From("text");
 
             var fixture = new RedditServiceTestFixture();
             fixture.GivenValidOptions().GivenSuccessfulAuthToken().GivenClientPostCommentSuccess();

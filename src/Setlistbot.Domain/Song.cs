@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using EnsureThat;
-using StronglyTypedPrimitives;
-using StronglyTypedPrimitives.Attributes;
+using Vogen;
 
 namespace Setlistbot.Domain
 {
@@ -20,16 +19,20 @@ namespace Setlistbot.Domain
             );
     }
 
-    [StronglyTyped(Template.String)]
+    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
     public readonly partial struct SongName
     {
-        public SongName(NonEmptyString value) => _value = value;
+        private static Validation Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? Validation.Invalid("Song name cannot be empty.")
+                : Validation.Ok;
     }
 
-    [StronglyTyped(Template.Int)]
+    [ValueObject<int>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
     public readonly partial struct SongPosition
     {
-        public SongPosition(int value) => _value = EnsureArg.IsGt(value, 0, nameof(value));
+        private static Validation Validate(int value) =>
+            value > 0 ? Validation.Ok : Validation.Invalid("Song position must be greater than 0.");
     }
 
     public enum SongTransition

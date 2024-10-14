@@ -1,5 +1,4 @@
-﻿using StronglyTypedPrimitives;
-using StronglyTypedPrimitives.Attributes;
+﻿using Vogen;
 
 namespace Setlistbot.Domain
 {
@@ -37,9 +36,12 @@ namespace Setlistbot.Domain
         }
     }
 
-    [StronglyTyped(Template.String)]
+    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
     public readonly partial struct SetName
     {
-        public SetName(NonEmptyString value) => _value = value;
+        private static Validation Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? Validation.Invalid("Set name cannot be empty.")
+                : Validation.Ok;
     }
 }

@@ -1,4 +1,5 @@
-﻿using EnsureThat;
+﻿using CSharpFunctionalExtensions;
+using EnsureThat;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Setlistbot.Application.Options;
@@ -102,7 +103,7 @@ namespace Setlistbot.Application.Reddit
 
         private async Task ReplyToComments()
         {
-            var comments = await _redditService.GetComments(new Subreddit(_botOptions.Subreddit));
+            var comments = await _redditService.GetComments(Subreddit.From(_botOptions.Subreddit));
 
             foreach (var comment in comments)
             {
@@ -126,9 +127,9 @@ namespace Setlistbot.Application.Reddit
             {
                 var setlists = await GetSetlists(comment);
                 var reply = BuildReply(setlists);
-                if (reply.Length > 0)
+                if (reply.HasValue)
                 {
-                    comment.SetReply(reply);
+                    comment.SetReply(reply.Value.Value);
 
                     _logger.LogInformation("Saving comment id: {CommentId}", comment.Id);
 
@@ -137,8 +138,8 @@ namespace Setlistbot.Application.Reddit
 
                     _logger.LogInformation("Posting reply to comment id: {CommentId}", comment.Id);
 
-                    var parent = comment.ParentId;
-                    var posted = await _redditService.PostComment(parent, reply);
+                    var parent = NonEmptyString.From(comment.ParentId);
+                    var posted = await _redditService.PostComment(parent, reply.Value);
                     if (posted.IsFailure)
                     {
                         await _commentRepository.Delete(comment);
@@ -164,15 +165,17 @@ namespace Setlistbot.Application.Reddit
                 StringComparison.CurrentCultureIgnoreCase
             );
 
-            var reply = await _commentRepository.Get(comment.Id);
+            var commentId = NonEmptyString.From(comment.Id);
+            var reply = await _commentRepository.Get(commentId);
             var alreadyReplied = reply.HasValue;
 
             return mentioned && hasDates && !isBotReply && !alreadyReplied;
         }
 
-        private string BuildReply(List<Setlist> setlists)
+        private Maybe<NonEmptyString> BuildReply(List<Setlist> setlists)
         {
-            return _replyBuilder.Build(setlists.Take(_botOptions.MaxSetlistCount));
+            var reply = _replyBuilder.Build(setlists.Take(_botOptions.MaxSetlistCount));
+            return reply.Length > 0 ? NonEmptyString.From(reply) : Maybe.None;
         }
 
         private async Task<List<Setlist>> GetSetlists(Comment comment)
@@ -189,7 +192,7 @@ namespace Setlistbot.Application.Reddit
 
         private async Task ReplyToPosts()
         {
-            var posts = await _redditService.GetPosts(new Subreddit(_botOptions.Subreddit));
+            var posts = await _redditService.GetPosts(Subreddit.From(_botOptions.Subreddit));
 
             foreach (var post in posts)
             {
@@ -213,9 +216,9 @@ namespace Setlistbot.Application.Reddit
             {
                 var setlists = await GetSetlists(post);
                 var reply = BuildReply(setlists);
-                if (reply.Length > 0)
+                if (reply.HasValue)
                 {
-                    post.SetReply(reply);
+                    post.SetReply(reply.Value.Value);
 
                     _logger.LogInformation("Saving post id: {PostId}", post.Id);
 
@@ -224,7 +227,8 @@ namespace Setlistbot.Application.Reddit
 
                     _logger.LogInformation("Posting reply to post id {PostId}", post.Id);
 
-                    var posted = await _redditService.PostComment(post.ParentId, reply);
+                    var parent = NonEmptyString.From(post.ParentId);
+                    var posted = await _redditService.PostComment(parent, reply.Value);
                     if (posted.IsFailure)
                     {
                         await _postRepository.Delete(post);
@@ -242,7 +246,8 @@ namespace Setlistbot.Application.Reddit
             var mentioned =
                 !_botOptions.RequireMention || post.HasMentionOf(_redditOptions.Username);
 
-            return mentioned && post.Dates.Any() && await _postRepository.Get(post.Id) == null;
+            var postId = NonEmptyString.From(post.Id);
+            return mentioned && post.Dates.Count != 0 && await _postRepository.Get(postId) == null;
         }
 
         private async Task<List<Setlist>> GetSetlists(Post post)

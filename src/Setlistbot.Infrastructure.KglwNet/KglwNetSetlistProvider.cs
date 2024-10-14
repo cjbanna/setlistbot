@@ -60,14 +60,14 @@ namespace Setlistbot.Infrastructure.KglwNet
                     var location = $"{showGrouping.Key.City}, {showGrouping.Key.State}";
 
                     var setlist = Setlist.NewSetlist(
-                        new ArtistId("kglw"),
-                        new ArtistName("King Gizzard & the Lizard Wizard"),
+                        Domain.ArtistId.From("kglw"),
+                        ArtistName.From("King Gizzard & the Lizard Wizard"),
                         DateOnly.Parse(showGrouping.Key.ShowDate),
                         new Location(
-                            new Venue(showGrouping.Key.Venue),
-                            new City(showGrouping.Key.City),
-                            new State(showGrouping.Key.State),
-                            new Country(showGrouping.Key.Country)
+                            Venue.From(showGrouping.Key.Venue),
+                            City.From(showGrouping.Key.City),
+                            State.From(showGrouping.Key.State),
+                            Country.From(showGrouping.Key.Country)
                         ),
                         showGrouping.Key.ShowNotes
                     );
@@ -89,7 +89,7 @@ namespace Setlistbot.Infrastructure.KglwNet
                             ? "One Set"
                             : setGrouping.Key;
 
-                        var set = new Set(new SetName(setName));
+                        var set = new Set(SetName.From(setName));
 
                         var orderedSongResponses = setGrouping
                             .OrderBy(x => x.Position)
@@ -107,8 +107,8 @@ namespace Setlistbot.Infrastructure.KglwNet
                         foreach (var songResponse in orderedSongResponses)
                         {
                             var song = new Song(
-                                new SongName(songResponse.Song),
-                                new SongPosition(songResponse.Index),
+                                SongName.From(songResponse.Song),
+                                SongPosition.From(songResponse.Index),
                                 songResponse.Transition.ToSongTransition(),
                                 TimeSpan.Zero,
                                 songResponse.Footnote

@@ -7,9 +7,8 @@ namespace Setlistbot.Domain
         private readonly Dictionary<SetName, Set> _sets = [];
 
         public IReadOnlyList<Set> Sets => _sets.Values.ToList();
-
-        public ArtistId ArtistId { get; private set; } = default!;
-        public ArtistName ArtistName { get; private set; } = default!;
+        public ArtistId ArtistId { get; private set; }
+        public ArtistName ArtistName { get; private set; }
         public DateOnly Date { get; private set; }
         public Location Location { get; private set; } = default!;
         public TimeSpan Duration =>
@@ -17,8 +16,6 @@ namespace Setlistbot.Domain
         public string Notes { get; private set; } = string.Empty;
         public Maybe<string> SpotifyUrl { get; private set; }
         public Maybe<string> Permalink { get; private set; }
-
-        private Setlist() { }
 
         public static Setlist NewSetlist(
             ArtistId artistId,
@@ -38,10 +35,8 @@ namespace Setlistbot.Domain
             };
         }
 
-        public void AddSet(Set set)
-        {
-            _sets.Add(set.Name, set);
-        }
+        public Result AddSet(Set set) =>
+            !_sets.TryAdd(set.Name, set) ? Result.Failure("Set already exists.") : Result.Success();
 
         public void AddSets(IEnumerable<Set> sets)
         {

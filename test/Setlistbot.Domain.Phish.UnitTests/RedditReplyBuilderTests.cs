@@ -20,35 +20,23 @@ namespace Setlistbot.Domain.Phish.UnitTests
         {
             // Arrange
             var setlist = Setlist.NewSetlist(
-                new ArtistId("phish"),
-                new ArtistName("Phish"),
+                ArtistId.From("phish"),
+                ArtistName.From("Phish"),
                 new DateOnly(1997, 11, 17),
                 new Location(
-                    new Venue("McNichols Arena"),
-                    new City("Denver"),
-                    new State("CO"),
-                    new Country("USA")
+                    Venue.From("McNichols Arena"),
+                    City.From("Denver"),
+                    State.From("CO"),
+                    Country.From("USA")
                 ),
                 "show notes"
             );
 
-            var set1 = new Set(new SetName("Set 1"));
+            var set1 = new Set(SetName.From("Set 1"));
             set1.AddSong(
                 new Song(
-                    new SongName("Tweezer"),
-                    1,
-                    SongTransition.Stop,
-                    TimeSpan.Zero,
-                    string.Empty
-                )
-            );
-            set1.AddSong(
-                new Song(new SongName("Reba"), 2, SongTransition.Stop, TimeSpan.Zero, string.Empty)
-            );
-            set1.AddSong(
-                new Song(
-                    new SongName("Train Song"),
-                    3,
+                    SongName.From("Tweezer"),
+                    SongPosition.From(1),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -56,23 +44,47 @@ namespace Setlistbot.Domain.Phish.UnitTests
             );
             set1.AddSong(
                 new Song(
-                    new SongName("Ghost"),
-                    4,
+                    SongName.From("Reba"),
+                    SongPosition.From(2),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Train Song"),
+                    SongPosition.From(3),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Ghost"),
+                    SongPosition.From(4),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
                 )
             );
             set1.AddSong(
-                new Song(new SongName("Fire"), 5, SongTransition.Stop, TimeSpan.Zero, string.Empty)
+                new Song(
+                    SongName.From("Fire"),
+                    SongPosition.From(5),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
             );
             setlist.AddSet(set1);
 
-            var set2 = new Set(new SetName("Set 2"));
+            var set2 = new Set(SetName.From("Set 2"));
             set2.AddSong(
                 new Song(
-                    new SongName("Down with Disease"),
-                    1,
+                    SongName.From("Down with Disease"),
+                    SongPosition.From(1),
                     SongTransition.Segue,
                     TimeSpan.Zero,
                     string.Empty
@@ -80,8 +92,8 @@ namespace Setlistbot.Domain.Phish.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Olivia's Pool"),
-                    2,
+                    SongName.From("Olivia's Pool"),
+                    SongPosition.From(2),
                     SongTransition.Immediate,
                     TimeSpan.Zero,
                     string.Empty
@@ -89,8 +101,8 @@ namespace Setlistbot.Domain.Phish.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Johnny B. Goode"),
-                    3,
+                    SongName.From("Johnny B. Goode"),
+                    SongPosition.From(3),
                     SongTransition.Segue,
                     TimeSpan.Zero,
                     string.Empty
@@ -98,8 +110,8 @@ namespace Setlistbot.Domain.Phish.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("Jesus Just Left Chicago"),
-                    4,
+                    SongName.From("Jesus Just Left Chicago"),
+                    SongPosition.From(4),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -107,8 +119,8 @@ namespace Setlistbot.Domain.Phish.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("When the Circus Comes"),
-                    5,
+                    SongName.From("When the Circus Comes"),
+                    SongPosition.From(5),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -116,8 +128,8 @@ namespace Setlistbot.Domain.Phish.UnitTests
             );
             set2.AddSong(
                 new Song(
-                    new SongName("You Enjoy Myself"),
-                    6,
+                    SongName.From("You Enjoy Myself"),
+                    SongPosition.From(6),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -125,11 +137,11 @@ namespace Setlistbot.Domain.Phish.UnitTests
             );
             setlist.AddSet(set2);
 
-            var encore = new Set(new SetName("Encore"));
+            var encore = new Set(SetName.From("Encore"));
             encore.AddSong(
                 new Song(
-                    new SongName("Character Zero"),
-                    1,
+                    SongName.From("Character Zero"),
+                    SongPosition.From(1),
                     SongTransition.Stop,
                     TimeSpan.Zero,
                     string.Empty
@@ -140,7 +152,7 @@ namespace Setlistbot.Domain.Phish.UnitTests
             var builder = new RedditReplyBuilder();
 
             // Act
-            var actual = builder.Build(new[] { setlist });
+            var actual = builder.Build([setlist]);
 
             // Assert
             var expected = TestDataHelper.GetTestData("TestData/1997-11-17-reply.md");

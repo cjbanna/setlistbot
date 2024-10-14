@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using FluentAssertions;
 using Setlistbot.Domain.Formatters;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            Assert.Equal("value", actual);
+            actual.Should().Be("value");
         }
 
         [Fact]
@@ -33,7 +34,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            Assert.Equal("default", actual);
+            actual.Should().Be("default");
         }
 
         [Fact]
@@ -50,7 +51,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            Assert.Equal(string.Empty, actual);
+            actual.Should().Be(string.Empty);
         }
     }
 }

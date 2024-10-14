@@ -16,15 +16,15 @@ namespace Setlistbot.Infrastructure.GratefulDead.Extensions
             var location = new Location(
                 string.IsNullOrWhiteSpace(gdSetlist.Venue)
                     ? Maybe.None
-                    : Maybe.From(new Venue(gdSetlist.Venue)),
-                new City(city),
-                string.IsNullOrWhiteSpace(state) ? Maybe.None : Maybe.From(new State(state)),
-                new Country(country)
+                    : Maybe.From(Venue.From(gdSetlist.Venue)),
+                City.From(city),
+                string.IsNullOrWhiteSpace(state) ? Maybe.None : Maybe.From(State.From(state)),
+                Country.From(country)
             );
 
             var setlist = domain.Setlist.NewSetlist(
-                new ArtistId("gd"),
-                new ArtistName("Grateful Dead"),
+                ArtistId.From("gd"),
+                ArtistName.From("Grateful Dead"),
                 DateOnly.FromDateTime(gdSetlist.ShowDate),
                 location,
                 string.Empty
@@ -37,14 +37,14 @@ namespace Setlistbot.Infrastructure.GratefulDead.Extensions
 
             foreach (var gdSet in gdSetlist.Sets)
             {
-                var set = new domain.Set(new SetName(gdSet.Name));
+                var set = new domain.Set(SetName.From(gdSet.Name));
                 var position = 1;
                 foreach (var gdSong in gdSet.Songs)
                 {
                     var transition = gdSong.Segue ? ">" : string.Empty;
                     var song = new domain.Song(
-                        new SongName(gdSong.Name),
-                        new SongPosition(position),
+                        SongName.From(gdSong.Name),
+                        SongPosition.From(position),
                         transition.ToSongTransition(),
                         TimeSpan.Zero,
                         string.Empty

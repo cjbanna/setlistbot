@@ -6,7 +6,7 @@
             new CombinedFormatter(
                 new MarkdownBoldFormatter(
                     new CombinedFormatter(
-                        new LiteralFormatter(set.Name),
+                        new LiteralFormatter(set.Name.Value),
                         new CharacterFormatter(':')
                     )
                 ),

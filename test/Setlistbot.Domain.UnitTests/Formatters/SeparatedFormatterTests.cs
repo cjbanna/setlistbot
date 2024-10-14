@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Setlistbot.Domain.Formatters;
 using Xunit;
 
@@ -18,7 +19,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            Assert.Equal(string.Empty, actual);
+            actual.Should().Be(string.Empty);
         }
 
         [Fact]
@@ -34,7 +35,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            Assert.Equal("value", actual);
+            actual.Should().Be("value");
         }
 
         [Fact]
@@ -56,33 +57,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            Assert.Equal("value1, value2, value3, value4", actual);
+            actual.Should().Be("value1, value2, value3, value4");
         }
-
-        // [Fact]
-        // public void Format_WhenHasTwoMaybeFormatters_ExpectFormattedValuesSeparatedBySeparator()
-        // {
-        //     // Arrange
-        //     var formatter = new SeparatedFormatter(
-        //         new CombinedFormatter(new CharacterFormatter(','), new SpaceFormatter()),
-        //         new IFormatter[]
-        //         {
-        //             new MaybeFormatter<string>(
-        //                 Maybe.From("value1"),
-        //                 new LiteralFormatter("value1")
-        //             ),
-        //             new MaybeFormatter<string>(
-        //                 Maybe.From("value2"),
-        //                 new LiteralFormatter("value2")
-        //             )
-        //         }
-        //     );
-        //
-        //     // Act
-        //     var actual = formatter.Format();
-        //
-        //     // Assert
-        //     Assert.Equal("value1, value2", actual);
-        // }
     }
 }

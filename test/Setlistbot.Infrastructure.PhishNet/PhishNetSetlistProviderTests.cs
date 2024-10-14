@@ -52,9 +52,9 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
 
             Assert.Collection(
                 setlist.Sets,
-                set => Assert.Equal("Set 1", set.Name),
-                set => Assert.Equal("Set 2", set.Name),
-                set => Assert.Equal("Encore", set.Name)
+                set => Assert.Equal("Set 1", set.Name.Value),
+                set => Assert.Equal("Set 2", set.Name.Value),
+                set => Assert.Equal("Encore", set.Name.Value)
             );
 
             var set1 = setlist.Sets.First(s => s.Name == "Set 1");
@@ -62,50 +62,50 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
                 set1.Songs,
                 song =>
                 {
-                    Assert.Equal<SongPosition>(1, song.Position);
-                    Assert.Equal("Mike's Song", song.Name);
+                    Assert.Equal(1, song.Position.Value);
+                    Assert.Equal("Mike's Song", song.Name.Value);
                     Assert.Equal(SongTransition.Segue, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(2, song.Position);
-                    Assert.Equal("I Am Hydrogen", song.Name);
+                    Assert.Equal(2, song.Position.Value);
+                    Assert.Equal("I Am Hydrogen", song.Name.Value);
                     Assert.Equal(SongTransition.Immediate, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(3, song.Position);
-                    Assert.Equal("Weekapaug Groove", song.Name);
+                    Assert.Equal(3, song.Position.Value);
+                    Assert.Equal("Weekapaug Groove", song.Name.Value);
                     Assert.Equal(SongTransition.Stop, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(4, song.Position);
-                    Assert.Equal("Harry Hood", song.Name);
+                    Assert.Equal(4, song.Position.Value);
+                    Assert.Equal("Harry Hood", song.Name.Value);
                     Assert.Equal(SongTransition.Immediate, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(5, song.Position);
-                    Assert.Equal("Train Song", song.Name);
+                    Assert.Equal(5, song.Position.Value);
+                    Assert.Equal("Train Song", song.Name.Value);
                     Assert.Equal(SongTransition.Stop, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(6, song.Position);
-                    Assert.Equal("Billy Breathes", song.Name);
+                    Assert.Equal(6, song.Position.Value);
+                    Assert.Equal("Billy Breathes", song.Name.Value);
                     Assert.Equal(SongTransition.Stop, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(7, song.Position);
-                    Assert.Equal("Frankenstein", song.Name);
+                    Assert.Equal(7, song.Position.Value);
+                    Assert.Equal("Frankenstein", song.Name.Value);
                     Assert.Equal(SongTransition.Immediate, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(8, song.Position);
-                    Assert.Equal("Izabella", song.Name);
+                    Assert.Equal(8, song.Position.Value);
+                    Assert.Equal("Izabella", song.Name.Value);
                     Assert.Equal(SongTransition.Stop, song.SongTransition);
                 }
             );
@@ -115,32 +115,32 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
                 set2.Songs,
                 song =>
                 {
-                    Assert.Equal<SongPosition>(1, song.Position);
-                    Assert.Equal("Halley's Comet", song.Name);
+                    Assert.Equal(1, song.Position.Value);
+                    Assert.Equal("Halley's Comet", song.Name.Value);
                     Assert.Equal(SongTransition.Immediate, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(2, song.Position);
-                    Assert.Equal("Tweezer", song.Name);
+                    Assert.Equal(2, song.Position.Value);
+                    Assert.Equal("Tweezer", song.Name.Value);
                     Assert.Equal(SongTransition.Immediate, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(3, song.Position);
-                    Assert.Equal("Black-Eyed Katy", song.Name);
+                    Assert.Equal(3, song.Position.Value);
+                    Assert.Equal("Black-Eyed Katy", song.Name.Value);
                     Assert.Equal(SongTransition.Immediate, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(4, song.Position);
-                    Assert.Equal("Piper", song.Name);
+                    Assert.Equal(4, song.Position.Value);
+                    Assert.Equal("Piper", song.Name.Value);
                     Assert.Equal(SongTransition.Immediate, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(5, song.Position);
-                    Assert.Equal("Run Like an Antelope", song.Name);
+                    Assert.Equal(5, song.Position.Value);
+                    Assert.Equal("Run Like an Antelope", song.Name.Value);
                     Assert.Equal(SongTransition.Stop, song.SongTransition);
                     Assert.Equal("Lyric changed to \"Michael Esquandolas.\"", song.Footnote);
                 }
@@ -151,14 +151,14 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
                 encore.Songs,
                 song =>
                 {
-                    Assert.Equal<SongPosition>(1, song.Position);
-                    Assert.Equal("Bouncing Around the Room", song.Name);
+                    Assert.Equal(1, song.Position.Value);
+                    Assert.Equal("Bouncing Around the Room", song.Name.Value);
                     Assert.Equal(SongTransition.Immediate, song.SongTransition);
                 },
                 song =>
                 {
-                    Assert.Equal<SongPosition>(2, song.Position);
-                    Assert.Equal("Tweezer Reprise", song.Name);
+                    Assert.Equal(2, song.Position.Value);
+                    Assert.Equal("Tweezer Reprise", song.Name.Value);
                     Assert.Equal(SongTransition.Stop, song.SongTransition);
                 }
             );

@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using StronglyTypedPrimitives.Attributes;
+using Vogen;
 
 namespace Setlistbot.Domain
 {
@@ -10,27 +10,39 @@ namespace Setlistbot.Domain
         Country Country
     );
 
-    [StronglyTyped(Template.String)]
+    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
     public readonly partial struct State
     {
-        public State(NonEmptyString value) => _value = value;
+        private static Validation Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? Validation.Invalid("State cannot be empty.")
+                : Validation.Ok;
     }
 
-    [StronglyTyped(Template.String)]
+    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
     public readonly partial struct Venue
     {
-        public Venue(NonEmptyString value) => _value = value;
+        private static Validation Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? Validation.Invalid("Venue cannot be empty.")
+                : Validation.Ok;
     }
 
-    [StronglyTyped(Template.String)]
+    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
     public readonly partial struct City
     {
-        public City(NonEmptyString value) => _value = value;
+        private static Validation Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? Validation.Invalid("City cannot be empty.")
+                : Validation.Ok;
     }
 
-    [StronglyTyped(Template.String)]
+    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
     public readonly partial struct Country
     {
-        public Country(NonEmptyString value) => _value = value;
+        private static Validation Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? Validation.Invalid("Country cannot be empty.")
+                : Validation.Ok;
     }
 }
