@@ -4,6 +4,6 @@ namespace Setlistbot.Infrastructure.PhishNet
 {
     public interface IPhishNetClient
     {
-        Task<Maybe<SetlistResponse>> GetSetlistAsync(DateOnly date);
+        Task<Result<SetlistResponse>> GetSetlistAsync(DateOnly date);
     }
 }

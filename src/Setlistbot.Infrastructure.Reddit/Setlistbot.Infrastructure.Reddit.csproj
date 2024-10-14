@@ -17,6 +17,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Setlistbot.Domain\Setlistbot.Domain.csproj" />
+    <ProjectReference Include="..\StronglyTypedPrimitives\StronglyTypedPrimitives.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" PrivateAssets="all" ExcludeAssets="runtime" />
   </ItemGroup>
 
 </Project>

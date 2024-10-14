@@ -9,6 +9,14 @@
   <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" Version="3.1.0" />
     <PackageReference Include="Ensure.That" Version="10.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StronglyTypedPrimitives.Attributes\StronglyTypedPrimitives.Attributes.csproj" />
+    <ProjectReference Include="..\StronglyTypedPrimitives\StronglyTypedPrimitives.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" PrivateAssets="all" ExcludeAssets="runtime" />
   </ItemGroup>
 
 </Project>

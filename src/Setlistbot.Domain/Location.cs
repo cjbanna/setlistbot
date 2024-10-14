@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using StronglyTypedPrimitives.Attributes;
 
 namespace Setlistbot.Domain
 {
@@ -9,31 +10,27 @@ namespace Setlistbot.Domain
         Country Country
     );
 
-    public sealed record State(NonEmptyString Value)
+    [StronglyTyped(Template.String)]
+    public readonly partial struct State
     {
-        public static implicit operator string(State state) => state.Value;
-
-        public static implicit operator State(string state) => new(new NonEmptyString(state));
+        public State(NonEmptyString value) => _value = value;
     }
 
-    public sealed record Venue(NonEmptyString Value)
+    [StronglyTyped(Template.String)]
+    public readonly partial struct Venue
     {
-        public static implicit operator string(Venue venue) => venue.Value;
-
-        public static implicit operator Venue(string venue) => new(new NonEmptyString(venue));
+        public Venue(NonEmptyString value) => _value = value;
     }
 
-    public sealed record City(NonEmptyString Value)
+    [StronglyTyped(Template.String)]
+    public readonly partial struct City
     {
-        public static implicit operator string(City city) => city.Value;
-
-        public static implicit operator City(string city) => new(new NonEmptyString(city));
+        public City(NonEmptyString value) => _value = value;
     }
 
-    public sealed record Country(NonEmptyString Value)
+    [StronglyTyped(Template.String)]
+    public readonly partial struct Country
     {
-        public static implicit operator string(Country country) => country.Value;
-
-        public static implicit operator Country(string country) => new(new NonEmptyString(country));
+        public Country(NonEmptyString value) => _value = value;
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using EnsureThat;
+using StronglyTypedPrimitives;
+using StronglyTypedPrimitives.Attributes;
 
 namespace Setlistbot.Domain
 {
@@ -8,38 +10,26 @@ namespace Setlistbot.Domain
         SongName Name,
         SongPosition Position,
         SongTransition SongTransition,
-        PositiveTimeSpan Duration,
+        TimeSpan Duration,
         string Footnote
-    );
-
-    public sealed record SongName(NonEmptyString Value)
+    )
     {
-        public static implicit operator string(SongName songName) => songName.Value;
-
-        public static implicit operator SongName(string songName) =>
-            new(new NonEmptyString(songName));
+        public TimeSpan Duration { get; } =
+            TimeSpan.FromMilliseconds(
+                EnsureArg.IsGte(Duration.TotalMilliseconds, 0, nameof(Duration))
+            );
     }
 
-    public readonly struct SongPosition : IComparable<SongPosition>
+    [StronglyTyped(Template.String)]
+    public readonly partial struct SongName
     {
-        private readonly int _position = 0;
+        public SongName(NonEmptyString value) => _value = value;
+    }
 
-        [Obsolete("Don't use the default constructor", true)]
-        public SongPosition() => throw new NotImplementedException();
-
-        public SongPosition(int position)
-        {
-            _position = EnsureArg.IsGt(position, 0, nameof(position));
-        }
-
-        public static implicit operator int(SongPosition position) => position._position;
-
-        public static implicit operator SongPosition(int position) => new(position);
-
-        public int CompareTo(SongPosition other)
-        {
-            return _position.CompareTo(other._position);
-        }
+    [StronglyTyped(Template.Int)]
+    public readonly partial struct SongPosition
+    {
+        public SongPosition(int value) => _value = EnsureArg.IsGt(value, 0, nameof(value));
     }
 
     public enum SongTransition

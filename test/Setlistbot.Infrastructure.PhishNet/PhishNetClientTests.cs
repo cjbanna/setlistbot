@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Flurl.Http.Testing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -47,7 +48,7 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
             var result = await fixture.PhishNetClient.GetSetlistAsync(new DateOnly(1997, 11, 22));
 
             // Assert
-            Assert.True(result.HasValue);
+            result.Should().Succeed();
 
             fixture
                 .HttpTest.ShouldHaveCalled(

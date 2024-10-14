@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Net;
+using CSharpFunctionalExtensions;
 using Setlistbot.Domain;
 using Setlistbot.Infrastructure.Reddit.Models;
 
@@ -6,22 +7,22 @@ namespace Setlistbot.Infrastructure.Reddit
 {
     public interface IRedditClient
     {
-        Task<Maybe<RedditToken>> GetAuthToken(
+        Task<Result<RedditToken>> GetAuthToken(
             NonEmptyString username,
             NonEmptyString password,
             NonEmptyString key,
             NonEmptyString secret
         );
-        Task<Maybe<SubredditCommentsResponse>> GetComments(
+        Task<Result<SubredditCommentsResponse>> GetComments(
             RedditToken token,
             Subreddit subreddit,
             Maybe<PositiveInt> limit = default
         );
-        Task<Maybe<PostCommentResponse>> PostComment(
+        Task<Result<PostCommentResponse, HttpStatusCode>> PostComment(
             RedditToken token,
             NonEmptyString parent,
             NonEmptyString text
         );
-        Task<Maybe<SubredditPostsResponse>> GetPosts(RedditToken token, Subreddit subreddit);
+        Task<Result<SubredditPostsResponse>> GetPosts(RedditToken token, Subreddit subreddit);
     }
 }

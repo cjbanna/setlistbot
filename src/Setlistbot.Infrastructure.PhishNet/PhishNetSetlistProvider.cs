@@ -25,8 +25,7 @@ namespace Setlistbot.Infrastructure.PhishNet
             try
             {
                 var setlistResponse = await _phishNetClient.GetSetlistAsync(date);
-
-                return setlistResponse.Match(GetSetlistsFromResponse, () => []);
+                return setlistResponse.Match(GetSetlistsFromResponse, _ => []);
             }
             catch (Exception ex)
             {

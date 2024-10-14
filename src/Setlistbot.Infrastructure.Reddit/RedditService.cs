@@ -12,38 +12,30 @@ namespace Setlistbot.Infrastructure.Reddit
     {
         private readonly IRedditClient _client;
         private readonly ILogger<RedditService> _logger;
-        private readonly RedditOptions _redditOptions;
+        private readonly IOptions<RedditOptions> _redditOptions;
 
         public RedditService(
-            IRedditClient client,
             ILogger<RedditService> logger,
+            IRedditClient client,
             IOptions<RedditOptions> redditOptions
         )
         {
             _client = client;
             _logger = logger;
-            _redditOptions = redditOptions.Value;
+            _redditOptions = redditOptions;
         }
 
-        public async Task<IEnumerable<Comment>> GetComments(Subreddit subreddit)
-        {
-            try
-            {
-                return await GetAuthToken()
-                    .Map(token => GetComments(subreddit, token))
-                    .GetValueOrDefault(() => []);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to get comments");
-                return [];
-            }
-        }
+        public async Task<IEnumerable<Comment>> GetComments(Subreddit subreddit) =>
+            await GetAuthToken()
+                .Map(token => GetComments(subreddit, token))
+                .GetValueOrDefault(() => []);
 
-        private async Task<IEnumerable<Comment>> GetComments(Subreddit subreddit, RedditToken token)
-        {
-            return await _client
-                .GetComments(token, subreddit, new PositiveInt(_redditOptions.CommentsLimit))
+        private async Task<IEnumerable<Comment>> GetComments(
+            Subreddit subreddit,
+            RedditToken token
+        ) =>
+            await _client
+                .GetComments(token, subreddit, new PositiveInt(_redditOptions.Value.CommentsLimit))
                 .Map(response =>
                     response.Data.Children.Select(c =>
                         Comment.NewComment(
@@ -56,22 +48,11 @@ namespace Setlistbot.Infrastructure.Reddit
                     )
                 )
                 .GetValueOrDefault(() => []);
-        }
 
-        public async Task<IEnumerable<Post>> GetPosts(Subreddit subreddit)
-        {
-            try
-            {
-                return await GetAuthToken()
-                    .Map(token => GetPosts(subreddit, token))
-                    .GetValueOrDefault(() => []);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to get posts");
-                return [];
-            }
-        }
+        public async Task<IEnumerable<Post>> GetPosts(Subreddit subreddit) =>
+            await GetAuthToken()
+                .Map(token => GetPosts(subreddit, token))
+                .GetValueOrDefault(() => []);
 
         private async Task<IEnumerable<Post>> GetPosts(Subreddit subreddit, RedditToken token)
         {
@@ -92,38 +73,19 @@ namespace Setlistbot.Infrastructure.Reddit
                 .GetValueOrDefault(() => []);
         }
 
-        public async Task<bool> PostComment(NonEmptyString parent, NonEmptyString text)
+        public async Task<Result> PostComment(NonEmptyString parent, NonEmptyString text)
         {
-            try
-            {
-                return await GetAuthToken()
-                    .Map(token => PostComment(parent, text, token))
-                    .GetValueOrDefault(() => false);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to post comment");
-            }
-
-            return false;
+            return await GetAuthToken()
+                .Map(async token => await _client.PostComment(token, parent, text))
+                .OnSuccessTry(_ => Result.Success());
         }
 
-        private async Task<bool> PostComment(
-            NonEmptyString parent,
-            NonEmptyString text,
-            RedditToken token
-        ) =>
-            await _client
-                .PostComment(token, parent, text)
-                .Map(response => response is not null)
-                .GetValueOrDefault(() => false);
-
-        private async Task<Maybe<RedditToken>> GetAuthToken() =>
+        private async Task<Result<RedditToken>> GetAuthToken() =>
             await _client.GetAuthToken(
-                _redditOptions.Username,
-                _redditOptions.Password,
-                _redditOptions.Key,
-                _redditOptions.Secret
+                _redditOptions.Value.Username,
+                _redditOptions.Value.Password,
+                _redditOptions.Value.Key,
+                _redditOptions.Value.Secret
             );
     }
 }

@@ -1,16 +1,11 @@
 using Setlistbot.Domain;
+using StronglyTypedPrimitives.Attributes;
 
 namespace Setlistbot.Infrastructure.Reddit
 {
-    public readonly record struct RedditToken
+    [StronglyTyped(Template.String)]
+    public readonly partial struct RedditToken
     {
-        private readonly NonEmptyString _value;
-
-        [Obsolete("Don't use the default constructor", true)]
-        public RedditToken() => throw new NotImplementedException();
-
         public RedditToken(NonEmptyString value) => _value = value;
-
-        public static implicit operator string(RedditToken value) => value._value;
     }
 }

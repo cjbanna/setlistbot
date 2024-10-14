@@ -139,7 +139,7 @@ namespace Setlistbot.Application.Reddit
 
                     var parent = comment.ParentId;
                     var posted = await _redditService.PostComment(parent, reply);
-                    if (!posted)
+                    if (posted.IsFailure)
                     {
                         await _commentRepository.Delete(comment);
                     }
@@ -225,7 +225,7 @@ namespace Setlistbot.Application.Reddit
                     _logger.LogInformation("Posting reply to post id {PostId}", post.Id);
 
                     var posted = await _redditService.PostComment(post.ParentId, reply);
-                    if (!posted)
+                    if (posted.IsFailure)
                     {
                         await _postRepository.Delete(post);
                     }

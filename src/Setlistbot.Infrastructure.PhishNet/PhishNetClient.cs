@@ -19,7 +19,7 @@ namespace Setlistbot.Infrastructure.PhishNet
             _options = Ensure.Any.IsNotNull(options, nameof(options)).Value;
         }
 
-        public async Task<Maybe<SetlistResponse>> GetSetlistAsync(DateOnly date)
+        public async Task<Result<SetlistResponse>> GetSetlistAsync(DateOnly date)
         {
             var url = "";
 

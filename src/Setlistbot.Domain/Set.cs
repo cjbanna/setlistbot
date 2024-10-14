@@ -1,4 +1,7 @@
-﻿namespace Setlistbot.Domain
+﻿using StronglyTypedPrimitives;
+using StronglyTypedPrimitives.Attributes;
+
+namespace Setlistbot.Domain
 {
     public sealed class Set
     {
@@ -34,10 +37,9 @@
         }
     }
 
-    public sealed record SetName(NonEmptyString Value)
+    [StronglyTyped(Template.String)]
+    public readonly partial struct SetName
     {
-        public static implicit operator string(SetName setName) => setName.Value;
-
-        public static implicit operator SetName(string setName) => new(new NonEmptyString(setName));
+        public SetName(NonEmptyString value) => _value = value;
     }
 }

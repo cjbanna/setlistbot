@@ -1,21 +1,16 @@
-﻿using EnsureThat;
+﻿using StronglyTypedPrimitives.Attributes;
 
 namespace Setlistbot.Domain
 {
-    public sealed record ArtistId
+    [StronglyTyped(Template.String)]
+    public readonly partial struct ArtistId
     {
-        private readonly string _artistId = string.Empty;
-
-        public ArtistId(string artistId)
-        {
-            _artistId = EnsureArg.IsNotNullOrWhiteSpace(artistId, nameof(artistId)).ToLower();
-        }
-
-        public static implicit operator string(ArtistId artistId) => artistId._artistId;
+        public ArtistId(NonEmptyString value) => _value = value;
     }
 
-    public record ArtistName(NonEmptyString Name)
+    [StronglyTyped(Template.String)]
+    public readonly partial struct ArtistName
     {
-        public static implicit operator string(ArtistName artistName) => artistName.Name;
+        public ArtistName(NonEmptyString value) => _value = value;
     }
 }
