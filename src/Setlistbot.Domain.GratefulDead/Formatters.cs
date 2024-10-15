@@ -21,18 +21,17 @@ namespace Setlistbot.Domain.GratefulDead
     {
         public string Format() =>
             new CombinedFormatter(
-                new HeaderFormatter(setlist),
-                new NewLineFormatter(2),
-                new SetsFormatter(setlist.Sets),
-                new NewLineFormatter(2),
+                new Formatters.SetlistFormatter(setlist),
                 new ArchiveOrgLinkFormatter(setlist),
                 new MaybeFormatter<string>(
                     setlist.SpotifyUrl,
-                    new CombinedFormatter(
-                        new SpaceFormatter(),
-                        new CharacterFormatter('|'),
-                        new SpotifyLinkFormatter(setlist.SpotifyUrl.Value)
-                    )
+                    () =>
+                        new CombinedFormatter(
+                            new SpaceFormatter(),
+                            new CharacterFormatter('|'),
+                            new SpaceFormatter(),
+                            new SpotifyLinkFormatter(setlist.SpotifyUrl.Value)
+                        )
                 )
             ).Format();
     }
