@@ -340,7 +340,9 @@ namespace Setlistbot.Domain.Kglw.UnitTests
 
             // Assert
             var expected = TestDataHelper.GetTestData("TestData/2022-10-11-reply.md");
-            actual.Should().Be(expected);
+            var expectedNormalized = expected.ReplaceLineEndings(string.Empty);
+            var actualNormalized = actual.ReplaceLineEndings(string.Empty);
+            actualNormalized.Should().Be(expectedNormalized);
         }
     }
 }

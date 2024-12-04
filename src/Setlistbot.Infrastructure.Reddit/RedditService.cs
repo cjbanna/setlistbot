@@ -54,9 +54,8 @@ namespace Setlistbot.Infrastructure.Reddit
                 .Map(token => GetPosts(subreddit, token))
                 .GetValueOrDefault(() => []);
 
-        private async Task<IEnumerable<Post>> GetPosts(Subreddit subreddit, RedditToken token)
-        {
-            return await _client
+        private async Task<IEnumerable<Post>> GetPosts(Subreddit subreddit, RedditToken token) =>
+            await _client
                 .GetPosts(token, subreddit)
                 .Map(response =>
                     response.Data.Children.Select(c =>
@@ -71,14 +70,11 @@ namespace Setlistbot.Infrastructure.Reddit
                     )
                 )
                 .GetValueOrDefault(() => []);
-        }
 
-        public async Task<Result> PostComment(NonEmptyString parent, NonEmptyString text)
-        {
-            return await GetAuthToken()
+        public async Task<Result> PostComment(NonEmptyString parent, NonEmptyString text) =>
+            await GetAuthToken()
                 .Map(async token => await _client.PostComment(token, parent, text))
                 .OnSuccessTry(_ => Result.Success());
-        }
 
         private async Task<Result<RedditToken>> GetAuthToken() =>
             await _client.GetAuthToken(

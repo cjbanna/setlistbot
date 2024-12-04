@@ -44,7 +44,7 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
             return this;
         }
 
-        public RedditServiceTestFixture GivenSuccessfulAuthToken()
+        public RedditServiceTestFixture GivenAuthTokenSuccess()
         {
             Client
                 .Setup(c =>
@@ -56,6 +56,21 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
                     )
                 )
                 .ReturnsAsync(Result.Success(RedditToken.From("token")));
+            return this;
+        }
+
+        public RedditServiceTestFixture GivenAuthTokenFailure()
+        {
+            Client
+                .Setup(c =>
+                    c.GetAuthToken(
+                        It.IsAny<NonEmptyString>(),
+                        It.IsAny<NonEmptyString>(),
+                        It.IsAny<NonEmptyString>(),
+                        It.IsAny<NonEmptyString>()
+                    )
+                )
+                .ReturnsAsync(Result.Failure<RedditToken>("error"));
             return this;
         }
 
@@ -74,10 +89,133 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
                 );
             return this;
         }
+
+        public RedditServiceTestFixture GivenClientGetCommentsSuccess()
+        {
+            Client
+                .Setup(c =>
+                    c.GetComments(
+                        It.IsAny<RedditToken>(),
+                        It.IsAny<Subreddit>(),
+                        It.IsAny<Maybe<PositiveInt>>()
+                    )
+                )
+                .ReturnsAsync(
+                    Result.Success(
+                        new SubredditCommentsResponse
+                        {
+                            Data = new SubredditCommentsResponseData
+                            {
+                                Children = new[]
+                                {
+                                    new SubredditComment()
+                                    {
+                                        Data = new SubredditCommentData
+                                        {
+                                            Id = "id",
+                                            Author = "author",
+                                            Body = "body",
+                                            Permalink = "permalink",
+                                        },
+                                    },
+                                },
+                            },
+                        }
+                    )
+                );
+            return this;
+        }
+
+        public RedditServiceTestFixture GivenClientGetPostsSuccess()
+        {
+            Client
+                .Setup(c => c.GetPosts(It.IsAny<RedditToken>(), It.IsAny<Subreddit>()))
+                .ReturnsAsync(
+                    Result.Success(
+                        new SubredditPostsResponse
+                        {
+                            Data = new SubredditPostsResponseData
+                            {
+                                Children = new[]
+                                {
+                                    new SubredditPost()
+                                    {
+                                        Data = new SubredditPostData
+                                        {
+                                            Id = "id",
+                                            Author = "author",
+                                            Title = "title",
+                                            SelfText = "selfText",
+                                            Permalink = "permalink",
+                                        },
+                                    },
+                                },
+                            },
+                        }
+                    )
+                );
+            return this;
+        }
     }
 
     public class RedditServiceTests
     {
+        [Fact]
+        public async Task GetComments_WhenGetAuthTokenFails_ExpectNoComments()
+        {
+            // Arrange
+            var fixture = new RedditServiceTestFixture();
+            fixture.GivenValidOptions().GivenAuthTokenFailure();
+
+            // Act
+            var result = await fixture.Service.GetComments(Subreddit.From("subreddit"));
+
+            // Assert
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task GetComments_WhenClientReturnsSuccess_ExpectComments()
+        {
+            // Arrange
+            var fixture = new RedditServiceTestFixture();
+            fixture.GivenValidOptions().GivenAuthTokenSuccess().GivenClientGetCommentsSuccess();
+
+            // Act
+            var result = await fixture.Service.GetComments(Subreddit.From("subreddit"));
+
+            // Assert
+            result.Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public async Task GetPosts_WhenGetAuthTokenFails_ExpectNoPosts()
+        {
+            // Arrange
+            var fixture = new RedditServiceTestFixture();
+            fixture.GivenValidOptions().GivenAuthTokenFailure();
+
+            // Act
+            var result = await fixture.Service.GetPosts(Subreddit.From("subreddit"));
+
+            // Assert
+            result.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task GetPosts_WhenClientReturnsSuccess_ExpectPosts()
+        {
+            // Arrange
+            var fixture = new RedditServiceTestFixture();
+            fixture.GivenValidOptions().GivenAuthTokenSuccess().GivenClientGetPostsSuccess();
+
+            // Act
+            var result = await fixture.Service.GetPosts(Subreddit.From("subreddit"));
+
+            // Assert
+            result.Should().NotBeEmpty();
+        }
+
         [Fact]
         public async Task PostComment_WhenClientReturnsSuccess_ReturnsSuccess()
         {
@@ -86,7 +224,7 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
             var text = NonEmptyString.From("text");
 
             var fixture = new RedditServiceTestFixture();
-            fixture.GivenValidOptions().GivenSuccessfulAuthToken().GivenClientPostCommentSuccess();
+            fixture.GivenValidOptions().GivenAuthTokenSuccess().GivenClientPostCommentSuccess();
 
             // Act
             var result = await fixture.Service.PostComment(parent, text);

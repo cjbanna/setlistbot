@@ -30,13 +30,11 @@ namespace Setlistbot.Domain.Kglw
     {
         public string Format() =>
             new CombinedFormatter(
-                new MarkdownBoldFormatter(new LiteralFormatter("King Gizzard & The Lizard Wizard")),
+                new MarkdownBoldFormatter(new LiteralFormatter(setlist.ArtistName.Value)),
                 new NewLineFormatter(2),
                 new SetlistHeaderFormatter(setlist),
                 new NewLineFormatter(2),
-                new CombinedFormatter(
-                    setlist.Sets.Select<Set, IFormatter>(s => new SetFormatter(s)).ToArray()
-                ),
+                new SetsFormatter(setlist.Sets),
                 new NewLineFormatter(2),
                 new AttributionFormatter(setlist)
             ).Format();

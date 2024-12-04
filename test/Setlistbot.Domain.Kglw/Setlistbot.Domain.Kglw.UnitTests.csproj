@@ -33,11 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TestData\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="TestData\2022-10-11-reply.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\2024-08-24-reply-discord.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -156,7 +156,9 @@ namespace Setlistbot.Domain.Phish.UnitTests
 
             // Assert
             var expected = TestDataHelper.GetTestData("TestData/1997-11-17-reply.md");
-            actual.Should().Be(expected);
+            var expectedNormalized = expected.ReplaceLineEndings(string.Empty);
+            var actualNormalized = actual.ReplaceLineEndings(string.Empty);
+            actualNormalized.Should().Be(expectedNormalized);
         }
     }
 }

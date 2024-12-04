@@ -36,18 +36,6 @@ namespace Setlistbot.Domain.GratefulDead
             ).Format();
     }
 
-    public sealed class HeaderFormatter(Setlist setlist) : IFormatter
-    {
-        public string Format() =>
-            new CombinedFormatter(
-                new YearMonthDayFormatter(setlist.Date),
-                new SpaceFormatter(),
-                new CharacterFormatter('@'),
-                new SpaceFormatter(),
-                new LocationFormatter(setlist.Location)
-            ).Format();
-    }
-
     public sealed class DiscordFormatter(Setlist setlist) : IFormatter
     {
         public string Format() =>

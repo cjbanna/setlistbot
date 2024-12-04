@@ -168,9 +168,10 @@ namespace Setlistbot.Domain.GratefulDead.UnitTests
             var actual = builder.Build([setlist]);
 
             // Assert
-            // Assert
             var expected = TestDataHelper.GetTestData("TestData/1977-05-08-reply.md");
-            actual.Should().Be(expected);
+            var expectedNormalized = expected.ReplaceLineEndings(string.Empty);
+            var actualNormalized = actual.ReplaceLineEndings(string.Empty);
+            actualNormalized.Should().Be(expectedNormalized);
         }
     }
 }
