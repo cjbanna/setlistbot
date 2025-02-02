@@ -1,19 +1,25 @@
-﻿using EnsureThat;
+﻿using Vogen;
 
 namespace Setlistbot.Domain
 {
-    public class Set
+    public sealed class Set
     {
-        private readonly List<Song> _songs = new();
+        private readonly Dictionary<SongPosition, Song> _songs = [];
 
-        public string Name { get; private set; }
-        public IReadOnlyList<Song> Songs => _songs.OrderBy(s => s.Position).ToList().AsReadOnly();
-        public int Duration => _songs.Sum(s => s.Duration);
+        public SetName Name { get; private set; }
+        public IReadOnlyList<Song> Songs => _songs.Values.OrderBy(s => s.Position).ToList();
+        public TimeSpan Duration =>
+            _songs.Aggregate(TimeSpan.Zero, (acc, s) => acc + s.Value.Duration);
 
-        public Set(string name)
+        public Set(SetName name)
         {
-            Ensure.That(name, nameof(name)).IsNotNullOrWhiteSpace();
             Name = name;
+        }
+
+        public Set(SetName name, IEnumerable<Song> songs)
+        {
+            Name = name;
+            AddSongs(songs);
         }
 
         public void AddSongs(IEnumerable<Song> songs)
@@ -26,14 +32,16 @@ namespace Setlistbot.Domain
 
         public void AddSong(Song song)
         {
-            Ensure.That(song, nameof(song)).IsNotNull();
-
-            if (Songs.Any(s => s.Position == song.Position))
-            {
-                throw new InvalidOperationException($"Position {song.Position} must be unique");
-            }
-
-            _songs.Add(song);
+            _songs.Add(song.Position, song);
         }
+    }
+
+    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    public readonly partial struct SetName
+    {
+        private static Validation Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? Validation.Invalid("Set name cannot be empty.")
+                : Validation.Ok;
     }
 }

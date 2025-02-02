@@ -9,6 +9,6 @@
         UserSelect = 5,
         RoleSelect = 6,
         MentionableSelect = 7,
-        ChannelSelect = 8
+        ChannelSelect = 8,
     }
 }

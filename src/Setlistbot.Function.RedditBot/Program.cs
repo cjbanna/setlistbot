@@ -18,7 +18,7 @@ using Setlistbot.Infrastructure.Reddit.Extensions;
 
 namespace Setlistbot.Function.RedditBot
 {
-    public class Program
+    public sealed class Program
     {
         public static void Main()
         {
@@ -53,8 +53,8 @@ namespace Setlistbot.Function.RedditBot
                     services.AddSingleton<ILoggerProvider>(
                         (serviceProvider) =>
                         {
-                            Log.Logger = new LoggerConfiguration().Enrich
-                                .FromLogContext()
+                            Log.Logger = new LoggerConfiguration()
+                                .Enrich.FromLogContext()
                                 .WriteTo.Console()
                                 .CreateLogger();
                             return new SerilogLoggerProvider(Log.Logger, true);
@@ -64,8 +64,8 @@ namespace Setlistbot.Function.RedditBot
                     services.AddSingleton<ILoggerProvider>(
                         (serviceProvider) =>
                         {
-                            Log.Logger = new LoggerConfiguration().Enrich
-                                .FromLogContext()
+                            Log.Logger = new LoggerConfiguration()
+                                .Enrich.FromLogContext()
                                 .WriteTo.Console()
                                 .CreateLogger();
                             return new SerilogLoggerProvider(Log.Logger, true);

@@ -1,10 +1,10 @@
-﻿using Microsoft.Azure.Functions.Worker;
+﻿using System.Security.Claims;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using System.Security.Claims;
 
 namespace Setlistbot.Function.Discord.UnitTests
 {
-    public class FakeHttpRequestData : HttpRequestData
+    public sealed class FakeHttpRequestData : HttpRequestData
     {
         public FakeHttpRequestData(
             FunctionContext functionContext,

@@ -2,7 +2,7 @@
 
 namespace Setlistbot.Infrastructure.Discord.Interactions
 {
-    public class InteractionResponse
+    public sealed class InteractionResponse
     {
         [JsonProperty("type")]
         public InteractionCallbackType Type { get; init; }

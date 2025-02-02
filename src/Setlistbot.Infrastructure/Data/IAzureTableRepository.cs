@@ -1,4 +1,5 @@
 ﻿using Azure.Data.Tables;
+using CSharpFunctionalExtensions;
 
 namespace Setlistbot.Infrastructure.Data
 {
@@ -6,7 +7,7 @@ namespace Setlistbot.Infrastructure.Data
         where T : class, ITableEntity, new()
     {
         Task<IEnumerable<T>> GetAsync(string partitionKey);
-        Task<T?> GetAsync(string partitionKey, string rowKey);
+        Task<Maybe<T>> GetAsync(string partitionKey, string rowKey);
         Task<IEnumerable<T>> GetAllAsync();
         Task DeleteAsync(T entity);
         Task AddAsync(T entity);

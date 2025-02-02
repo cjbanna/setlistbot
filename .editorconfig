@@ -12,6 +12,10 @@ indent_size = 2
 [*.json]
 indent_size = 2
 
+# csproj files
+[*.csproj]
+indent_size = 2
+
 # C# files
 [*.cs]
 
@@ -30,7 +34,7 @@ insert_final_newline = true
 
 # Organize usings
 dotnet_separate_import_directive_groups = false
-dotnet_sort_system_directives_first = false
+dotnet_sort_system_directives_first = true
 file_header_template = unset
 
 # this. and Me. preferences

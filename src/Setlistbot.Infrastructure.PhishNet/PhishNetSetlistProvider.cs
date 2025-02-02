@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Logging;
 using Setlistbot.Domain;
 
 namespace Setlistbot.Infrastructure.PhishNet
 {
-    public class PhishNetSetlistProvider : ISetlistProvider
+    public sealed class PhishNetSetlistProvider : ISetlistProvider
     {
         private readonly ILogger<PhishNetSetlistProvider> _logger;
         private readonly IPhishNetClient _phishNetClient;
@@ -19,18 +20,12 @@ namespace Setlistbot.Infrastructure.PhishNet
 
         public string ArtistId => "phish";
 
-        public async Task<IEnumerable<Setlist>> GetSetlists(DateTime date)
+        public async Task<IEnumerable<Setlist>> GetSetlists(DateOnly date)
         {
             try
             {
                 var setlistResponse = await _phishNetClient.GetSetlistAsync(date);
-
-                if (setlistResponse == null || setlistResponse.Data == null)
-                {
-                    return Enumerable.Empty<Setlist>();
-                }
-
-                return GetSetlistsFromResponse(setlistResponse);
+                return setlistResponse.Match(GetSetlistsFromResponse, _ => []);
             }
             catch (Exception ex)
             {
@@ -45,60 +40,43 @@ namespace Setlistbot.Infrastructure.PhishNet
             {
                 var setlists = new List<Setlist>();
 
-                if (setlistResponse == null || setlistResponse.Data == null)
-                {
-                    return setlists;
-                }
-
-                var phishSetlists = setlistResponse.Data
-                    .Where(s => s.ArtistName == "Phish")
-                    .GroupBy(
-                        s =>
-                            new
-                            {
-                                s.ShowDate,
-                                s.Venue,
-                                s.City,
-                                s.State,
-                                s.Country,
-                                s.SetlistNotes
-                            }
-                    )
+                var phishSetlists = setlistResponse
+                    .Data.Where(s => s.ArtistName == "Phish")
+                    .GroupBy(s => new
+                    {
+                        s.ShowDate,
+                        s.Venue,
+                        s.City,
+                        s.State,
+                        s.Country,
+                        s.SetlistNotes,
+                    })
                     .OrderBy(s => s.Key.ShowDate)
                     .ToArray();
 
                 foreach (var showGrouping in phishSetlists)
                 {
-                    var location = $"{showGrouping.Key.City}, {showGrouping.Key.State}";
-
                     var setlist = Setlist.NewSetlist(
-                        "phish",
-                        "Phish",
-                        DateTime.Parse(showGrouping.Key.ShowDate),
+                        Domain.ArtistId.From("phish"),
+                        ArtistName.From("Phish"),
+                        DateOnly.Parse(showGrouping.Key.ShowDate),
                         new Location(
-                            showGrouping.Key.Venue,
-                            showGrouping.Key.City,
-                            showGrouping.Key.State,
-                            showGrouping.Key.Country
+                            string.IsNullOrWhiteSpace(showGrouping.Key.Venue)
+                                ? Maybe.None
+                                : Maybe.From(Venue.From(showGrouping.Key.Venue)),
+                            City.From(showGrouping.Key.City),
+                            string.IsNullOrWhiteSpace(showGrouping.Key.State)
+                                ? Maybe.None
+                                : Maybe.From(State.From(showGrouping.Key.State)),
+                            Country.From(showGrouping.Key.Country)
                         ),
                         showGrouping.Key.SetlistNotes
                     );
 
                     foreach (var setGrouping in showGrouping.GroupBy(x => x.Set))
                     {
-                        var setName = setGrouping.Key switch
-                        {
-                            "1" => "Set 1",
-                            "2" => "Set 2",
-                            "3" => "Set 3",
-                            "4" => "Set 4",
-                            "e" => "Encore",
-                            "e2" => "Encore 2",
-                            "e3" => "Encore 3",
-                            _ => string.Empty,
-                        };
-
-                        var set = new Set(setName);
+                        var setName = GetSetName(setGrouping.Key);
+                        var set = new Set(SetName.From(setName));
 
                         var orderedSongResponses = setGrouping
                             .OrderBy(x => x.Position)
@@ -109,16 +87,16 @@ namespace Setlistbot.Infrastructure.PhishNet
                                         x.Song,
                                         x.Transition,
                                         Index = i + 1,
-                                        x.Footnote
+                                        x.Footnote,
                                     }
                             );
 
                         foreach (var songResponse in orderedSongResponses)
                         {
                             var song = new Song(
-                                songResponse.Song,
-                                songResponse.Index,
-                                songResponse.Transition,
+                                SongName.From(songResponse.Song),
+                                SongPosition.From(songResponse.Index),
+                                songResponse.Transition.ToSongTransition(),
                                 default,
                                 songResponse.Footnote
                             );
@@ -142,6 +120,21 @@ namespace Setlistbot.Infrastructure.PhishNet
                 );
                 throw;
             }
+        }
+
+        private static string GetSetName(string value)
+        {
+            return value switch
+            {
+                "1" => "Set 1",
+                "2" => "Set 2",
+                "3" => "Set 3",
+                "4" => "Set 4",
+                "e" => "Encore",
+                "e2" => "Encore 2",
+                "e3" => "Encore 3",
+                _ => "Set",
+            };
         }
     }
 }

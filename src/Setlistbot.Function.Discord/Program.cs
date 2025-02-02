@@ -21,8 +21,8 @@ var host = new HostBuilder()
     {
         workerApp.UseWhen<VerifyKeyMiddleware>(context =>
         {
-            return context.FunctionDefinition.InputBindings.Values
-                    .First(b => b.Type.EndsWith("Trigger"))
+            return context
+                    .FunctionDefinition.InputBindings.Values.First(b => b.Type.EndsWith("Trigger"))
                     .Type == "httpTrigger";
         });
     })
@@ -47,8 +47,8 @@ var host = new HostBuilder()
         services.AddSingleton<ILoggerProvider>(
             (serviceProvider) =>
             {
-                Log.Logger = new LoggerConfiguration().Enrich
-                    .FromLogContext()
+                Log.Logger = new LoggerConfiguration()
+                    .Enrich.FromLogContext()
                     .WriteTo.Console()
                     .CreateLogger();
                 return new SerilogLoggerProvider(Log.Logger, true);
@@ -57,6 +57,6 @@ var host = new HostBuilder()
     })
     .Build();
 
-host.Services.GetRequiredService<IDiscordService>().RegisterApplicationCommands();
+await host.Services.GetRequiredService<IDiscordService>().RegisterApplicationCommands();
 
 host.Run();

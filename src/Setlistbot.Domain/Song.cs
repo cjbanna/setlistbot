@@ -1,29 +1,55 @@
-﻿using EnsureThat;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using EnsureThat;
+using Vogen;
 
 namespace Setlistbot.Domain
 {
-    [DebuggerDisplay("{Position} {Name} {Transition}")]
-    public class Song
+    [DebuggerDisplay("{Position} {Name} {SongTransition}")]
+    public sealed record Song(
+        SongName Name,
+        SongPosition Position,
+        SongTransition SongTransition,
+        TimeSpan Duration,
+        string Footnote
+    )
     {
-        public Song(string name, int position, string transition, int duration, string footnote)
-        {
-            Ensure.That(name, nameof(name)).IsNotNullOrWhiteSpace();
-            Ensure.That(position, nameof(position)).IsGt(0);
-            Ensure.That(duration, nameof(duration)).IsGte(0);
-            Ensure.That(transition, nameof(transition)).IsNotNull();
+        public TimeSpan Duration { get; } =
+            TimeSpan.FromMilliseconds(
+                EnsureArg.IsGte(Duration.TotalMilliseconds, 0, nameof(Duration))
+            );
+    }
 
-            Name = name;
-            Position = position;
-            Transition = transition.Trim();
-            Duration = duration;
-            Footnote = footnote;
-        }
+    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    public readonly partial struct SongName
+    {
+        private static Validation Validate(string value) =>
+            string.IsNullOrWhiteSpace(value)
+                ? Validation.Invalid("Song name cannot be empty.")
+                : Validation.Ok;
+    }
 
-        public int Position { get; }
-        public string Name { get; }
-        public string Transition { get; }
-        public int Duration { get; }
-        public string Footnote { get; }
+    [ValueObject<int>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    public readonly partial struct SongPosition
+    {
+        private static Validation Validate(int value) =>
+            value > 0 ? Validation.Ok : Validation.Invalid("Song position must be greater than 0.");
+    }
+
+    public enum SongTransition
+    {
+        Stop,
+        Immediate,
+        Segue,
+    }
+
+    public static class SongTransitionExtensions
+    {
+        public static SongTransition ToSongTransition(this string symbol) =>
+            symbol.Trim() switch
+            {
+                ">" => SongTransition.Immediate,
+                "->" => SongTransition.Segue,
+                _ => SongTransition.Stop,
+            };
     }
 }

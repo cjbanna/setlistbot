@@ -2,18 +2,19 @@
 
 namespace Setlistbot.Domain.Phish
 {
-    public class DiscordReplyBuilder : IReplyBuilder
+    public sealed class DiscordReplyBuilder : IReplyBuilder
     {
         public string ArtistId => "phish";
 
         public string Build(IEnumerable<Setlist> setlists)
         {
-            if (setlists == null || !setlists.Any())
+            var enumerable = setlists as Setlist[] ?? setlists.ToArray();
+            if (!enumerable.Any())
             {
                 return string.Empty;
             }
 
-            var setlist = setlists.First();
+            var setlist = enumerable.First();
             var reply = new StringBuilder();
             var date = setlist.Date.ToString("yyyy-MM-dd");
             var location = $"{setlist.Location.City}, {setlist.Location.State}";
@@ -30,13 +31,13 @@ namespace Setlistbot.Domain.Phish
                 reply.Append($"**{set.Name}**: ");
                 foreach (var song in set.Songs.OrderBy(s => s.Position))
                 {
-                    if (song.Transition.Trim() == ",")
+                    if (song.SongTransition == SongTransition.Stop)
                     {
-                        reply.Append($"{song.Name}{song.Transition.Trim()} ");
+                        reply.Append($"{song.Name}{song.SongTransition} ");
                     }
                     else
                     {
-                        reply.Append($"{song.Name} {song.Transition.Trim()} ");
+                        reply.Append($"{song.Name} {song.SongTransition} ");
                     }
                 }
                 reply.Remove(reply.Length - 1, 1);
@@ -51,23 +52,17 @@ namespace Setlistbot.Domain.Phish
 
         private string GetPhishTracksUrl(Setlist setlist)
         {
-            return string.Format(
-                "http://phishtracks.com/shows/{0}",
-                setlist.Date.ToString("yyyy-MM-dd")
-            );
+            return $"http://phishtracks.com/shows/{setlist.Date:yyyy-MM-dd}";
         }
 
         private string GetPhishinUrl(Setlist setlist)
         {
-            return string.Format("http://phish.in/{0}", setlist.Date);
+            return $"http://phish.in/{setlist.Date}";
         }
 
         private string GetPhishNetUrl(Setlist setlist)
         {
-            return string.Format(
-                "http://phish.net/setlists/?d={0}",
-                setlist.Date.ToString("yyyy-MM-dd")
-            );
+            return $"http://phish.net/setlists/?d={setlist.Date:yyyy-MM-dd}";
         }
     }
 }

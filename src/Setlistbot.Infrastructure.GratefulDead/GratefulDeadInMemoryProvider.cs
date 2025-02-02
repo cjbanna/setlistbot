@@ -4,7 +4,7 @@ using domain = Setlistbot.Domain;
 
 namespace Setlistbot.Infrastructure.GratefulDead
 {
-    public class GratefulDeadInMemoryProvider : domain.ISetlistProvider
+    public sealed class GratefulDeadInMemoryProvider : domain.ISetlistProvider
     {
         private static readonly Lazy<IEnumerable<Setlist>> Setlists = new Lazy<
             IEnumerable<Setlist>
@@ -19,10 +19,12 @@ namespace Setlistbot.Infrastructure.GratefulDead
 
         public string ArtistId => "gd";
 
-        public async Task<IEnumerable<domain.Setlist>> GetSetlists(DateTime date)
+        public async Task<IEnumerable<domain.Setlist>> GetSetlists(DateOnly date)
         {
             return await Task.FromResult(
-                Setlists.Value.Where(s => s.ShowDate == date).Select(s => s.ToSetlist())
+                Setlists
+                    .Value.Where(s => DateOnly.FromDateTime(s.ShowDate) == date)
+                    .Select(s => s.ToSetlist())
             );
         }
     }

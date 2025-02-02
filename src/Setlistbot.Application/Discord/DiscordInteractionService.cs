@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Logging;
 using Setlistbot.Infrastructure.Discord.Extensions;
 using Setlistbot.Infrastructure.Discord.Interactions;
 using Setlistbot.Infrastructure.Repositories;
 
 namespace Setlistbot.Application.Discord
 {
-    public class DiscordInteractionService : IDiscordInteractionService
+    public sealed class DiscordInteractionService : IDiscordInteractionService
     {
         private readonly ILogger<DiscordInteractionService> _logger;
         private readonly ISetlistProviderFactory _setlistProviderFactory;
@@ -25,23 +26,21 @@ namespace Setlistbot.Application.Discord
             _discordUsageRepository = discordUsageRepository;
         }
 
-        public async Task<InteractionResponse?> GetResponse(Interaction interaction)
+        public async Task<Maybe<InteractionResponse>> GetResponse(Interaction interaction)
         {
             try
             {
-                var handlers = new List<Func<Interaction, Task<InteractionResponse?>>>
+                if (interaction.InteractionType == InteractionType.Ping)
                 {
-                    HandlePing,
-                    HandleSetlistCommand
-                };
+                    return HandlePing();
+                }
 
-                foreach (var handler in handlers)
+                if (
+                    interaction is
+                    { InteractionType: InteractionType.ApplicationCommand, Data.Name: "setlist" }
+                )
                 {
-                    var response = await handler(interaction);
-                    if (response != null)
-                    {
-                        return response;
-                    }
+                    return await HandleSetlistCommand(interaction);
                 }
             }
             catch (Exception ex)
@@ -53,71 +52,58 @@ namespace Setlistbot.Application.Discord
             return null;
         }
 
-        private async Task<InteractionResponse?> HandlePing(Interaction interaction)
+        private InteractionResponse HandlePing()
         {
-            if (interaction.InteractionType == InteractionType.Ping)
-            {
-                _logger.LogInformation("Ping handled");
-                return new InteractionResponse { Type = InteractionCallbackType.Pong };
-            }
-
-            return await Task.FromResult<InteractionResponse?>(null);
+            _logger.LogInformation("Ping handled");
+            return new InteractionResponse { Type = InteractionCallbackType.Pong };
         }
 
-        private async Task<InteractionResponse?> HandleSetlistCommand(Interaction interaction)
+        private async Task<Maybe<InteractionResponse>> HandleSetlistCommand(Interaction interaction)
         {
-            if (
-                interaction.InteractionType == InteractionType.ApplicationCommand
-                && interaction.Data?.Name == "setlist"
-            )
+            _logger.LogInformation("Setlist command handled");
+
+            await _discordUsageRepository.TrackUsageAsync(interaction);
+
+            var artistId = interaction.GetOption("artist");
+            var dateInput = interaction.GetOption("date");
+
+            var setlistProvider = _setlistProviderFactory.Get(artistId);
+
+            if (!DateOnly.TryParse(dateInput, out var date))
             {
-                _logger.LogInformation("Setlist command handled");
-
-                await _discordUsageRepository.TrackUsageAsync(interaction);
-
-                var artistId = interaction.GetOption("artist");
-                var dateInput = interaction.GetOption("date");
-
-                var setlistProvider = _setlistProviderFactory.Get(artistId);
-
-                if (!DateTime.TryParse(dateInput, out var date))
-                {
-                    return new InteractionResponse
-                    {
-                        Type = InteractionCallbackType.ChannelMessageWithSource,
-                        Data = new InteractionCallbackData
-                        {
-                            Content =
-                                $"Failed to parse date: '{dateInput}'. Try using mm/dd/yy or yyyy-mm-dd.",
-                        }
-                    };
-                }
-
-                var setlists = await setlistProvider.GetSetlists(date);
-                if (!setlists.Any())
-                {
-                    return new InteractionResponse
-                    {
-                        Type = InteractionCallbackType.ChannelMessageWithSource,
-                        Data = new InteractionCallbackData
-                        {
-                            Content =
-                                $"No setlist found for {artistId} on {date:yyyy-MM-dd}. Please try again with a different date or artist."
-                        }
-                    };
-                }
-
-                var replyBuilder = _replyBuilderFactory.Get(artistId);
-                var reply = replyBuilder.Build(setlists);
-
                 return new InteractionResponse
                 {
                     Type = InteractionCallbackType.ChannelMessageWithSource,
-                    Data = new InteractionCallbackData { Content = reply }
+                    Data = new InteractionCallbackData
+                    {
+                        Content =
+                            $"Failed to parse date: '{dateInput}'. Try using mm/dd/yy or yyyy-mm-dd.",
+                    },
                 };
             }
 
-            return null;
+            var setlists = await setlistProvider.GetSetlists(date);
+            if (!setlists.Any())
+            {
+                return new InteractionResponse
+                {
+                    Type = InteractionCallbackType.ChannelMessageWithSource,
+                    Data = new InteractionCallbackData
+                    {
+                        Content =
+                            $"No setlist found for {artistId} on {date:yyyy-MM-dd}. Please try again with a different date or artist.",
+                    },
+                };
+            }
+
+            var replyBuilder = _replyBuilderFactory.Get(artistId);
+            var reply = replyBuilder.Build(setlists);
+
+            return new InteractionResponse
+            {
+                Type = InteractionCallbackType.ChannelMessageWithSource,
+                Data = new InteractionCallbackData { Content = reply },
+            };
         }
     }
 }

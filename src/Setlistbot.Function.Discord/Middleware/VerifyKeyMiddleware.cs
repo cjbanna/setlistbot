@@ -1,16 +1,16 @@
-﻿using Microsoft.Azure.Functions.Worker;
+﻿using System.Net;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.Functions.Worker.Middleware;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Setlistbot.Infrastructure.Discord;
 using Setlistbot.Infrastructure.Discord.Options;
-using System.Net;
 
 namespace Setlistbot.Function.Discord.Middleware
 {
     // Interpreted from https://github.com/discord/discord-interactions-js/blob/main/src/index.ts#L163
-    public class VerifyKeyMiddleware : IFunctionsWorkerMiddleware
+    public sealed class VerifyKeyMiddleware : IFunctionsWorkerMiddleware
     {
         private readonly ILogger<VerifyKeyMiddleware> _logger;
         private readonly IDiscordService _discordService;

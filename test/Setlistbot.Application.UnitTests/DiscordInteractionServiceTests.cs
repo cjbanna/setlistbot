@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using Moq;
 using Setlistbot.Application.Discord;
 using Setlistbot.Domain;
 using Setlistbot.Infrastructure.Discord.Interactions;
@@ -31,7 +30,7 @@ namespace Setlistbot.Application.UnitTests
         }
     }
 
-    public class SetlistCommandHandlerTestFixture : DiscordInteractionServiceTestFixture
+    public sealed class SetlistCommandHandlerTestFixture : DiscordInteractionServiceTestFixture
     {
         public SetlistCommandHandlerTestFixture()
             : base()
@@ -41,11 +40,22 @@ namespace Setlistbot.Application.UnitTests
 
         private void Setup()
         {
-            var date = new DateTime(1995, 12, 31);
-            var location = new Location("Madison Square Garden", "New York", "NY", "USA");
+            var date = new DateOnly(1995, 12, 31);
+            var location = new Location(
+                Venue.From("Madison Square Garden"),
+                City.From("New York"),
+                State.From("NY"),
+                Country.From("USA")
+            );
             var setlists = new List<Setlist>
             {
-                Setlist.NewSetlist("phish", "Phish", date, location, string.Empty)
+                Setlist.NewSetlist(
+                    ArtistId.From("phish"),
+                    ArtistName.From("Phish"),
+                    date,
+                    location,
+                    string.Empty
+                ),
             };
 
             var setlistProvider = new Mock<ISetlistProvider>();
@@ -60,7 +70,7 @@ namespace Setlistbot.Application.UnitTests
         }
     }
 
-    public class DiscordInteractionServiceTests
+    public sealed class DiscordInteractionServiceTests
     {
         [Fact]
         public async Task GetResponse_WhenPing_ExpectPong()
@@ -73,8 +83,8 @@ namespace Setlistbot.Application.UnitTests
             var response = await fixture.DiscordInteractionService.GetResponse(interaction);
 
             // Assert
-            Assert.NotNull(response);
-            Assert.Equal(InteractionCallbackType.Pong, response.Type);
+            response.HasValue.Should().BeTrue();
+            response.Value.Type.Should().Be(InteractionCallbackType.Pong);
         }
 
         [Fact]
@@ -89,22 +99,22 @@ namespace Setlistbot.Application.UnitTests
                 Data = new InteractionData
                 {
                     Name = "setlist",
-                    Options = new InteractionOption[]
-                    {
+                    Options =
+                    [
                         new InteractionOption { Name = "artist", Value = "phish" },
-                        new InteractionOption { Name = "date", Value = "1995-12-31" }
-                    }
-                }
+                        new InteractionOption { Name = "date", Value = "1995-12-31" },
+                    ],
+                },
             };
 
             // Act
             var response = await fixture.DiscordInteractionService.GetResponse(interaction);
 
             // Assert
-            Assert.NotNull(response);
-            Assert.Equal(InteractionCallbackType.ChannelMessageWithSource, response.Type);
-            Assert.NotNull(response.Data);
-            Assert.Equal("Some setlist", response.Data.Content);
+            response.HasValue.Should().BeTrue();
+            response.Value.Type.Should().Be(InteractionCallbackType.ChannelMessageWithSource);
+            response.Value.Data.Should().NotBeNull();
+            response.Value.Data!.Content.Should().Be("Some setlist");
         }
 
         [Fact]
@@ -122,22 +132,21 @@ namespace Setlistbot.Application.UnitTests
                     Options = new InteractionOption[]
                     {
                         new InteractionOption { Name = "artist", Value = "phish" },
-                        new InteractionOption { Name = "date", Value = "not a date" }
-                    }
-                }
+                        new InteractionOption { Name = "date", Value = "not a date" },
+                    },
+                },
             };
 
             // Act
             var response = await fixture.DiscordInteractionService.GetResponse(interaction);
 
             // Assert
-            Assert.NotNull(response);
-            Assert.Equal(InteractionCallbackType.ChannelMessageWithSource, response.Type);
-            Assert.NotNull(response.Data);
-            Assert.Equal(
-                $"Failed to parse date: 'not a date'. Try using mm/dd/yy or yyyy-mm-dd.",
-                response.Data.Content
-            );
+            response.HasValue.Should().BeTrue();
+            response.Value.Type.Should().Be(InteractionCallbackType.ChannelMessageWithSource);
+            response.Value.Data.Should().NotBeNull();
+            response
+                .Value.Data!.Content.Should()
+                .Be($"Failed to parse date: 'not a date'. Try using mm/dd/yy or yyyy-mm-dd.");
         }
 
         [Fact]
@@ -152,25 +161,26 @@ namespace Setlistbot.Application.UnitTests
                 Data = new InteractionData
                 {
                     Name = "setlist",
-                    Options = new InteractionOption[]
-                    {
+                    Options =
+                    [
                         new InteractionOption { Name = "artist", Value = "phish" },
-                        new InteractionOption { Name = "date", Value = "1980-01-01" }
-                    }
-                }
+                        new InteractionOption { Name = "date", Value = "1980-01-01" },
+                    ],
+                },
             };
 
             // Act
             var response = await fixture.DiscordInteractionService.GetResponse(interaction);
 
             // Assert
-            Assert.NotNull(response);
-            Assert.Equal(InteractionCallbackType.ChannelMessageWithSource, response.Type);
-            Assert.NotNull(response.Data);
-            Assert.Equal(
-                $"No setlist found for phish on 1980-01-01. Please try again with a different date or artist.",
-                response.Data.Content
-            );
+            response.HasValue.Should().BeTrue();
+            response.Value.Type.Should().Be(InteractionCallbackType.ChannelMessageWithSource);
+            response.Value.Data.Should().NotBeNull();
+            response
+                .Value.Data!.Content.Should()
+                .Be(
+                    $"No setlist found for phish on 1980-01-01. Please try again with a different date or artist."
+                );
         }
     }
 }

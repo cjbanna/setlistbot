@@ -1,6 +1,7 @@
-﻿using EnsureThat;
+﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Setlistbot.Domain;
 using Setlistbot.Domain.CommentAggregate;
 using Setlistbot.Domain.PostAggregate;
 using Setlistbot.Infrastructure.Reddit.Options;
@@ -11,131 +12,76 @@ namespace Setlistbot.Infrastructure.Reddit
     {
         private readonly IRedditClient _client;
         private readonly ILogger<RedditService> _logger;
-        private readonly RedditOptions _redditOptions;
+        private readonly IOptions<RedditOptions> _redditOptions;
 
         public RedditService(
-            IRedditClient client,
             ILogger<RedditService> logger,
+            IRedditClient client,
             IOptions<RedditOptions> redditOptions
         )
         {
-            _client = Ensure.Any.IsNotNull(client, nameof(client));
-            _logger = Ensure.Any.IsNotNull(logger, nameof(logger));
-            Ensure.That(redditOptions, nameof(redditOptions)).IsNotNull();
-            _redditOptions = Ensure.Any.IsNotNull(redditOptions.Value, nameof(redditOptions.Value));
+            _client = client;
+            _logger = logger;
+            _redditOptions = redditOptions;
         }
 
-        public async Task<IEnumerable<Comment>> GetComments(string subreddit)
-        {
-            Ensure.That(subreddit, nameof(subreddit)).IsNotNullOrWhiteSpace();
+        public async Task<IEnumerable<Comment>> GetComments(Subreddit subreddit) =>
+            await GetAuthToken()
+                .Map(token => GetComments(subreddit, token))
+                .GetValueOrDefault(() => []);
 
-            try
-            {
-                var token = await GetAuthToken();
-                if (token == null)
-                {
-                    return Enumerable.Empty<Comment>();
-                }
+        private async Task<IEnumerable<Comment>> GetComments(
+            Subreddit subreddit,
+            RedditToken token
+        ) =>
+            await _client
+                .GetComments(token, subreddit, PositiveInt.From(_redditOptions.Value.CommentsLimit))
+                .Map(response =>
+                    response.Data.Children.Select(c =>
+                        Comment.NewComment(
+                            c.Data.Id,
+                            c.Data.Author,
+                            c.Data.Body,
+                            c.Data.Permalink,
+                            subreddit.Value
+                        )
+                    )
+                )
+                .GetValueOrDefault(() => []);
 
-                var response = await _client.GetComments(
-                    token,
-                    subreddit,
-                    _redditOptions.CommentsLimit
-                );
-                if (response != null)
-                {
-                    return response.Data.Children
-                        .Where(c => c != null)
-                        .Select(
-                            c =>
-                                Comment.NewComment(
-                                    c.Data.Id,
-                                    c.Data.Author,
-                                    c.Data.Body,
-                                    c.Data.Permalink,
-                                    subreddit
-                                )
-                        );
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to get comments");
-            }
+        public async Task<IEnumerable<Post>> GetPosts(Subreddit subreddit) =>
+            await GetAuthToken()
+                .Map(token => GetPosts(subreddit, token))
+                .GetValueOrDefault(() => []);
 
-            return Enumerable.Empty<Comment>();
-        }
+        private async Task<IEnumerable<Post>> GetPosts(Subreddit subreddit, RedditToken token) =>
+            await _client
+                .GetPosts(token, subreddit)
+                .Map(response =>
+                    response.Data.Children.Select(c =>
+                        Post.NewPost(
+                            c.Data.Id,
+                            c.Data.Author,
+                            c.Data.Title,
+                            c.Data.SelfText,
+                            c.Data.Permalink,
+                            subreddit.Value
+                        )
+                    )
+                )
+                .GetValueOrDefault(() => []);
 
-        public async Task<IEnumerable<Post>> GetPosts(string subreddit)
-        {
-            Ensure.That(subreddit, nameof(subreddit)).IsNotNullOrWhiteSpace();
+        public async Task<Result> PostComment(NonEmptyString parent, NonEmptyString text) =>
+            await GetAuthToken()
+                .Map(async token => await _client.PostComment(token, parent, text))
+                .OnSuccessTry(_ => Result.Success());
 
-            try
-            {
-                var token = await GetAuthToken();
-                if (token == null)
-                {
-                    return Enumerable.Empty<Post>();
-                }
-
-                var response = await _client.GetPosts(token, subreddit);
-                if (response != null)
-                {
-                    return response.Data.Children
-                        .Where(c => c != null)
-                        .Select(
-                            c =>
-                                Post.NewPost(
-                                    c.Data.Id,
-                                    c.Data.Author,
-                                    c.Data.Title,
-                                    c.Data.SelfText,
-                                    c.Data.Permalink,
-                                    subreddit
-                                )
-                        );
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to get posts");
-            }
-
-            return Enumerable.Empty<Post>();
-        }
-
-        public async Task<bool> PostComment(string parent, string text)
-        {
-            Ensure.That(parent, nameof(parent)).IsNotNullOrWhiteSpace();
-            Ensure.That(text, nameof(text)).IsNotNullOrWhiteSpace();
-
-            try
-            {
-                var token = await GetAuthToken();
-                if (token == null)
-                {
-                    return false;
-                }
-
-                var response = await _client.PostComment(token, parent, text);
-                return response != null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to post comment");
-            }
-
-            return false;
-        }
-
-        private async Task<string?> GetAuthToken()
-        {
-            return await _client.GetAuthToken(
-                _redditOptions.Username,
-                _redditOptions.Password,
-                _redditOptions.Key,
-                _redditOptions.Secret
+        private async Task<Result<RedditToken>> GetAuthToken() =>
+            await _client.GetAuthToken(
+                NonEmptyString.From(_redditOptions.Value.Username),
+                NonEmptyString.From(_redditOptions.Value.Password),
+                NonEmptyString.From(_redditOptions.Value.Key),
+                NonEmptyString.From(_redditOptions.Value.Secret)
             );
-        }
     }
 }

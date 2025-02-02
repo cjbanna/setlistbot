@@ -1,14 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Text;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Setlistbot.Infrastructure.Discord.Client;
 using Setlistbot.Infrastructure.Discord.Client.Models;
 using Setlistbot.Infrastructure.Discord.Options;
-using System.Text;
 using DiscordRest = Discord.Rest;
 
 namespace Setlistbot.Infrastructure.Discord
 {
-    public class DiscordService : IDiscordService
+    public sealed class DiscordService : IDiscordService
     {
         private readonly ILogger<DiscordService> _logger;
         private readonly IDiscordClient _discordClient;
@@ -55,29 +55,29 @@ namespace Setlistbot.Infrastructure.Discord
                                 new ApplicationCommandOptionChoice
                                 {
                                     Name = "Phish",
-                                    Value = "phish"
+                                    Value = "phish",
                                 },
                                 new ApplicationCommandOptionChoice
                                 {
                                     Name = "King Gizzard and the Lizard Wizard",
-                                    Value = "kglw"
+                                    Value = "kglw",
                                 },
                                 new ApplicationCommandOptionChoice
                                 {
                                     Name = "Grateful Dead",
-                                    Value = "gd"
-                                }
-                            }
+                                    Value = "gd",
+                                },
+                            },
                         },
                         new ApplicationCommandOption
                         {
                             Name = "date",
                             Description = "The date of the show",
                             Type = ApplicationCommandOptionType.String,
-                            Required = true
-                        }
-                    }
-                }
+                            Required = true,
+                        },
+                    },
+                },
             };
 
             var response = await _discordClient.CreateGlobalApplicationCommands(commands);

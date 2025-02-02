@@ -19,7 +19,7 @@ namespace Setlistbot.Infrastructure.Extensions
                 SelfText = post.SelfText,
                 Reply = post.Reply,
                 Author = post.Author,
-                Permalink = post.Permalink
+                Permalink = post.Permalink,
             };
         }
 

@@ -3,7 +3,7 @@ using Setlistbot.Domain;
 
 namespace Setlistbot.Application
 {
-    public class ReplyBuilderFactory : IReplyBuilderFactory
+    public sealed class ReplyBuilderFactory : IReplyBuilderFactory
     {
         private readonly IServiceProvider _serviceProvider;
 

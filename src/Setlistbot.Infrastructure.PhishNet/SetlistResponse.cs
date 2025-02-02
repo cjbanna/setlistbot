@@ -2,16 +2,16 @@
 
 namespace Setlistbot.Infrastructure.PhishNet
 {
-    public class SetlistResponse
+    public sealed class SetlistResponse
     {
         [JsonProperty("error_message")]
         public string ErrorMessage { get; set; } = string.Empty;
 
         [JsonProperty("data")]
-        public SetlistResponseData[] Data { get; set; } = Array.Empty<SetlistResponseData>();
+        public SetlistResponseData[] Data { get; set; } = [];
     }
 
-    public class SetlistResponseData
+    public sealed class SetlistResponseData
     {
         [JsonProperty("showid")]
         public int ShowId { get; set; }

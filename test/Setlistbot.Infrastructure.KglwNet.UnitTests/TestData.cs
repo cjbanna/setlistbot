@@ -2,7 +2,7 @@
 
 namespace Setlistbot.Infrastructure.KglwNet.UnitTests
 {
-    public class TestData
+    public static class TestData
     {
         public static SetlistResponse GetSetlistResponseTestData()
         {

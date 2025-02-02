@@ -5,7 +5,7 @@ namespace Setlistbot.Domain.PostAggregate
 {
     public sealed class Post
     {
-        private List<DateTime> _dates = null!;
+        private List<DateOnly> _dates = null!;
 
         public string Id { get; private set; } = string.Empty;
         public string Author { get; private set; } = string.Empty;
@@ -17,7 +17,7 @@ namespace Setlistbot.Domain.PostAggregate
 
         public string ParentId => $"t3_{Id}";
 
-        public IReadOnlyCollection<DateTime> Dates
+        public IReadOnlyCollection<DateOnly> Dates
         {
             get
             {
@@ -51,7 +51,7 @@ namespace Setlistbot.Domain.PostAggregate
                 SelfText = selfText,
                 Permalink = permalink,
                 ArtistId = artistId,
-                Reply = string.Empty
+                Reply = string.Empty,
             };
         }
 
@@ -80,7 +80,7 @@ namespace Setlistbot.Domain.PostAggregate
                 SelfText = selfText,
                 Permalink = permalink,
                 ArtistId = artistId,
-                Reply = reply
+                Reply = reply,
             };
         }
 

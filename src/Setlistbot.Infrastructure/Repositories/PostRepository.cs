@@ -1,4 +1,6 @@
-﻿using EnsureThat;
+﻿using CSharpFunctionalExtensions;
+using EnsureThat;
+using Setlistbot.Domain;
 using Setlistbot.Domain.PostAggregate;
 using Setlistbot.Infrastructure.Data;
 using Setlistbot.Infrastructure.Extensions;
@@ -15,12 +17,10 @@ namespace Setlistbot.Infrastructure.Repositories
             _subreddit = Ensure.String.IsNotNullOrWhiteSpace(subreddit, nameof(subreddit));
         }
 
-        public async Task<Post?> Get(string id)
+        public async Task<Maybe<Post>> Get(NonEmptyString id)
         {
-            Ensure.That(id, nameof(id)).IsNotNullOrWhiteSpace();
-
-            var entity = await GetAsync(_subreddit, id);
-            return entity.ToDomain();
+            var entity = await GetAsync(_subreddit, id.Value);
+            return entity.Match(some => some.ToDomain(), () => Maybe<Post>.None);
         }
 
         public async Task Add(Post post)

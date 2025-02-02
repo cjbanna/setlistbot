@@ -1,7 +1,8 @@
-﻿using Microsoft.Azure.Functions.Worker.Http;
+﻿using System.Text;
+using CSharpFunctionalExtensions;
+using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Text;
 
 namespace Setlistbot.Function.Discord.Extensions
 {
@@ -14,21 +15,19 @@ namespace Setlistbot.Function.Discord.Extensions
             new JsonSerializerSettings
             {
                 ContractResolver = ContractResolver,
-                NullValueHandling = NullValueHandling.Ignore
+                NullValueHandling = NullValueHandling.Ignore,
             };
 
         /// <summary>
         /// Deserializes the HTTP request body as JSON using Newtonsoft.Json.
         /// </summary>
         /// <returns>The deserialized object from the JSON string.</returns>
-        public static async Task<T?> DeserializeJsonBodyAsync<T>(this HttpRequestData request)
+        public static async Task<Maybe<T>> DeserializeJsonBodyAsync<T>(this HttpRequestData request)
         {
             var body = await request.ReadAsStringAsync();
-            if (string.IsNullOrEmpty(body))
-            {
-                return default;
-            }
-            return JsonConvert.DeserializeObject<T>(body, SerializerSettings);
+            return string.IsNullOrEmpty(body)
+                ? Maybe<T>.None
+                : JsonConvert.DeserializeObject<T>(body, SerializerSettings);
         }
 
         /// <summary>

@@ -5,7 +5,7 @@ namespace Setlistbot.Domain.CommentAggregate
 {
     public sealed class Comment
     {
-        private List<DateTime> _dates = null!;
+        private List<DateOnly> _dates = [];
 
         public string Id { get; private set; } = string.Empty;
         public string Author { get; private set; } = string.Empty;
@@ -16,7 +16,7 @@ namespace Setlistbot.Domain.CommentAggregate
 
         public string ParentId => $"t1_{Id}";
 
-        public IReadOnlyCollection<DateTime> Dates
+        public IReadOnlyCollection<DateOnly> Dates
         {
             get
             {
@@ -26,6 +26,30 @@ namespace Setlistbot.Domain.CommentAggregate
         }
 
         private Comment() { }
+
+        public Comment(
+            string id,
+            string author,
+            string body,
+            string permalink,
+            string artistId,
+            string reply
+        )
+        {
+            Ensure.String.IsNotNullOrWhiteSpace(id, nameof(id));
+            Ensure.String.IsNotNullOrEmpty(body, nameof(body));
+            Ensure.String.IsNotNullOrWhiteSpace(permalink, nameof(permalink));
+            Ensure.String.IsNotNullOrWhiteSpace(author, nameof(author));
+            Ensure.String.IsNotEmptyOrWhiteSpace(artistId, nameof(artistId));
+            Ensure.String.IsNotNullOrWhiteSpace(reply, nameof(reply));
+
+            Id = id;
+            Author = author;
+            Body = body;
+            Permalink = permalink;
+            ArtistId = artistId;
+            Reply = reply;
+        }
 
         public static Comment NewComment(
             string id,
@@ -48,34 +72,7 @@ namespace Setlistbot.Domain.CommentAggregate
                 Body = body,
                 Permalink = permalink,
                 ArtistId = artistId,
-                Reply = string.Empty
-            };
-        }
-
-        public static Comment Hydrate(
-            string id,
-            string author,
-            string body,
-            string permalink,
-            string artistId,
-            string reply
-        )
-        {
-            Ensure.String.IsNotNullOrWhiteSpace(id, nameof(id));
-            Ensure.String.IsNotNullOrEmpty(body, nameof(body));
-            Ensure.String.IsNotNullOrWhiteSpace(permalink, nameof(permalink));
-            Ensure.String.IsNotNullOrWhiteSpace(author, nameof(author));
-            Ensure.String.IsNotEmptyOrWhiteSpace(artistId, nameof(artistId));
-            Ensure.String.IsNotNullOrWhiteSpace(reply, nameof(reply));
-
-            return new Comment()
-            {
-                Id = id,
-                Author = author,
-                Body = body,
-                Permalink = permalink,
-                ArtistId = artistId,
-                Reply = reply
+                Reply = string.Empty,
             };
         }
 

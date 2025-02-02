@@ -12,6 +12,6 @@
         Role = 8,
         Mentionable = 9,
         Number = 10,
-        Attachment = 11
+        Attachment = 11,
     }
 }

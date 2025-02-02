@@ -1,4 +1,5 @@
 ﻿using Azure.Data.Tables;
+using CSharpFunctionalExtensions;
 using EnsureThat;
 
 namespace Setlistbot.Infrastructure.Data
@@ -6,18 +7,17 @@ namespace Setlistbot.Infrastructure.Data
     public abstract class AzureTableRepository<T> : IAzureTableRepository<T>
         where T : class, ITableEntity, new()
     {
-        protected readonly TableClient _client;
-        protected readonly string _tableName;
+        private readonly TableClient _client;
 
-        public AzureTableRepository(string connectionString, string tableName)
+        protected AzureTableRepository(string connectionString, string tableName)
         {
             Ensure.That(connectionString, nameof(connectionString)).IsNotNullOrWhiteSpace();
-            _tableName = Ensure.String.IsNotNullOrWhiteSpace(tableName, nameof(tableName));
+            var tableName1 = Ensure.String.IsNotNullOrWhiteSpace(tableName, nameof(tableName));
 
-            _client = new TableClient(connectionString, _tableName);
+            _client = new TableClient(connectionString, tableName1);
 
             var serviceClient = new TableServiceClient(connectionString);
-            serviceClient.CreateTableIfNotExistsAsync(_tableName);
+            serviceClient.CreateTableIfNotExistsAsync(tableName1);
         }
 
         public async Task<IEnumerable<T>> GetAsync(string partitionKey)
@@ -36,7 +36,7 @@ namespace Setlistbot.Infrastructure.Data
             return results;
         }
 
-        public async Task<T?> GetAsync(string partitionKey, string rowKey)
+        public async Task<Maybe<T>> GetAsync(string partitionKey, string rowKey)
         {
             var filter = TableClient.CreateQueryFilter(
                 $"PartitionKey eq {partitionKey} and RowKey eq {rowKey}"

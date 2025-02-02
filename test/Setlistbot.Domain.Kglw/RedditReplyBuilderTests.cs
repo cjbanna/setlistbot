@@ -1,6 +1,6 @@
 namespace Setlistbot.Domain.Kglw.UnitTests
 {
-    public class RedditReplyBuilderTests
+    public sealed class RedditReplyBuilderTests
     {
         [Fact]
         public void ArtistId_ExpectKglw()
@@ -12,7 +12,7 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             var actual = builder.ArtistId;
 
             // Assert
-            Assert.Equal("kglw", actual);
+            actual.Should().Be("kglw");
         }
 
         [Fact]
@@ -20,49 +20,310 @@ namespace Setlistbot.Domain.Kglw.UnitTests
         {
             // Arrange
             var setlist = Setlist.NewSetlist(
-                "kglw",
-                "King Gizzard & the Lizard Wizard",
-                new DateTime(2022, 10, 11),
-                new Location("Red Rocks", "Morrison", "CO", "USA"),
+                ArtistId.From("kglw"),
+                ArtistName.From("King Gizzard & the Lizard Wizard"),
+                new DateOnly(2022, 10, 11),
+                new Location(
+                    Venue.From("Red Rocks"),
+                    City.From("Morrison"),
+                    State.From("CO"),
+                    Country.From("USA")
+                ),
                 "show notes"
             );
 
-            var set1 = new Set("Set 1");
-            set1.AddSong(new Song("The Dripping Tap", 1, ",", 0, string.Empty));
-            set1.AddSong(new Song("Gaia", 2, ",", 0, string.Empty));
-            set1.AddSong(new Song("Predator X", 3, ",", 0, string.Empty));
-            set1.AddSong(new Song("Organ Farmer", 4, ",", 0, string.Empty));
-            set1.AddSong(new Song("Pleura", 5, ",", 0, string.Empty));
-            set1.AddSong(new Song("Oddlife", 6, ">", 0, string.Empty));
-            set1.AddSong(new Song("Doom City", 7, ",", 0, string.Empty));
-            set1.AddSong(new Song("K.G.L.W. (Outro)", 8, ",", 0, string.Empty));
-            set1.AddSong(new Song("Boogiman Sam", 9, "->", 0, string.Empty));
-            set1.AddSong(new Song("Sleepwalker", 10, ",", 0, string.Empty));
-            set1.AddSong(new Song("Sea of Trees", 11, "->", 0, string.Empty));
-            set1.AddSong(new Song("The Bitter Boogie", 12, ",", 0, string.Empty));
+            var set1 = new Set(SetName.From("Set 1"));
+            set1.AddSong(
+                new Song(
+                    SongName.From("The Dripping Tap"),
+                    SongPosition.From(1),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Gaia"),
+                    SongPosition.From(2),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Predator X"),
+                    SongPosition.From(3),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Organ Farmer"),
+                    SongPosition.From(4),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Pleura"),
+                    SongPosition.From(5),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Oddlife"),
+                    SongPosition.From(6),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Doom City"),
+                    SongPosition.From(7),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("K.G.L.W. (Outro)"),
+                    SongPosition.From(8),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Boogiman Sam"),
+                    SongPosition.From(9),
+                    SongTransition.Segue,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Sleepwalker"),
+                    SongPosition.From(10),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("Sea of Trees"),
+                    SongPosition.From(11),
+                    SongTransition.Segue,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set1.AddSong(
+                new Song(
+                    SongName.From("The Bitter Boogie"),
+                    SongPosition.From(12),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
             setlist.AddSet(set1);
 
-            var set2 = new Set("Set 2");
-            set2.AddSong(new Song("Perihelion", 1, ">", 0, string.Empty));
-            set2.AddSong(new Song("I'm in Your Mind", 2, ">", 0, string.Empty));
-            set2.AddSong(new Song("I'm Not in Your Mind", 3, ">", 0, string.Empty));
-            set2.AddSong(new Song("Cellophane", 4, ">", 0, string.Empty));
-            set2.AddSong(new Song("I'm in Your Mind Fuzz", 5, ",", 0, string.Empty));
-            set2.AddSong(new Song("Tezeta", 6, ",", 0, string.Empty));
-            set2.AddSong(new Song("A New World", 7, ">", 0, string.Empty));
-            set2.AddSong(new Song("Altered Beast I", 8, ">", 0, string.Empty));
-            set2.AddSong(new Song("Alter Me I", 9, ">", 0, string.Empty));
-            set2.AddSong(new Song("Altered Beast II", 10, ">", 0, string.Empty));
-            set2.AddSong(new Song("Alter Me II", 11, ">", 0, string.Empty));
-            set2.AddSong(new Song("Altered Beast III", 12, ">", 0, string.Empty));
-            set2.AddSong(new Song("Ambergris", 13, ",", 0, string.Empty));
-            set2.AddSong(new Song("Muddy Water", 14, ",", 0, string.Empty));
-            set2.AddSong(new Song("Iron Lung", 15, ",", 0, string.Empty));
-            set2.AddSong(new Song("Robot Stop", 16, ">", 0, string.Empty));
-            set2.AddSong(new Song("Gamma Knife", 17, ">", 0, string.Empty));
-            set2.AddSong(new Song("People-Vultures", 18, ">", 0, string.Empty));
-            set2.AddSong(new Song("Mr. Beat", 19, "->", 0, string.Empty));
-            set2.AddSong(new Song("Iron Lung", 20, ",", 0, string.Empty));
+            var set2 = new Set(SetName.From("Set 2"));
+            set2.AddSong(
+                new Song(
+                    SongName.From("Perihelion"),
+                    SongPosition.From(1),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("I'm in Your Mind"),
+                    SongPosition.From(2),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("I'm Not in Your Mind"),
+                    SongPosition.From(3),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Cellophane"),
+                    SongPosition.From(4),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("I'm in Your Mind Fuzz"),
+                    SongPosition.From(5),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Tezeta"),
+                    SongPosition.From(6),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("A New World"),
+                    SongPosition.From(7),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Altered Beast I"),
+                    SongPosition.From(8),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Alter Me I"),
+                    SongPosition.From(9),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Altered Beast II"),
+                    SongPosition.From(10),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Alter Me II"),
+                    SongPosition.From(11),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Altered Beast III"),
+                    SongPosition.From(12),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Ambergris"),
+                    SongPosition.From(13),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Muddy Water"),
+                    SongPosition.From(14),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Iron Lung"),
+                    SongPosition.From(15),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Robot Stop"),
+                    SongPosition.From(16),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Gamma Knife"),
+                    SongPosition.From(17),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("People-Vultures"),
+                    SongPosition.From(18),
+                    SongTransition.Immediate,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Mr. Beat"),
+                    SongPosition.From(19),
+                    SongTransition.Segue,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
+            set2.AddSong(
+                new Song(
+                    SongName.From("Iron Lung"),
+                    SongPosition.From(20),
+                    SongTransition.Stop,
+                    TimeSpan.Zero,
+                    string.Empty
+                )
+            );
 
             setlist.AddSet(set2);
 
@@ -75,11 +336,13 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             var builder = new RedditReplyBuilder();
 
             // Act
-            var actual = builder.Build(new[] { setlist });
+            var actual = builder.Build([setlist]);
 
             // Assert
             var expected = TestDataHelper.GetTestData("TestData/2022-10-11-reply.md");
-            Assert.Equal(expected, actual);
+            var expectedNormalized = expected.ReplaceLineEndings(string.Empty);
+            var actualNormalized = actual.ReplaceLineEndings(string.Empty);
+            actualNormalized.Should().Be(expectedNormalized);
         }
     }
 }
