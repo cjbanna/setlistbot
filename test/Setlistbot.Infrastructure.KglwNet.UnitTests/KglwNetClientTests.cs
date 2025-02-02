@@ -6,7 +6,7 @@ using Setlistbot.Infrastructure.KglwNet.Options;
 
 namespace Setlistbot.Infrastructure.KglwNet.UnitTests
 {
-    public class KglwNetClientTestFixture
+    public sealed class KglwNetClientTestFixture
     {
         public Mock<IOptions<KglwNetOptions>> Options { get; }
         public Mock<ILogger<KglwNetClient>> Logger { get; }
@@ -28,7 +28,7 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
         }
     }
 
-    public class KglwNetClientTests
+    public sealed class KglwNetClientTests
     {
         [Fact]
         public async Task GetSetlistAsync_WhenNoError_ExpectSuccessResponse()

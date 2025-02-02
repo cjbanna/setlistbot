@@ -2,7 +2,7 @@
 
 namespace Setlistbot.Domain.Phish
 {
-    public class RedditReplyBuilder : IReplyBuilder
+    public sealed class RedditReplyBuilder : IReplyBuilder
     {
         public string ArtistId => "phish";
 

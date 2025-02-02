@@ -7,7 +7,7 @@ using Setlistbot.Infrastructure.Discord.Options;
 
 namespace Setlistbot.Infrastructure.Discord.Client
 {
-    public class DiscordClient : IDiscordClient
+    public sealed class DiscordClient : IDiscordClient
     {
         private readonly ILogger<DiscordClient> _logger;
         private readonly DiscordOptions _options;

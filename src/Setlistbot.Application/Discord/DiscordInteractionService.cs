@@ -6,7 +6,7 @@ using Setlistbot.Infrastructure.Repositories;
 
 namespace Setlistbot.Application.Discord
 {
-    public class DiscordInteractionService : IDiscordInteractionService
+    public sealed class DiscordInteractionService : IDiscordInteractionService
     {
         private readonly ILogger<DiscordInteractionService> _logger;
         private readonly ISetlistProviderFactory _setlistProviderFactory;

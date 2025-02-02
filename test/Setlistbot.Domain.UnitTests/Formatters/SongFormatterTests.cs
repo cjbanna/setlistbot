@@ -2,7 +2,7 @@ using Setlistbot.Domain.Formatters;
 
 namespace Setlistbot.Domain.UnitTests.Formatters
 {
-    public class SongFormatterTests
+    public sealed class SongFormatterTests
     {
         [Fact]
         public void Format_WhenSongName_ExpectSongName()

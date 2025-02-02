@@ -2,7 +2,7 @@
 
 namespace Setlistbot.Domain.Kglw
 {
-    public class RedditReplyBuilder : IReplyBuilder
+    public sealed class RedditReplyBuilder : IReplyBuilder
     {
         public string ArtistId => "kglw";
 

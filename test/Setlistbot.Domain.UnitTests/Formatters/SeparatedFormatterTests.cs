@@ -2,7 +2,7 @@ using Setlistbot.Domain.Formatters;
 
 namespace Setlistbot.Domain.UnitTests.Formatters
 {
-    public class SeparatedFormatterTests
+    public sealed class SeparatedFormatterTests
     {
         [Fact]
         public void Format_WhenHasNoFormatters_ExpectEmptyString()

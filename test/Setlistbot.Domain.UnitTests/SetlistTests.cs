@@ -1,6 +1,6 @@
 namespace Setlistbot.Domain.UnitTests
 {
-    public class SetlistTests
+    public sealed class SetlistTests
     {
         [Fact]
         public void NewSetlist_WhenCalled_ExpectSetlist()

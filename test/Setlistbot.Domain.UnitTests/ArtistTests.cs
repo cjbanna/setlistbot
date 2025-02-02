@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Setlistbot.Domain.UnitTests
 {
-    public class ArtistTests
+    public sealed class ArtistTests
     {
         [Fact]
         public void Test()
@@ -21,7 +21,7 @@ namespace Setlistbot.Domain.UnitTests
 
     public record TestType(Maybe<string> Foo);
 
-    public class MaybeJsonConverter<T> : JsonConverter<Maybe<T>>
+    public sealed class MaybeJsonConverter<T> : JsonConverter<Maybe<T>>
     {
         public override void WriteJson(
             JsonWriter writer,

@@ -6,7 +6,7 @@ using Setlistbot.Infrastructure.Extensions;
 
 namespace Setlistbot.Infrastructure.Repositories
 {
-    public class DiscordUsageRepository
+    public sealed class DiscordUsageRepository
         : AzureTableRepository<DiscordUsageEntity>,
             IDiscordUsageRepository
     {

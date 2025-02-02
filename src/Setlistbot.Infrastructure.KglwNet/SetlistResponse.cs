@@ -2,7 +2,7 @@
 
 namespace Setlistbot.Infrastructure.KglwNet
 {
-    public class SetlistResponse
+    public sealed class SetlistResponse
     {
         [JsonProperty("error_message")]
         public string ErrorMessage { get; set; } = string.Empty;
@@ -11,7 +11,7 @@ namespace Setlistbot.Infrastructure.KglwNet
         public SetlistResponseData[] Data { get; set; } = new SetlistResponseData[0];
     }
 
-    public class SetlistResponseData
+    public sealed class SetlistResponseData
     {
         [JsonProperty("show_id")]
         public int ShowId { get; set; }

@@ -6,7 +6,7 @@ using Setlistbot.Infrastructure.PhishNet.Options;
 
 namespace Setlistbot.Infrastructure.PhishNet.UnitTests
 {
-    public class PhishNetClientTestFixture
+    public sealed class PhishNetClientTestFixture
     {
         public Mock<IOptions<PhishNetOptions>> Options { get; }
         public Mock<ILogger<PhishNetClient>> Logger { get; }
@@ -37,7 +37,7 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
         }
     }
 
-    public class PhishNetClientTests
+    public sealed class PhishNetClientTests
     {
         [Fact]
         public async Task GetSetlistAsync_WhenNoError_ExpectSuccessResponse()

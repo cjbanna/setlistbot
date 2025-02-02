@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Setlistbot.Function.Discord
 {
-    public class KeepWarmFunctions
+    public sealed class KeepWarmFunctions
     {
         private readonly ILogger<KeepWarmFunctions> _logger;
 

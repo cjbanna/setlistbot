@@ -4,7 +4,7 @@ using Setlistbot.Domain;
 
 namespace Setlistbot.Infrastructure.KglwNet
 {
-    public class KglwNetSetlistProvider : ISetlistProvider
+    public sealed class KglwNetSetlistProvider : ISetlistProvider
     {
         private readonly ILogger<KglwNetSetlistProvider> _logger;
         private readonly IKglwNetClient _kglwNetClient;

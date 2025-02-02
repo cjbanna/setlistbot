@@ -2,7 +2,7 @@ using Setlistbot.Domain;
 
 namespace Setlistbot.Infrastructure.GratefulDead.UnitTests
 {
-    public class GratefulDeadInMemoryProviderTests
+    public sealed class GratefulDeadInMemoryProviderTests
     {
         [Fact]
         public async Task GetSetlists_WhenShowExists_ExpectSetlist()

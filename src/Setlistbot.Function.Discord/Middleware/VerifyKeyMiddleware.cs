@@ -10,7 +10,7 @@ using Setlistbot.Infrastructure.Discord.Options;
 namespace Setlistbot.Function.Discord.Middleware
 {
     // Interpreted from https://github.com/discord/discord-interactions-js/blob/main/src/index.ts#L163
-    public class VerifyKeyMiddleware : IFunctionsWorkerMiddleware
+    public sealed class VerifyKeyMiddleware : IFunctionsWorkerMiddleware
     {
         private readonly ILogger<VerifyKeyMiddleware> _logger;
         private readonly IDiscordService _discordService;

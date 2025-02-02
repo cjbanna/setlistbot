@@ -30,7 +30,7 @@ namespace Setlistbot.Application.UnitTests
         }
     }
 
-    public class SetlistCommandHandlerTestFixture : DiscordInteractionServiceTestFixture
+    public sealed class SetlistCommandHandlerTestFixture : DiscordInteractionServiceTestFixture
     {
         public SetlistCommandHandlerTestFixture()
             : base()
@@ -70,7 +70,7 @@ namespace Setlistbot.Application.UnitTests
         }
     }
 
-    public class DiscordInteractionServiceTests
+    public sealed class DiscordInteractionServiceTests
     {
         [Fact]
         public async Task GetResponse_WhenPing_ExpectPong()

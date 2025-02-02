@@ -1,4 +1,4 @@
 namespace Setlistbot.Domain.UnitTests.CommentAggregate
 {
-    public class CommentTests { }
+    public sealed class CommentTests { }
 }

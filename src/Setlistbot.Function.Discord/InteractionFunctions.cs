@@ -9,7 +9,7 @@ using Setlistbot.Infrastructure.Discord.Interactions;
 
 namespace Setlistbot.Function.Discord
 {
-    public class InteractionFunctions
+    public sealed class InteractionFunctions
     {
         private readonly ILogger<InteractionFunctions> _logger;
         private readonly IDiscordInteractionService _discordInteractionService;

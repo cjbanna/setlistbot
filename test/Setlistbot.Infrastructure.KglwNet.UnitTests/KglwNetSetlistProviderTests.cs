@@ -4,7 +4,7 @@ using Setlistbot.Domain;
 
 namespace Setlistbot.Infrastructure.KglwNet.UnitTests
 {
-    public class KglwNetSetlistProviderTestFixture
+    public sealed class KglwNetSetlistProviderTestFixture
     {
         public Mock<ILogger<KglwNetSetlistProvider>> Logger { get; }
 
@@ -23,7 +23,7 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
         }
     }
 
-    public class KglwNetSetlistProviderTests
+    public sealed class KglwNetSetlistProviderTests
     {
         [Fact]
         public async Task GetSetlistsAsync_WhenSetlistResponse_ExpectSetlist()

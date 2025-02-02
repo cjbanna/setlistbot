@@ -4,7 +4,7 @@ using domain = Setlistbot.Domain;
 
 namespace Setlistbot.Infrastructure.GratefulDead
 {
-    public class GratefulDeadInMemoryProvider : domain.ISetlistProvider
+    public sealed class GratefulDeadInMemoryProvider : domain.ISetlistProvider
     {
         private static readonly Lazy<IEnumerable<Setlist>> Setlists = new Lazy<
             IEnumerable<Setlist>

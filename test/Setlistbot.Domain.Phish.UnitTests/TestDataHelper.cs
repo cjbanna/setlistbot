@@ -1,6 +1,6 @@
 ﻿namespace Setlistbot.Domain.Phish.UnitTests
 {
-    public class TestDataHelper
+    public sealed class TestDataHelper
     {
         public static string GetTestData(string relativePath)
         {

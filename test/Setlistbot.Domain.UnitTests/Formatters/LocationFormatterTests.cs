@@ -2,7 +2,7 @@ using Setlistbot.Domain.Formatters;
 
 namespace Setlistbot.Domain.UnitTests.Formatters
 {
-    public class LocationFormatterTests
+    public sealed class LocationFormatterTests
     {
         [Fact]
         public void Format_WhenLocation_ExpectFormattedLocation()

@@ -7,7 +7,7 @@ using Setlistbot.Infrastructure.PhishNet.Options;
 
 namespace Setlistbot.Infrastructure.PhishNet
 {
-    public class PhishNetClient : IPhishNetClient
+    public sealed class PhishNetClient : IPhishNetClient
     {
         private readonly ILogger<PhishNetClient> _logger;
         private readonly IOptions<PhishNetOptions> _options;

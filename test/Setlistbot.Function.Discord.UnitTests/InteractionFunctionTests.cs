@@ -8,7 +8,7 @@ using Setlistbot.Infrastructure.Discord.Interactions;
 
 namespace Setlistbot.Function.Discord.UnitTests
 {
-    public class InteractionFunctionTestFixture
+    public sealed class InteractionFunctionTestFixture
     {
         public Mock<ILogger<InteractionFunctions>> Logger { get; }
         public Mock<IDiscordInteractionService> DiscordInteractionService { get; }
@@ -28,7 +28,7 @@ namespace Setlistbot.Function.Discord.UnitTests
         }
     }
 
-    public class InteractionFunctionTests
+    public sealed class InteractionFunctionTests
     {
         [Fact]
         public async Task HandleInteraction_WhenPing_ExpectPong()

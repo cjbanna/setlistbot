@@ -5,7 +5,7 @@ using Setlistbot.Application.Reddit;
 
 namespace Setlistbot.Function.RedditBot
 {
-    public class SetlistbotTimer
+    public sealed class SetlistbotTimer
     {
         private readonly ILogger<SetlistbotTimer> _logger;
         private readonly IRedditSetlistbot _bot;
@@ -40,14 +40,14 @@ namespace Setlistbot.Function.RedditBot
         }
     }
 
-    public class MyInfo
+    public sealed class MyInfo
     {
         public MyScheduleStatus? ScheduleStatus { get; set; }
 
         public bool IsPastDue { get; set; }
     }
 
-    public class MyScheduleStatus
+    public sealed class MyScheduleStatus
     {
         public DateTime Last { get; set; }
 

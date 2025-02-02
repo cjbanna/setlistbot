@@ -18,7 +18,7 @@ using Setlistbot.Infrastructure.Reddit.Extensions;
 
 namespace Setlistbot.Function.RedditBot
 {
-    public class Program
+    public sealed class Program
     {
         public static void Main()
         {

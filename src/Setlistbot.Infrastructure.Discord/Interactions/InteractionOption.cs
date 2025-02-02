@@ -2,7 +2,7 @@
 
 namespace Setlistbot.Infrastructure.Discord.Interactions
 {
-    public class InteractionOption
+    public sealed class InteractionOption
     {
         [JsonProperty("name")]
         public string Name { get; init; } = string.Empty;

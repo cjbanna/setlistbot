@@ -1,6 +1,6 @@
 namespace Setlistbot.Domain.Phish.UnitTests
 {
-    public class RedditReplyBuilderTests
+    public sealed class RedditReplyBuilderTests
     {
         [Fact]
         public void ArtistId_ExpectPhish()

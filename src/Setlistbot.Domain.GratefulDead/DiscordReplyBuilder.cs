@@ -2,7 +2,7 @@
 
 namespace Setlistbot.Domain.GratefulDead
 {
-    public class DiscordReplyBuilder : IReplyBuilder
+    public sealed class DiscordReplyBuilder : IReplyBuilder
     {
         public string ArtistId => "gd";
 

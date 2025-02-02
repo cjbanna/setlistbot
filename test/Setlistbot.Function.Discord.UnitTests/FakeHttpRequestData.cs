@@ -4,7 +4,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 
 namespace Setlistbot.Function.Discord.UnitTests
 {
-    public class FakeHttpRequestData : HttpRequestData
+    public sealed class FakeHttpRequestData : HttpRequestData
     {
         public FakeHttpRequestData(
             FunctionContext functionContext,

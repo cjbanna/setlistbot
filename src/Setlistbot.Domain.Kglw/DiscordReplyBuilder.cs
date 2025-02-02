@@ -3,7 +3,7 @@ using Setlistbot.Domain.Formatters;
 
 namespace Setlistbot.Domain.Kglw
 {
-    public class DiscordReplyBuilder : IReplyBuilder
+    public sealed class DiscordReplyBuilder : IReplyBuilder
     {
         public string ArtistId => "kglw";
 

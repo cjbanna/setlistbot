@@ -2,7 +2,7 @@
 
 namespace Setlistbot.Domain.Kglw.UnitTests
 {
-    public class DiscordReplyBuilderTests
+    public sealed class DiscordReplyBuilderTests
     {
         [Fact]
         public void ArtistId_ReturnsKglw()

@@ -8,7 +8,7 @@ using Setlistbot.Infrastructure.KglwNet.Options;
 
 namespace Setlistbot.Infrastructure.KglwNet
 {
-    public class KglwNetClient : IKglwNetClient
+    public sealed class KglwNetClient : IKglwNetClient
     {
         private readonly ILogger<KglwNetClient> _logger;
         private readonly IOptions<KglwNetOptions> _options;

@@ -8,7 +8,7 @@ using DiscordRest = Discord.Rest;
 
 namespace Setlistbot.Infrastructure.Discord
 {
-    public class DiscordService : IDiscordService
+    public sealed class DiscordService : IDiscordService
     {
         private readonly ILogger<DiscordService> _logger;
         private readonly IDiscordClient _discordClient;

@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Setlistbot.Infrastructure.Reddit.UnitTests
 {
-    public class RedditServiceTestFixture
+    public sealed class RedditServiceTestFixture
     {
         public Mock<ILogger<RedditService>> Logger { get; }
         public Mock<IRedditClient> Client { get; }
@@ -158,7 +158,7 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
         }
     }
 
-    public class RedditServiceTests
+    public sealed class RedditServiceTests
     {
         [Fact]
         public async Task GetComments_WhenGetAuthTokenFails_ExpectNoComments()

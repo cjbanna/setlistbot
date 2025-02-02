@@ -3,7 +3,7 @@ using Setlistbot.Domain.Formatters;
 
 namespace Setlistbot.Domain.UnitTests.Formatters
 {
-    public class MaybeFormatterTests
+    public sealed class MaybeFormatterTests
     {
         [Fact]
         public void Format_WhenHasValue_ExpectFormattedValue()

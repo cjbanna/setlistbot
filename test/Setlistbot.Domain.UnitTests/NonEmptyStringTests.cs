@@ -3,7 +3,7 @@ using Vogen;
 
 namespace Setlistbot.Domain.UnitTests
 {
-    public class NonEmptyStringTests
+    public sealed class NonEmptyStringTests
     {
         [Fact]
         public void NonEmptyString_WhenValueIsEmpty_ThrowsArgumentException()

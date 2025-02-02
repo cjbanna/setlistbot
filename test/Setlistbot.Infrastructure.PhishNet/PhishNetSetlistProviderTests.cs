@@ -4,7 +4,7 @@ using Setlistbot.Domain;
 
 namespace Setlistbot.Infrastructure.PhishNet.UnitTests
 {
-    public class PhishNetSetlistProviderTestFixture
+    public sealed class PhishNetSetlistProviderTestFixture
     {
         public Mock<ILogger<PhishNetSetlistProvider>> Logger { get; }
 
@@ -23,7 +23,7 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
         }
     }
 
-    public class PhishNetSetlistProviderTests
+    public sealed class PhishNetSetlistProviderTests
     {
         [Fact]
         public async Task GetSetlistsAsync_WhenSetlistResponse_ExpectSetlist()

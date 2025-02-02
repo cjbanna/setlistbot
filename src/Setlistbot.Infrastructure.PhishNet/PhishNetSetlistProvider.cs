@@ -4,7 +4,7 @@ using Setlistbot.Domain;
 
 namespace Setlistbot.Infrastructure.PhishNet
 {
-    public class PhishNetSetlistProvider : ISetlistProvider
+    public sealed class PhishNetSetlistProvider : ISetlistProvider
     {
         private readonly ILogger<PhishNetSetlistProvider> _logger;
         private readonly IPhishNetClient _phishNetClient;

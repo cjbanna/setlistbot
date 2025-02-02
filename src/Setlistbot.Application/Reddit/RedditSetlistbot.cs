@@ -11,7 +11,7 @@ using Setlistbot.Infrastructure.Reddit.Options;
 
 namespace Setlistbot.Application.Reddit
 {
-    public class RedditSetlistbot : IRedditSetlistbot
+    public sealed class RedditSetlistbot : IRedditSetlistbot
     {
         private readonly ILogger<RedditSetlistbot> _logger;
         private readonly IRedditService _redditService;

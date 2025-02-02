@@ -2,7 +2,7 @@
 
 namespace Setlistbot.Infrastructure.Discord.Client.Models
 {
-    public class ApplicationCommandOption
+    public sealed class ApplicationCommandOption
     {
         [JsonProperty("name")]
         public string Name { get; init; } = string.Empty;
