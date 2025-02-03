@@ -14,7 +14,7 @@ namespace Setlistbot.Infrastructure.PhishNet
     public sealed class SetlistResponseData
     {
         [JsonPropertyName("showid")]
-        public string ShowId { get; set; }
+        public int ShowId { get; set; }
 
         [JsonPropertyName("showdate")]
         public string ShowDate { get; set; } = string.Empty;
