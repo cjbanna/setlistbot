@@ -5,8 +5,6 @@ namespace Setlistbot.Domain.CommentAggregate
 {
     public sealed class Comment
     {
-        private List<DateOnly> _dates = [];
-
         public string Id { get; private set; } = string.Empty;
         public string Author { get; private set; } = string.Empty;
         public string Body { get; private set; } = string.Empty;
@@ -16,14 +14,7 @@ namespace Setlistbot.Domain.CommentAggregate
 
         public string ParentId => $"t1_{Id}";
 
-        public IReadOnlyCollection<DateOnly> Dates
-        {
-            get
-            {
-                _dates ??= Body.ParseDates().ToList();
-                return _dates.AsReadOnly();
-            }
-        }
+        public IReadOnlyCollection<DateOnly> Dates => Body.ParseDates().ToList().AsReadOnly();
 
         private Comment() { }
 
@@ -83,7 +74,7 @@ namespace Setlistbot.Domain.CommentAggregate
         /// <returns></returns>
         public bool HasMentionOf(string text)
         {
-            return text != null && Body.Contains(text, StringComparison.CurrentCultureIgnoreCase);
+            return Body.Contains(text, StringComparison.CurrentCultureIgnoreCase);
         }
 
         /// <summary>
