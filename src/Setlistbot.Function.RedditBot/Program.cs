@@ -50,27 +50,14 @@ namespace Setlistbot.Function.RedditBot
                         .AddPhishNet()
                         .AddGratefulDeadInMemory();
 
-                    services.AddSingleton<ILoggerProvider>(
-                        (serviceProvider) =>
-                        {
-                            Log.Logger = new LoggerConfiguration()
-                                .Enrich.FromLogContext()
-                                .WriteTo.Console()
-                                .CreateLogger();
-                            return new SerilogLoggerProvider(Log.Logger, true);
-                        }
-                    );
-
-                    services.AddSingleton<ILoggerProvider>(
-                        (serviceProvider) =>
-                        {
-                            Log.Logger = new LoggerConfiguration()
-                                .Enrich.FromLogContext()
-                                .WriteTo.Console()
-                                .CreateLogger();
-                            return new SerilogLoggerProvider(Log.Logger, true);
-                        }
-                    );
+                    services.AddSingleton<ILoggerProvider>(_ =>
+                    {
+                        Log.Logger = new LoggerConfiguration()
+                            .Enrich.FromLogContext()
+                            .WriteTo.Console()
+                            .CreateLogger();
+                        return new SerilogLoggerProvider(Log.Logger, true);
+                    });
                 })
                 .Build();
 
