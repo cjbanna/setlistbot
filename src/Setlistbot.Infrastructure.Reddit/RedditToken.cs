@@ -2,7 +2,7 @@ using Vogen;
 
 namespace Setlistbot.Infrastructure.Reddit
 {
-    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<string>]
     public readonly partial struct RedditToken
     {
         private static Validation Validate(string value) =>

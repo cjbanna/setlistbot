@@ -1,22 +1,22 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Setlistbot.Infrastructure.Discord.Client.Models
 {
     public sealed class ApplicationCommandOption
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; init; } = string.Empty;
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; init; } = string.Empty;
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public ApplicationCommandOptionType Type { get; init; }
 
-        [JsonProperty("required")]
+        [JsonPropertyName("required")]
         public bool Required { get; init; }
 
-        [JsonProperty("choices")]
+        [JsonPropertyName("choices")]
         public IEnumerable<ApplicationCommandOptionChoice>? Choices { get; init; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 using Setlistbot.Infrastructure.Data;
 using Setlistbot.Infrastructure.Discord.Interactions;
 
@@ -16,7 +16,7 @@ namespace Setlistbot.Infrastructure.Extensions
                 ApplicationId = interaction.ApplicationId,
                 GuildId = interaction.GuildId,
                 IteractionType = (int)interaction.InteractionType,
-                Data = JsonConvert.SerializeObject(interaction.Data),
+                Data = JsonSerializer.Serialize(interaction.Data),
             };
         }
     }

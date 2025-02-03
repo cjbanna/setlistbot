@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json;
 using Vogen;
 
 namespace Setlistbot.Domain.UnitTests
@@ -175,28 +175,28 @@ namespace Setlistbot.Domain.UnitTests
         }
 
         [Fact]
-        public void NewtonsoftJsonSerialize_WhenValueIsNotNullOrWhiteSpace_ReturnsValue()
+        public void JsonSerialize_WhenValueIsNotNullOrWhiteSpace_ReturnsValue()
         {
             // Arrange
             var value = "value";
             var nonEmptyString = NonEmptyString.From(value);
 
             // Act
-            var result = JsonConvert.SerializeObject(nonEmptyString);
+            var result = JsonSerializer.Serialize(nonEmptyString);
 
             // Assert
             result.Should().Be($"\"{value}\"");
         }
 
         [Fact]
-        public void NewtonsoftJsonDeserialize_WhenValueIsNotNullOrWhiteSpace_ReturnsValue()
+        public void JsonDeserialize_WhenValueIsNotNullOrWhiteSpace_ReturnsValue()
         {
             // Arrange
             var value = "value";
             var json = $"\"{value}\"";
 
             // Act
-            var result = JsonConvert.DeserializeObject<NonEmptyString>(json);
+            var result = JsonSerializer.Deserialize<NonEmptyString>(json);
 
             // Assert
             result.Value.Should().Be(value);

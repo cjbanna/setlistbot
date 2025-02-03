@@ -10,7 +10,7 @@ namespace Setlistbot.Domain
         Country Country
     );
 
-    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<string>]
     public readonly partial struct State
     {
         private static Validation Validate(string value) =>
@@ -19,7 +19,7 @@ namespace Setlistbot.Domain
                 : Validation.Ok;
     }
 
-    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<string>]
     public readonly partial struct Venue
     {
         private static Validation Validate(string value) =>
@@ -28,7 +28,7 @@ namespace Setlistbot.Domain
                 : Validation.Ok;
     }
 
-    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<string>]
     public readonly partial struct City
     {
         private static Validation Validate(string value) =>
@@ -37,7 +37,7 @@ namespace Setlistbot.Domain
                 : Validation.Ok;
     }
 
-    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<string>]
     public readonly partial struct Country
     {
         private static Validation Validate(string value) =>

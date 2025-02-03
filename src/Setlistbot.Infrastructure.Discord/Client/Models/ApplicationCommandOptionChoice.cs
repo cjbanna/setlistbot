@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Setlistbot.Infrastructure.Discord.Client.Models
 {
     public sealed class ApplicationCommandOptionChoice
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; init; } = string.Empty;
 
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public string Value { get; init; } = string.Empty;
     }
 }

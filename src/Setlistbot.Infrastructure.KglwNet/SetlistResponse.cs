@@ -1,61 +1,61 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Setlistbot.Infrastructure.KglwNet
 {
     public sealed class SetlistResponse
     {
-        [JsonProperty("error_message")]
+        [JsonPropertyName("error_message")]
         public string ErrorMessage { get; set; } = string.Empty;
 
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public SetlistResponseData[] Data { get; set; } = new SetlistResponseData[0];
     }
 
     public sealed class SetlistResponseData
     {
-        [JsonProperty("show_id")]
+        [JsonPropertyName("show_id")]
         public int ShowId { get; set; }
 
-        [JsonProperty("showdate")]
+        [JsonPropertyName("showdate")]
         public string ShowDate { get; set; } = string.Empty;
 
-        [JsonProperty("artist")]
+        [JsonPropertyName("artist")]
         public string ArtistName { get; set; } = string.Empty;
 
-        [JsonProperty("position")]
+        [JsonPropertyName("position")]
         public int Position { get; set; }
 
-        [JsonProperty("songname")]
+        [JsonPropertyName("songname")]
         public string Song { get; set; } = string.Empty;
 
-        [JsonProperty("footnote")]
+        [JsonPropertyName("footnote")]
         public string Footnote { get; set; } = string.Empty;
 
-        [JsonProperty("settype")]
+        [JsonPropertyName("settype")]
         public string SetType { get; set; } = string.Empty;
 
-        [JsonProperty("setnumber")]
-        public int SetNumber { get; set; }
+        [JsonPropertyName("setnumber")]
+        public string SetNumber { get; set; } = string.Empty;
 
-        [JsonProperty("transition")]
+        [JsonPropertyName("transition")]
         public string Transition { get; set; } = string.Empty;
 
-        [JsonProperty("venuename")]
+        [JsonPropertyName("venuename")]
         public string Venue { get; set; } = string.Empty;
 
-        [JsonProperty("city")]
+        [JsonPropertyName("city")]
         public string City { get; set; } = string.Empty;
 
-        [JsonProperty("state")]
+        [JsonPropertyName("state")]
         public string State { get; set; } = string.Empty;
 
-        [JsonProperty("country")]
+        [JsonPropertyName("country")]
         public string Country { get; set; } = string.Empty;
 
-        [JsonProperty("shownotes")]
+        [JsonPropertyName("shownotes")]
         public string ShowNotes { get; set; } = string.Empty;
 
-        [JsonProperty("permalink")]
+        [JsonPropertyName("permalink")]
         public string Permalink { get; set; } = string.Empty;
     }
 }

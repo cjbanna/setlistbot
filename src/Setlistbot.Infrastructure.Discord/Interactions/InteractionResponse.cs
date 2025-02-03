@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Setlistbot.Infrastructure.Discord.Interactions
 {
     public sealed class InteractionResponse
     {
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public InteractionCallbackType Type { get; init; }
 
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public InteractionCallbackData? Data { get; init; }
     }
 }

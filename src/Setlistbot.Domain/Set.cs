@@ -36,7 +36,7 @@ namespace Setlistbot.Domain
         }
     }
 
-    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<string>]
     public readonly partial struct SetName
     {
         private static Validation Validate(string value) =>

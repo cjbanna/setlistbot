@@ -4,7 +4,6 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Setlistbot.Application.Discord;
-using Setlistbot.Function.Discord.Extensions;
 using Setlistbot.Infrastructure.Discord.Interactions;
 
 namespace Setlistbot.Function.Discord
@@ -31,15 +30,13 @@ namespace Setlistbot.Function.Discord
         {
             try
             {
-                var interaction = await httpRequest.DeserializeJsonBodyAsync<Interaction>();
-                if (interaction.HasNoValue)
+                var interaction = await httpRequest.ReadFromJsonAsync<Interaction>();
+                if (interaction is null)
                 {
                     throw new Exception($"Could not parse interaction from HTTP request body");
                 }
 
-                var interactionResponse = await _discordInteractionService.GetResponse(
-                    interaction.Value
-                );
+                var interactionResponse = await _discordInteractionService.GetResponse(interaction);
 
                 return await interactionResponse.Match(
                     async some => await GetHttpResponse(some),
@@ -55,10 +52,10 @@ namespace Setlistbot.Function.Discord
                 return httpRequest.CreateResponse(HttpStatusCode.InternalServerError);
             }
 
-            async Task<HttpResponseData> GetHttpResponse(InteractionResponse some)
+            async Task<HttpResponseData> GetHttpResponse(InteractionResponse response)
             {
                 var httpResponse = httpRequest.CreateResponse(HttpStatusCode.OK);
-                await httpResponse.SerializeJsonBodyAsync(some);
+                await httpResponse.WriteAsJsonAsync(response);
                 return httpResponse;
             }
         }

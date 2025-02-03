@@ -19,7 +19,7 @@ namespace Setlistbot.Domain
             );
     }
 
-    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<string>]
     public readonly partial struct SongName
     {
         private static Validation Validate(string value) =>
@@ -28,7 +28,7 @@ namespace Setlistbot.Domain
                 : Validation.Ok;
     }
 
-    [ValueObject<int>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<int>]
     public readonly partial struct SongPosition
     {
         private static Validation Validate(int value) =>

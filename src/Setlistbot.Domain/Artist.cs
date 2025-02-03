@@ -2,7 +2,7 @@
 
 namespace Setlistbot.Domain
 {
-    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<string>]
     public readonly partial struct ArtistId
     {
         private static Validation Validate(string value) =>
@@ -11,7 +11,7 @@ namespace Setlistbot.Domain
                 : Validation.Ok;
     }
 
-    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<string>]
     public readonly partial struct ArtistName
     {
         private static Validation Validate(string value) =>

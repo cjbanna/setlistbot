@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 using Setlistbot.Infrastructure.GratefulDead.Extensions;
 using domain = Setlistbot.Domain;
 
@@ -13,8 +13,13 @@ namespace Setlistbot.Infrastructure.GratefulDead
         private static IEnumerable<Setlist> LoadSetlists()
         {
             var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "gd-shows.json");
-            return JsonConvert.DeserializeObject<IEnumerable<Setlist>>(File.ReadAllText(filePath))
-                ?? Enumerable.Empty<Setlist>();
+            return JsonSerializer.Deserialize<IEnumerable<Setlist>>(
+                    File.ReadAllText(filePath),
+                    new JsonSerializerOptions()
+                    {
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    }
+                ) ?? [];
         }
 
         public string ArtistId => "gd";

@@ -1,9 +1,8 @@
-using Setlistbot.Domain;
 using Vogen;
 
 namespace Setlistbot.Infrastructure.Reddit
 {
-    [ValueObject<string>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<string>]
     public readonly partial struct Subreddit
     {
         private static Validation Validate(string value) =>

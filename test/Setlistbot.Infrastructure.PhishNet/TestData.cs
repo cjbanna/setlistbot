@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Setlistbot.Infrastructure.PhishNet.UnitTests
 {
@@ -11,7 +12,13 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
                 "PhishNetResponses/1997-11-22-setlist-response.json"
             );
             var json = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<SetlistResponse>(json)!;
+            return JsonSerializer.Deserialize<SetlistResponse>(
+                json,
+                new JsonSerializerOptions
+                {
+                    NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                }
+            )!;
         }
     }
 }

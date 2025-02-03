@@ -1,40 +1,40 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Setlistbot.Infrastructure.Reddit.Models
 {
     public sealed class SubredditPostsResponse
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public SubredditPostsResponseData Data { get; set; } = new SubredditPostsResponseData();
     }
 
     public sealed class SubredditPostsResponseData
     {
-        [JsonProperty("children")]
+        [JsonPropertyName("children")]
         public IEnumerable<SubredditPost> Children { get; set; } = new List<SubredditPost>();
     }
 
     public sealed class SubredditPost
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public SubredditPostData Data { get; set; } = new SubredditPostData();
     }
 
     public sealed class SubredditPostData
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; } = string.Empty;
 
-        [JsonProperty("author")]
+        [JsonPropertyName("author")]
         public string Author { get; set; } = string.Empty;
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; } = string.Empty;
 
-        [JsonProperty("selftext")]
+        [JsonPropertyName("selftext")]
         public string SelfText { get; set; } = string.Empty;
 
-        [JsonProperty("permalink")]
+        [JsonPropertyName("permalink")]
         public string Permalink { get; set; } = string.Empty;
     }
 }

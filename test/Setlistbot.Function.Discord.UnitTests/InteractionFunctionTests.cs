@@ -1,10 +1,10 @@
 using System.Net;
-using System.Text;
+using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Setlistbot.Application.Discord;
 using Setlistbot.Infrastructure.Discord.Interactions;
+using WorkerHttpFake;
 
 namespace Setlistbot.Function.Discord.UnitTests
 {
@@ -38,10 +38,8 @@ namespace Setlistbot.Function.Discord.UnitTests
 
             var body = new { type = 1 };
 
-            var bodyStream = new MemoryStream(
-                Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(body))
-            );
-            var httpRequest = new FakeHttpRequestData(fixture.FunctionContext.Object, bodyStream);
+            var json = JsonSerializer.Serialize(body);
+            var httpRequest = new HttpRequestDataBuilder().WithBody(json).Build();
 
             // Simulate a pong response to a ping request
             fixture
@@ -59,12 +57,12 @@ namespace Setlistbot.Function.Discord.UnitTests
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Position = 0;
             var responseBody = await new StreamReader(response.Body).ReadToEndAsync();
-            responseBody.Should().Be("{\"type\":1}");
+            responseBody.Should().Be("{\"type\":1,\"data\":null}");
             response
                 .Headers.Should()
                 .ContainSingle(h => h.Key == "Content-Type")
                 .Which.Value.Should()
-                .Contain("application/json");
+                .Contain("application/json; charset=utf-8");
         }
     }
 }

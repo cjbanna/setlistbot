@@ -1,22 +1,22 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Setlistbot.Infrastructure.Discord.Interactions
 {
     public sealed class Interaction
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; } = string.Empty;
 
-        [JsonProperty("application_id")]
+        [JsonPropertyName("application_id")]
         public string ApplicationId { get; set; } = string.Empty;
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public InteractionType InteractionType { get; set; } = default!;
 
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public InteractionData? Data { get; set; }
 
-        [JsonProperty("guild_id")]
+        [JsonPropertyName("guild_id")]
         public string GuildId { get; set; } = string.Empty;
     }
 }

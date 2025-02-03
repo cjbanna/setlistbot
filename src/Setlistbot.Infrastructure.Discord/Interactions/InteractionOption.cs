@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Setlistbot.Infrastructure.Discord.Interactions
 {
     public sealed class InteractionOption
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; init; } = string.Empty;
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public ApplicationCommandOptionType Type { get; init; } = default!;
 
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public object Value { get; init; } = default!;
     }
 }

@@ -2,7 +2,7 @@ using Vogen;
 
 namespace Setlistbot.Domain
 {
-    [ValueObject<int>(conversions: Conversions.TypeConverter | Conversions.NewtonsoftJson)]
+    [ValueObject<int>]
     public readonly partial struct PositiveInt
     {
         private static Validation Validate(int value) =>

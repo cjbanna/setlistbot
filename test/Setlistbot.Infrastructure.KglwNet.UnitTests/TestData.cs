@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 
 namespace Setlistbot.Infrastructure.KglwNet.UnitTests
 {
@@ -11,7 +11,7 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
                 "KglwNetResponses/2022-10-10-setlist-response.json"
             );
             var json = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<SetlistResponse>(json)!;
+            return JsonSerializer.Deserialize<SetlistResponse>(json)!;
         }
     }
 }
