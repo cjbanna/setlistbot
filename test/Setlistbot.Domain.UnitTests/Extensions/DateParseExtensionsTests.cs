@@ -5,6 +5,18 @@ namespace Setlistbot.Domain.UnitTests.Extensions
     public class DateParseExtensionsTests
     {
         [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void ParseDates_Empty_ReturnsEmptyCollection(string input)
+        {
+            // Act
+            var result = input.ParseDates();
+
+            // Assert
+            Assert.Empty(result);
+        }
+
+        [Theory]
         [InlineData("This is a date: 2023-10-01")]
         [InlineData("Another date: 2023/10/01")]
         [InlineData("Date with dots: 10.1.2023")]
