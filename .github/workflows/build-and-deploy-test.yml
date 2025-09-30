@@ -54,6 +54,7 @@ jobs:
           name: redditbot
           path: ./RedditBot
           if-no-files-found: error
+          include-hidden-files: true
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -61,6 +62,7 @@ jobs:
           name: discordbot
           path: ./DiscordBot
           if-no-files-found: error
+          include-hidden-files: true
 
   deploy_reddit_kglw_test:
     name: "Deploy Reddit Bot (KGLW) to Test Environment"
