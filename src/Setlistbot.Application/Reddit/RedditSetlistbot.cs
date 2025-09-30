@@ -142,7 +142,14 @@ namespace Setlistbot.Application.Reddit
                     var posted = await _redditService.PostComment(parent, reply.Value);
                     if (posted.IsFailure)
                     {
-                        await _commentRepository.Delete(comment);
+                        // If the posting fails, just log a warning and move on. We don't want to
+                        // post again and again to a comment if something is wrong. There have been
+                        // instances where Reddit's API returns a 500 error even though the comment
+                        // was successfully posted.
+                        _logger.LogWarning(
+                            "Failed to post reply to comment id: {CommentId}",
+                            comment.Id
+                        );
                     }
                 }
             }

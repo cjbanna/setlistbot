@@ -650,7 +650,7 @@ namespace Setlistbot.Application.UnitTests
         }
 
         [Fact]
-        public async Task ReplyToComments_WhenPostCommentFails_DeletesComment()
+        public async Task ReplyToComments_WhenPostCommentFails_LogsWarning()
         {
             // Arrange
             var fixture = new RedditSetlistbotTestFixture().WithValidOptions();
@@ -702,7 +702,20 @@ namespace Setlistbot.Application.UnitTests
 
             // Assert
             fixture.CommentRepository.Verify(r => r.Add(It.IsAny<Comment>()), Times.Once);
-            fixture.CommentRepository.Verify(r => r.Delete(It.IsAny<Comment>()), Times.Once);
+
+            fixture.Logger.Verify(
+                l =>
+                    l.Log(
+                        LogLevel.Warning,
+                        It.IsAny<EventId>(),
+                        It.Is<It.IsAnyType>(
+                            (v, t) => v.ToString()!.Contains("Failed to post reply to comment id")
+                        ),
+                        It.IsAny<Exception?>(),
+                        It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+                    ),
+                Times.Once
+            );
         }
 
         [Fact]
