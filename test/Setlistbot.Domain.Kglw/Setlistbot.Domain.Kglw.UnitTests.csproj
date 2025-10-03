@@ -1,13 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="7.2.0" />
     <PackageReference Include="FluentAssertions.Analyzers" Version="0.34.1">
@@ -25,12 +22,10 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\Setlistbot.Domain.Kglw\Setlistbot.Domain.Kglw.csproj" />
     <ProjectReference Include="..\..\src\Setlistbot.Domain\Setlistbot.Domain.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="TestData\2022-10-11-reply.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -39,5 +34,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>
