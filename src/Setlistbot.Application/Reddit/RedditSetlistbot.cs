@@ -121,7 +121,11 @@ namespace Setlistbot.Application.Reddit
                 return;
             }
 
-            _logger.LogInformation("Replying to comment id: {CommentId}", comment.Id);
+            _logger.LogInformation(
+                "Replying to comment id: {CommentId} {Permalink}",
+                comment.Id,
+                comment.Permalink
+            );
 
             try
             {
@@ -131,12 +135,20 @@ namespace Setlistbot.Application.Reddit
                 {
                     comment.SetReply(reply.Value.Value);
 
-                    _logger.LogInformation("Saving comment id: {CommentId}", comment.Id);
+                    _logger.LogInformation(
+                        "Saving comment id: {CommentId} {Permalink}",
+                        comment.Id,
+                        comment.Permalink
+                    );
 
                     // save comment before replying to prevent repeated replies
                     await _commentRepository.Add(comment);
 
-                    _logger.LogInformation("Posting reply to comment id: {CommentId}", comment.Id);
+                    _logger.LogInformation(
+                        "Posting reply to comment id: {CommentId} {Permalink}",
+                        comment.Id,
+                        comment.Permalink
+                    );
 
                     var parent = NonEmptyString.From(comment.ParentId);
                     var posted = await _redditService.PostComment(parent, reply.Value);
@@ -147,15 +159,21 @@ namespace Setlistbot.Application.Reddit
                         // instances where Reddit's API returns a 500 error even though the comment
                         // was successfully posted.
                         _logger.LogWarning(
-                            "Failed to post reply to comment id: {CommentId}",
-                            comment.Id
+                            "Failed to post reply to comment id: {CommentId} {Permalink}",
+                            comment.Id,
+                            comment.Permalink
                         );
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to reply to comment id: {CommentId}", comment.Id);
+                _logger.LogError(
+                    ex,
+                    "Failed to reply to comment id: {CommentId} {Permalink}",
+                    comment.Id,
+                    comment.Permalink
+                );
             }
         }
 
@@ -217,7 +235,11 @@ namespace Setlistbot.Application.Reddit
                 return;
             }
 
-            _logger.LogInformation("Replying to post id: {PostId}", post.Id);
+            _logger.LogInformation(
+                "Replying to post id: {PostId} {Permalink}",
+                post.Id,
+                post.Permalink
+            );
 
             try
             {
@@ -227,12 +249,20 @@ namespace Setlistbot.Application.Reddit
                 {
                     post.SetReply(reply.Value.Value);
 
-                    _logger.LogInformation("Saving post id: {PostId}", post.Id);
+                    _logger.LogInformation(
+                        "Saving post id: {PostId} {Permalink}",
+                        post.Id,
+                        post.Permalink
+                    );
 
                     // save comment before replying to prevent repeated replies
                     await _postRepository.Add(post);
 
-                    _logger.LogInformation("Posting reply to post id {PostId}", post.Id);
+                    _logger.LogInformation(
+                        "Posting reply to post id: {PostId} {Permalink}",
+                        post.Id,
+                        post.Permalink
+                    );
 
                     var parent = NonEmptyString.From(post.ParentId);
                     var posted = await _redditService.PostComment(parent, reply.Value);
@@ -244,7 +274,12 @@ namespace Setlistbot.Application.Reddit
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to reply to post id: {PostId}", post.Id);
+                _logger.LogError(
+                    ex,
+                    "Failed to reply to post id: {PostId} {Permalink}",
+                    post.Id,
+                    post.Permalink
+                );
             }
         }
 
