@@ -7,7 +7,7 @@ namespace Setlistbot.Domain.GratefulDead
         public string Format() =>
             setlists
                 .Select(setlist => new CombinedFormatter(
-                    new ArchiveOrgLinkFormatter(setlist),
+                    new ArchiveOrgLinkFormatter(setlist, linkAsDate: true),
                     new SpaceFormatter(),
                     new CharacterFormatter('@'),
                     new SpaceFormatter(),
