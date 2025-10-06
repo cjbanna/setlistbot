@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
+using Setlistbot.Domain;
 using Setlistbot.Infrastructure.GratefulDead.Extensions;
-using domain = Setlistbot.Domain;
 
 namespace Setlistbot.Infrastructure.GratefulDead
 {
-    public sealed class GratefulDeadInMemoryProvider : domain.ISetlistProvider
+    public sealed class GratefulDeadInMemoryProvider : ISetlistProvider
     {
         private static readonly Lazy<IEnumerable<Setlist>> Setlists = new Lazy<
             IEnumerable<Setlist>
@@ -24,7 +24,7 @@ namespace Setlistbot.Infrastructure.GratefulDead
 
         public string ArtistId => "gd";
 
-        public async Task<IEnumerable<domain.Setlist>> GetSetlists(DateOnly date)
+        public async Task<IEnumerable<Domain.Setlist>> GetSetlists(DateOnly date)
         {
             return await Task.FromResult(
                 Setlists
