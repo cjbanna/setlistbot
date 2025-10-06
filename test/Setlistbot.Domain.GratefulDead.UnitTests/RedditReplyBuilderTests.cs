@@ -173,5 +173,47 @@ namespace Setlistbot.Domain.GratefulDead.UnitTests
             var actualNormalized = actual.ReplaceLineEndings(string.Empty);
             actualNormalized.Should().Be(expectedNormalized);
         }
+
+        [Fact]
+        public void Build_WhenMultipleShows_ExpectReply()
+        {
+            // Arrange
+            var setlist1 = Setlist.NewSetlist(
+                ArtistId.From("gd"),
+                ArtistName.From("The Grateful Dead"),
+                new DateOnly(1972, 9, 28),
+                new Location(
+                    Venue.From("Stanley Theater"),
+                    City.From("Jersey City"),
+                    State.From("NJ"),
+                    Country.From("USA")
+                ),
+                "show notes"
+            );
+
+            var setlist2 = Setlist.NewSetlist(
+                ArtistId.From("gd"),
+                ArtistName.From("The Grateful Dead"),
+                new DateOnly(1972, 12, 31),
+                new Location(
+                    Venue.From("Winterland Arena"),
+                    City.From("San Francisco"),
+                    State.From("CA"),
+                    Country.From("USA")
+                ),
+                string.Empty
+            );
+
+            var builder = new RedditReplyBuilder();
+
+            // Act
+            var actual = builder.Build([setlist1, setlist2]);
+
+            // Assert
+            var expected = TestDataHelper.GetTestData("TestData/multiple-shows-reply.md");
+            var expectedNormalized = expected.ReplaceLineEndings(string.Empty);
+            var actualNormalized = actual.ReplaceLineEndings(string.Empty);
+            actualNormalized.Should().Be(expectedNormalized);
+        }
     }
 }
