@@ -11,18 +11,12 @@ updates:
       # Customize the commit message prefix
       prefix: "chore(deps): "
     # Limit the number of open pull requests created by Dependabot
-    open-pull-requests-limit: 20
-    # group specific dependencies to be updated together
+    open-pull-requests-limit: 1
+    # group all nuget dependencies to be updated together
     groups:
-      moments:
+      dotnet-dependencies:
         patterns:
-          - "Flurl.*"
-      microsoft-azure-functions:
-        patterns:
-          - "Microsoft.Azure.Functions.*"
-      xunit:
-        patterns:
-          - "xunit*"
+          - "*"
 
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
@@ -34,3 +28,10 @@ updates:
     commit-message:
       # Customize the commit message prefix
       prefix: "chore(deps): "
+    # Limit the number of open pull requests created by Dependabot
+    open-pull-requests-limit: 1
+    # group all github actions dependencies to be updated together
+    groups:
+      github-actions:
+        patterns:
+          - "*"
