@@ -22,9 +22,6 @@ jobs:
       - name: Restore Tools
         run: dotnet tool restore
 
-      - name: Verify Formatting
-        run: dotnet format --verify-no-changes
-
       - name: Run CSharpier
         run: dotnet csharpier check .
 
