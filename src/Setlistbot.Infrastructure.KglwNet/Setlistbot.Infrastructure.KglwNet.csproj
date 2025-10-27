@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.9" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.10" />
     <ProjectReference Include="..\Setlistbot.Domain\Setlistbot.Domain.csproj" />
   </ItemGroup>
 </Project>
