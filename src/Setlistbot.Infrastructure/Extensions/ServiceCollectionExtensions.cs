@@ -1,6 +1,7 @@
 ﻿using Azure.Data.Tables;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Setlistbot.Domain.CommentAggregate;
@@ -21,34 +22,42 @@ namespace Setlistbot.Infrastructure.Extensions
         {
             services.AddOptionsFromConfig<AzureTableOptions>(ConfigKey);
 
-            var options = services
-                .BuildServiceProvider()
-                .GetRequiredService<IOptions<AzureTableOptions>>()
-                .Value;
+            services.AddSingleton<TableServiceClient>(sp =>
+            {
+                var options = sp.GetRequiredService<IOptions<AzureTableOptions>>().Value;
+                return new TableServiceClient(options.ConnectionString);
+            });
 
             const string commentsTableName = "comments";
             const string postsTableName = "posts";
 
-            // Ensure the tables exist
-            var serviceClient = new TableServiceClient(options.ConnectionString);
-            serviceClient.CreateTableIfNotExists(commentsTableName);
-            serviceClient.CreateTableIfNotExists(postsTableName);
-
             services
-                .AddScoped<ICommentRepository>(_ => new CommentRepository(
-                    subreddit,
-                    options.ConnectionString,
-                    commentsTableName
-                ))
-                .AddScoped<IPostRepository>(_ => new PostRepository(
-                    subreddit,
-                    options.ConnectionString,
-                    postsTableName
-                ))
-                .AddScoped<IDiscordUsageRepository>(provider => new DiscordUsageRepository(
-                    options.ConnectionString,
-                    "discordusage",
-                    provider.GetRequiredService<ILogger<DiscordUsageRepository>>()
+                .AddScoped<ICommentRepository>(sp =>
+                {
+                    var options = sp.GetRequiredService<IOptions<AzureTableOptions>>().Value;
+                    return new CommentRepository(
+                        subreddit,
+                        options.ConnectionString,
+                        commentsTableName
+                    );
+                })
+                .AddScoped<IPostRepository>(sp =>
+                {
+                    var options = sp.GetRequiredService<IOptions<AzureTableOptions>>().Value;
+                    return new PostRepository(subreddit, options.ConnectionString, postsTableName);
+                })
+                .AddScoped<IDiscordUsageRepository>(sp =>
+                {
+                    var options = sp.GetRequiredService<IOptions<AzureTableOptions>>().Value;
+                    return new DiscordUsageRepository(
+                        options.ConnectionString,
+                        "discordusage",
+                        sp.GetRequiredService<ILogger<DiscordUsageRepository>>()
+                    );
+                })
+                .AddHostedService(sp => new TableInitializer(
+                    sp.GetRequiredService<TableServiceClient>(),
+                    new[] { commentsTableName, postsTableName, "discordusage" }
                 ));
 
             return services;
@@ -60,16 +69,26 @@ namespace Setlistbot.Infrastructure.Extensions
         {
             services.AddOptionsFromConfig<AzureTableOptions>(ConfigKey);
 
-            var options = services
-                .BuildServiceProvider()
-                .GetRequiredService<IOptions<AzureTableOptions>>()
-                .Value;
+            services.AddSingleton<TableServiceClient>(sp =>
+            {
+                var options = sp.GetRequiredService<IOptions<AzureTableOptions>>().Value;
+                return new TableServiceClient(options.ConnectionString);
+            });
 
-            services.AddScoped<IDiscordUsageRepository>(provider => new DiscordUsageRepository(
-                options.ConnectionString,
-                "discordusage",
-                provider.GetRequiredService<ILogger<DiscordUsageRepository>>()
-            ));
+            services
+                .AddScoped<IDiscordUsageRepository>(sp =>
+                {
+                    var options = sp.GetRequiredService<IOptions<AzureTableOptions>>().Value;
+                    return new DiscordUsageRepository(
+                        options.ConnectionString,
+                        "discordusage",
+                        sp.GetRequiredService<ILogger<DiscordUsageRepository>>()
+                    );
+                })
+                .AddHostedService(sp => new TableInitializer(
+                    sp.GetRequiredService<TableServiceClient>(),
+                    new[] { "discordusage" }
+                ));
 
             return services;
         }
@@ -89,6 +108,35 @@ namespace Setlistbot.Infrastructure.Extensions
                 );
 
             return collection;
+        }
+
+        private sealed class TableInitializer : IHostedService
+        {
+            private readonly TableServiceClient _serviceClient;
+            private readonly IEnumerable<string> _tableNames;
+
+            public TableInitializer(
+                TableServiceClient serviceClient,
+                IEnumerable<string> tableNames
+            )
+            {
+                _serviceClient = serviceClient;
+                _tableNames = tableNames;
+            }
+
+            public Task StartAsync(CancellationToken cancellationToken)
+            {
+                foreach (var tableName in _tableNames)
+                {
+                    _serviceClient.CreateTableIfNotExists(tableName);
+                }
+                return Task.CompletedTask;
+            }
+
+            public Task StopAsync(CancellationToken cancellationToken)
+            {
+                return Task.CompletedTask;
+            }
         }
     }
 }
