@@ -27,7 +27,7 @@ namespace Setlistbot.Infrastructure.Extensions
         {
             return entity == null
                 ? null
-                : Post.Hydrate(
+                : new Post(
                     entity.RowKey,
                     entity.Author,
                     entity.Title,

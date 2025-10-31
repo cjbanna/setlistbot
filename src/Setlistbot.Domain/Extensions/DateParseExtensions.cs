@@ -2,18 +2,18 @@
 
 namespace Setlistbot.Domain.Extensions
 {
-    public static class DateParseExtensions
+    public static partial class DateParseExtensions
     {
         public static IEnumerable<DateOnly> ParseDates(this string input)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                return Enumerable.Empty<DateOnly>();
+                return [];
             }
 
             var dates = new List<DateOnly>();
 
-            var dateRegex = new Regex(@"\d{1,4}[- /.]\d{1,2}[- /.]\d{1,4}");
+            var dateRegex = DatesRegex();
             foreach (Match match in dateRegex.Matches(input))
             {
                 if (DateOnly.TryParse(match.Value, out var date))
@@ -27,5 +27,8 @@ namespace Setlistbot.Domain.Extensions
 
             return dates;
         }
+
+        [GeneratedRegex(@"\d{1,4}[- /.]\d{1,2}[- /.]\d{1,4}")]
+        private static partial Regex DatesRegex();
     }
 }
