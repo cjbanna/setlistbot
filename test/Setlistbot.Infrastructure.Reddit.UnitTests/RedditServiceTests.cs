@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using CSharpFunctionalExtensions;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -171,7 +170,7 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
             var result = await fixture.Service.GetComments(Subreddit.From("subreddit"));
 
             // Assert
-            result.Should().BeEmpty();
+            Assert.Empty(result);
         }
 
         [Fact]
@@ -185,7 +184,7 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
             var result = await fixture.Service.GetComments(Subreddit.From("subreddit"));
 
             // Assert
-            result.Should().NotBeEmpty();
+            Assert.NotEmpty(result);
         }
 
         [Fact]
@@ -199,7 +198,7 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
             var result = await fixture.Service.GetPosts(Subreddit.From("subreddit"));
 
             // Assert
-            result.Should().BeEmpty();
+            Assert.Empty(result);
         }
 
         [Fact]
@@ -213,7 +212,7 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
             var result = await fixture.Service.GetPosts(Subreddit.From("subreddit"));
 
             // Assert
-            result.Should().NotBeEmpty();
+            Assert.NotEmpty(result);
         }
 
         [Fact]
@@ -230,7 +229,7 @@ namespace Setlistbot.Infrastructure.Reddit.UnitTests
             var result = await fixture.Service.PostComment(parent, text);
 
             // Assert
-            result.Should().Succeed();
+            Assert.True(result.IsSuccess);
         }
     }
 }

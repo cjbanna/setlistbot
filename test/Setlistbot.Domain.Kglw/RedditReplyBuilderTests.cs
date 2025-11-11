@@ -12,7 +12,7 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             var actual = builder.ArtistId;
 
             // Assert
-            actual.Should().Be("kglw");
+            Assert.Equal("kglw", actual);
         }
 
         [Fact]
@@ -342,7 +342,7 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             var expected = TestDataHelper.GetTestData("TestData/2022-10-11-reply.md");
             var expectedNormalized = expected.ReplaceLineEndings(string.Empty);
             var actualNormalized = actual.ReplaceLineEndings(string.Empty);
-            actualNormalized.Should().Be(expectedNormalized);
+            Assert.Equal(expectedNormalized, actualNormalized);
         }
     }
 }

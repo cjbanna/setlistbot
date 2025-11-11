@@ -1,5 +1,4 @@
 using Azure.Data.Tables;
-using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,13 +37,13 @@ namespace Setlistbot.Infrastructure.UnitTests
         {
             using var provider = BuildProvider(s => s.AddInfrastructure("testsubreddit"));
 
-            provider.GetRequiredService<ICommentRepository>().Should().NotBeNull();
-            provider.GetRequiredService<IPostRepository>().Should().NotBeNull();
-            provider.GetRequiredService<IDiscordUsageRepository>().Should().NotBeNull();
-            provider.GetRequiredService<TableServiceClient>().Should().NotBeNull();
+            Assert.NotNull(provider.GetRequiredService<ICommentRepository>());
+            Assert.NotNull(provider.GetRequiredService<IPostRepository>());
+            Assert.NotNull(provider.GetRequiredService<IDiscordUsageRepository>());
+            Assert.NotNull(provider.GetRequiredService<TableServiceClient>());
 
             var hostedServices = provider.GetServices<IHostedService>();
-            hostedServices.Should().ContainSingle(h => h.GetType().Name == "TableInitializer");
+            Assert.Single(hostedServices, h => h.GetType().Name == "TableInitializer");
         }
 
         [Fact]
@@ -52,11 +51,11 @@ namespace Setlistbot.Infrastructure.UnitTests
         {
             using var provider = BuildProvider(s => s.AddDiscordUsageInfrastructure());
 
-            provider.GetRequiredService<IDiscordUsageRepository>().Should().NotBeNull();
-            provider.GetRequiredService<TableServiceClient>().Should().NotBeNull();
+            Assert.NotNull(provider.GetRequiredService<IDiscordUsageRepository>());
+            Assert.NotNull(provider.GetRequiredService<TableServiceClient>());
 
             var hostedServices = provider.GetServices<IHostedService>();
-            hostedServices.Should().ContainSingle(h => h.GetType().Name == "TableInitializer");
+            Assert.Single(hostedServices, h => h.GetType().Name == "TableInitializer");
         }
     }
 }

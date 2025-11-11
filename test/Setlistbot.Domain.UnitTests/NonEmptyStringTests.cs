@@ -11,11 +11,8 @@ namespace Setlistbot.Domain.UnitTests
             // Arrange
             var value = string.Empty;
 
-            // Act
-            Action act = () => NonEmptyString.From(value);
-
-            // Assert
-            act.Should().ThrowExactly<ValueObjectValidationException>();
+            // Act & Assert
+            Assert.Throws<ValueObjectValidationException>(() => NonEmptyString.From(value));
         }
 
         [Fact]
@@ -24,11 +21,8 @@ namespace Setlistbot.Domain.UnitTests
             // Arrange
             var value = " ";
 
-            // Act
-            Action act = () => NonEmptyString.From(value);
-
-            // Assert
-            act.Should().ThrowExactly<ValueObjectValidationException>();
+            // Act & Assert
+            Assert.Throws<ValueObjectValidationException>(() => NonEmptyString.From(value));
         }
 
         [Fact]
@@ -41,7 +35,7 @@ namespace Setlistbot.Domain.UnitTests
             var nonEmptyString = NonEmptyString.From(value);
 
             // Assert
-            nonEmptyString.Should().Be(NonEmptyString.From(value));
+            Assert.Equal(NonEmptyString.From(value), nonEmptyString);
         }
 
         [Fact]
@@ -55,7 +49,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = value.CompareTo(other);
 
             // Assert
-            result.Should().Be(0);
+            Assert.Equal(0, result);
         }
 
         [Fact]
@@ -69,7 +63,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = value.CompareTo(other);
 
             // Assert
-            result.Should().NotBe(0);
+            Assert.NotEqual(0, result);
         }
 
         [Fact]
@@ -83,7 +77,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = nonEmptyString.Equals(other);
 
             // Assert
-            result.Should().BeTrue();
+            Assert.True(result);
         }
 
         [Fact]
@@ -97,7 +91,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = nonEmptyString.Equals("other");
 
             // Assert
-            result.Should().BeFalse();
+            Assert.False(result);
         }
 
         [Fact]
@@ -112,7 +106,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = nonEmptyString1 == nonEmptyString2;
 
             // Assert
-            result.Should().BeTrue();
+            Assert.True(result);
         }
 
         [Fact]
@@ -127,7 +121,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = nonEmptyString1 == nonEmptyString2;
 
             // Assert
-            result.Should().BeFalse();
+            Assert.False(result);
         }
 
         [Fact]
@@ -142,7 +136,7 @@ namespace Setlistbot.Domain.UnitTests
             var result2 = NonEmptyString.From(value).GetHashCode();
 
             // Assert
-            result2.Should().Be(result1);
+            Assert.Equal(result1, result2);
         }
 
         [Fact]
@@ -157,7 +151,7 @@ namespace Setlistbot.Domain.UnitTests
             var result2 = NonEmptyString.From("other").GetHashCode();
 
             // Assert
-            result2.Should().NotBe(result1);
+            Assert.NotEqual(result1, result2);
         }
 
         [Fact]
@@ -171,7 +165,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = nonEmptyString.ToString();
 
             // Assert
-            result.Should().Be(value);
+            Assert.Equal(value, result);
         }
 
         [Fact]
@@ -185,7 +179,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = JsonSerializer.Serialize(nonEmptyString);
 
             // Assert
-            result.Should().Be($"\"{value}\"");
+            Assert.Equal($"\"{value}\"", result);
         }
 
         [Fact]
@@ -199,7 +193,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = JsonSerializer.Deserialize<NonEmptyString>(json);
 
             // Assert
-            result.Value.Should().Be(value);
+            Assert.Equal(value, result.Value);
         }
     }
 }

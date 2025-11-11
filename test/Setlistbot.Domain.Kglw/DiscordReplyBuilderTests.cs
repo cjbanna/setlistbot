@@ -14,7 +14,7 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             var result = builder.ArtistId;
 
             // Assert
-            result.Should().Be("kglw");
+            Assert.Equal("kglw", result);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             var result = builder.Build([]);
 
             // Assert
-            result.Should().BeEmpty();
+            Assert.Empty(result);
         }
 
         [Fact]
@@ -215,7 +215,7 @@ namespace Setlistbot.Domain.Kglw.UnitTests
             var expected = TestDataHelper.GetTestData("TestData/2024-08-24-reply-discord.md");
             var expectedNormalized = expected.ReplaceLineEndings(string.Empty);
             var actualNormalized = actual.ReplaceLineEndings(string.Empty);
-            actualNormalized.Should().Be(expectedNormalized);
+            Assert.Equal(expectedNormalized, actualNormalized);
         }
     }
 }

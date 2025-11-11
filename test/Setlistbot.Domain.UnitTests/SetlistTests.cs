@@ -21,11 +21,11 @@ namespace Setlistbot.Domain.UnitTests
             var setlist = Setlist.NewSetlist(artistId, artistName, date, location, notes);
 
             // Assert
-            setlist.ArtistId.Should().Be(artistId);
-            setlist.ArtistName.Should().Be(artistName);
-            setlist.Date.Should().Be(date);
-            setlist.Location.Should().Be(location);
-            setlist.Notes.Should().Be(notes);
+            Assert.Equal(artistId, setlist.ArtistId);
+            Assert.Equal(artistName, setlist.ArtistName);
+            Assert.Equal(date, setlist.Date);
+            Assert.Equal(location, setlist.Location);
+            Assert.Equal(notes, setlist.Notes);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace Setlistbot.Domain.UnitTests
             setlist.AddSet(set);
 
             // Assert
-            setlist.Sets.Should().Contain(set);
+            Assert.Contains(set, setlist.Sets);
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace Setlistbot.Domain.UnitTests
             setlist.AddSets(new[] { set1, set2 });
 
             // Assert
-            setlist.Sets.Should().Contain(set1);
+            Assert.Contains(set1, setlist.Sets);
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace Setlistbot.Domain.UnitTests
             var result = setlist.AddSet(duplicateSet);
 
             // Assert
-            result.Should().Fail();
+            Assert.True(result.IsFailure);
         }
 
         [Fact]
@@ -130,7 +130,7 @@ namespace Setlistbot.Domain.UnitTests
             setlist.AddSpotifyUrl(url);
 
             // Assert
-            setlist.SpotifyUrl.Value.Should().Be(url.ToString());
+            Assert.Equal(url.ToString(), setlist.SpotifyUrl.Value);
         }
 
         [Fact]
@@ -155,7 +155,7 @@ namespace Setlistbot.Domain.UnitTests
             setlist.AddPermalink(url);
 
             // Assert
-            setlist.Permalink.Value.Should().Be(url.ToString());
+            Assert.Equal(url.ToString(), setlist.Permalink.Value);
         }
 
         [Fact]
@@ -218,7 +218,7 @@ namespace Setlistbot.Domain.UnitTests
             var duration = setlist.Duration;
 
             // Assert
-            duration.TotalMinutes.Should().Be(20);
+            Assert.Equal(20, duration.TotalMinutes);
         }
     }
 }

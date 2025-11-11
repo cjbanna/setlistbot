@@ -17,7 +17,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            actual.Should().Be(string.Empty);
+            Assert.Equal(string.Empty, actual);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            actual.Should().Be("value");
+            Assert.Equal("value", actual);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            actual.Should().Be("value1, value2, value3, value4");
+            Assert.Equal("value1, value2, value3, value4", actual);
         }
     }
 }

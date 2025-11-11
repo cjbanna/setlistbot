@@ -45,7 +45,7 @@ namespace Setlistbot.Infrastructure.KglwNet.UnitTests
             var result = await fixture.KglwNetClient.GetSetlistAsync(new DateOnly(2022, 10, 10));
 
             // Assert
-            result.HasValue.Should().BeTrue();
+            Assert.True(result.HasValue);
 
             fixture
                 .HttpTest.ShouldHaveCalled(

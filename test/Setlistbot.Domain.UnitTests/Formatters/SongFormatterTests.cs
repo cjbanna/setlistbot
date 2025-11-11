@@ -16,7 +16,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            actual.Should().Be("Song Name");
+            Assert.Equal("Song Name", actual);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            actual.Should().Be("Song Name,");
+            Assert.Equal("Song Name,", actual);
         }
     }
 }

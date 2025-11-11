@@ -12,7 +12,7 @@ namespace Setlistbot.Domain.GratefulDead.UnitTests
             var actual = builder.ArtistId;
 
             // Assert
-            actual.Should().Be("gd");
+            Assert.Equal("gd", actual);
         }
 
         [Fact]
@@ -171,7 +171,7 @@ namespace Setlistbot.Domain.GratefulDead.UnitTests
             var expected = TestDataHelper.GetTestData("TestData/1977-05-08-reply.md");
             var expectedNormalized = expected.ReplaceLineEndings(string.Empty);
             var actualNormalized = actual.ReplaceLineEndings(string.Empty);
-            actualNormalized.Should().Be(expectedNormalized);
+            Assert.Equal(expectedNormalized, actualNormalized);
         }
 
         [Fact]
@@ -213,7 +213,7 @@ namespace Setlistbot.Domain.GratefulDead.UnitTests
             var expected = TestDataHelper.GetTestData("TestData/multiple-shows-reply.md");
             var expectedNormalized = expected.ReplaceLineEndings(string.Empty);
             var actualNormalized = actual.ReplaceLineEndings(string.Empty);
-            actualNormalized.Should().Be(expectedNormalized);
+            Assert.Equal(expectedNormalized, actualNormalized);
         }
     }
 }

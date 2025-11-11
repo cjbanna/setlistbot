@@ -54,15 +54,12 @@ namespace Setlistbot.Function.Discord.UnitTests
             var response = await fixture.InteractionFunction.HandleInteraction(httpRequest);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             response.Body.Position = 0;
             var responseBody = await new StreamReader(response.Body).ReadToEndAsync();
-            responseBody.Should().Be("{\"type\":1,\"data\":null}");
-            response
-                .Headers.Should()
-                .ContainSingle(h => h.Key == "Content-Type")
-                .Which.Value.Should()
-                .Contain("application/json; charset=utf-8");
+            Assert.Equal("{\"type\":1,\"data\":null}", responseBody);
+            var contentTypeHeader = Assert.Single(response.Headers, h => h.Key == "Content-Type");
+            Assert.Contains("application/json; charset=utf-8", contentTypeHeader.Value);
         }
     }
 }
