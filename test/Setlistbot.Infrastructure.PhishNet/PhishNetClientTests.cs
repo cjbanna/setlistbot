@@ -52,7 +52,7 @@ namespace Setlistbot.Infrastructure.PhishNet.UnitTests
             var result = await fixture.PhishNetClient.GetSetlistAsync(new DateOnly(1997, 11, 22));
 
             // Assert
-            result.Should().Succeed();
+            Assert.True(result.IsSuccess);
 
             fixture
                 .HttpTest.ShouldHaveCalled(

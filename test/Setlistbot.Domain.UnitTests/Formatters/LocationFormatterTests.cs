@@ -21,7 +21,7 @@ namespace Setlistbot.Domain.UnitTests.Formatters
             var actual = formatter.Format();
 
             // Assert
-            actual.Should().Be("McNichols Arena, Denver, CO, USA");
+            Assert.Equal("McNichols Arena, Denver, CO, USA", actual);
         }
     }
 }

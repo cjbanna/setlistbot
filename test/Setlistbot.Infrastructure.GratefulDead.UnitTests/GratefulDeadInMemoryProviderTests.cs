@@ -14,143 +14,72 @@ namespace Setlistbot.Infrastructure.GratefulDead.UnitTests
             var setlists = await provider.GetSetlists(new DateOnly(1977, 5, 8));
 
             // Assert
-            var setlist = setlists.Should().ContainSingle();
-            setlist.Subject.ArtistId.Should().Be(ArtistId.From("gd"));
-            setlist.Subject.Location.Should().NotBeNull();
-            setlist.Subject.Location.City.Should().Be(City.From("Ithaca"));
-            setlist.Subject.Location.State.Should().Be(State.From("NY"));
-            setlist.Subject.Location.Country.Should().Be(Country.From("USA"));
-            setlist
-                .Subject.Location.Venue.Should()
-                .Be(Venue.From("Barton Hall - Cornell University"));
-            setlist.Subject.Date.Should().Be(new DateOnly(1977, 5, 8));
-            setlist.Subject.SpotifyUrl.Value.Should().NotBeNullOrEmpty();
-            setlist.Subject.Sets.Should().HaveCount(3);
+            var setlist = Assert.Single(setlists);
+            Assert.Equal(ArtistId.From("gd"), setlist.ArtistId);
+            Assert.NotNull(setlist.Location);
+            Assert.Equal(City.From("Ithaca"), setlist.Location.City);
+            Assert.Equal(State.From("NY"), setlist.Location.State);
+            Assert.Equal(Country.From("USA"), setlist.Location.Country);
+            Assert.Equal(Venue.From("Barton Hall - Cornell University"), setlist.Location.Venue);
+            Assert.Equal(new DateOnly(1977, 5, 8), setlist.Date);
+            Assert.NotNull(setlist.SpotifyUrl.Value);
+            Assert.NotEmpty(setlist.SpotifyUrl.Value);
+            Assert.Equal(3, setlist.Sets.Count);
 
-            setlist
-                .Subject.Sets.Should()
-                .SatisfyRespectively(
-                    set =>
-                    {
-                        set.Name.Value.Should().Be("Set 1");
-                        set.Songs.Should()
-                            .SatisfyRespectively(
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("New Minglewood Blues");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Loser");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("El Paso");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("They Love Each Other");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Jack Straw");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Deal");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Lazy Lightnin'");
-                                    song.SongTransition.Should().Be(SongTransition.Immediate);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Supplication");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Brown Eyed Women");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Mama Tried");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Row Jimmy");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Dancing In The Street");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                }
-                            );
-                    },
-                    set =>
-                    {
-                        set.Name.Value.Should().Be("Set 2");
-                        set.Songs.Should()
-                            .SatisfyRespectively(
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Scarlet Begonias");
-                                    song.SongTransition.Should().Be(SongTransition.Immediate);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Fire On The Mountain");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Estimated Prophet");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Saint Stephen");
-                                    song.SongTransition.Should().Be(SongTransition.Immediate);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Not Fade Away");
-                                    song.SongTransition.Should().Be(SongTransition.Immediate);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Saint Stephen");
-                                    song.SongTransition.Should().Be(SongTransition.Immediate);
-                                },
-                                song =>
-                                {
-                                    song.Name.Value.Should().Be("Morning Dew");
-                                    song.SongTransition.Should().Be(SongTransition.Stop);
-                                }
-                            );
-                    },
-                    encore =>
-                    {
-                        encore.Name.Value.Should().Be("Encore");
-                        encore
-                            .Songs.Should()
-                            .SatisfyRespectively(song =>
-                            {
-                                song.Name.Value.Should().Be("One More Saturday Night");
-                                song.SongTransition.Should().Be(SongTransition.Stop);
-                            });
-                    }
-                );
+            // Verify Set 1
+            var set1 = setlist.Sets[0];
+            Assert.Equal("Set 1", set1.Name.Value);
+            Assert.Equal(12, set1.Songs.Count);
+            Assert.Equal("New Minglewood Blues", set1.Songs[0].Name.Value);
+            Assert.Equal(SongTransition.Stop, set1.Songs[0].SongTransition);
+            Assert.Equal("Loser", set1.Songs[1].Name.Value);
+            Assert.Equal(SongTransition.Stop, set1.Songs[1].SongTransition);
+            Assert.Equal("El Paso", set1.Songs[2].Name.Value);
+            Assert.Equal(SongTransition.Stop, set1.Songs[2].SongTransition);
+            Assert.Equal("They Love Each Other", set1.Songs[3].Name.Value);
+            Assert.Equal(SongTransition.Stop, set1.Songs[3].SongTransition);
+            Assert.Equal("Jack Straw", set1.Songs[4].Name.Value);
+            Assert.Equal(SongTransition.Stop, set1.Songs[4].SongTransition);
+            Assert.Equal("Deal", set1.Songs[5].Name.Value);
+            Assert.Equal(SongTransition.Stop, set1.Songs[5].SongTransition);
+            Assert.Equal("Lazy Lightnin'", set1.Songs[6].Name.Value);
+            Assert.Equal(SongTransition.Immediate, set1.Songs[6].SongTransition);
+            Assert.Equal("Supplication", set1.Songs[7].Name.Value);
+            Assert.Equal(SongTransition.Stop, set1.Songs[7].SongTransition);
+            Assert.Equal("Brown Eyed Women", set1.Songs[8].Name.Value);
+            Assert.Equal(SongTransition.Stop, set1.Songs[8].SongTransition);
+            Assert.Equal("Mama Tried", set1.Songs[9].Name.Value);
+            Assert.Equal(SongTransition.Stop, set1.Songs[9].SongTransition);
+            Assert.Equal("Row Jimmy", set1.Songs[10].Name.Value);
+            Assert.Equal(SongTransition.Stop, set1.Songs[10].SongTransition);
+            Assert.Equal("Dancing In The Street", set1.Songs[11].Name.Value);
+            Assert.Equal(SongTransition.Stop, set1.Songs[11].SongTransition);
+
+            // Verify Set 2
+            var set2 = setlist.Sets[1];
+            Assert.Equal("Set 2", set2.Name.Value);
+            Assert.Equal(7, set2.Songs.Count);
+            Assert.Equal("Scarlet Begonias", set2.Songs[0].Name.Value);
+            Assert.Equal(SongTransition.Immediate, set2.Songs[0].SongTransition);
+            Assert.Equal("Fire On The Mountain", set2.Songs[1].Name.Value);
+            Assert.Equal(SongTransition.Stop, set2.Songs[1].SongTransition);
+            Assert.Equal("Estimated Prophet", set2.Songs[2].Name.Value);
+            Assert.Equal(SongTransition.Stop, set2.Songs[2].SongTransition);
+            Assert.Equal("Saint Stephen", set2.Songs[3].Name.Value);
+            Assert.Equal(SongTransition.Immediate, set2.Songs[3].SongTransition);
+            Assert.Equal("Not Fade Away", set2.Songs[4].Name.Value);
+            Assert.Equal(SongTransition.Immediate, set2.Songs[4].SongTransition);
+            Assert.Equal("Saint Stephen", set2.Songs[5].Name.Value);
+            Assert.Equal(SongTransition.Immediate, set2.Songs[5].SongTransition);
+            Assert.Equal("Morning Dew", set2.Songs[6].Name.Value);
+            Assert.Equal(SongTransition.Stop, set2.Songs[6].SongTransition);
+
+            // Verify Encore
+            var encore = setlist.Sets[2];
+            Assert.Equal("Encore", encore.Name.Value);
+            Assert.Single(encore.Songs);
+            Assert.Equal("One More Saturday Night", encore.Songs[0].Name.Value);
+            Assert.Equal(SongTransition.Stop, encore.Songs[0].SongTransition);
         }
     }
 }

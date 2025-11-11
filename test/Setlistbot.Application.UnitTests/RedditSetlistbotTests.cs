@@ -1,5 +1,4 @@
 using CSharpFunctionalExtensions;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -93,7 +92,7 @@ namespace Setlistbot.Application.UnitTests
             var fixture = new RedditSetlistbotTestFixture().WithValidOptions();
 
             // Act & Assert
-            Action act = () =>
+            var exception = Assert.Throws<ArgumentNullException>(() =>
                 new RedditSetlistbot(
                     null!,
                     fixture.RedditService.Object,
@@ -103,9 +102,10 @@ namespace Setlistbot.Application.UnitTests
                     fixture.SetlistProviderFactory.Object,
                     fixture.BotOptions.Object,
                     fixture.RedditOptions.Object
-                );
+                )
+            );
 
-            act.Should().Throw<ArgumentNullException>().WithParameterName("logger");
+            Assert.Equal("logger", exception.ParamName);
         }
 
         [Fact]
@@ -115,7 +115,7 @@ namespace Setlistbot.Application.UnitTests
             var fixture = new RedditSetlistbotTestFixture().WithValidOptions();
 
             // Act & Assert
-            Action act = () =>
+            var exception = Assert.Throws<ArgumentNullException>(() =>
                 new RedditSetlistbot(
                     fixture.Logger.Object,
                     null!,
@@ -125,9 +125,10 @@ namespace Setlistbot.Application.UnitTests
                     fixture.SetlistProviderFactory.Object,
                     fixture.BotOptions.Object,
                     fixture.RedditOptions.Object
-                );
+                )
+            );
 
-            act.Should().Throw<ArgumentNullException>().WithParameterName("redditService");
+            Assert.Equal("redditService", exception.ParamName);
         }
 
         [Fact]
@@ -137,7 +138,7 @@ namespace Setlistbot.Application.UnitTests
             var fixture = new RedditSetlistbotTestFixture().WithValidOptions();
 
             // Act & Assert
-            Action act = () =>
+            var exception = Assert.Throws<ArgumentNullException>(() =>
                 new RedditSetlistbot(
                     fixture.Logger.Object,
                     fixture.RedditService.Object,
@@ -147,9 +148,10 @@ namespace Setlistbot.Application.UnitTests
                     fixture.SetlistProviderFactory.Object,
                     fixture.BotOptions.Object,
                     fixture.RedditOptions.Object
-                );
+                )
+            );
 
-            act.Should().Throw<ArgumentNullException>().WithParameterName("commentRepository");
+            Assert.Equal("commentRepository", exception.ParamName);
         }
 
         [Fact]
@@ -159,7 +161,7 @@ namespace Setlistbot.Application.UnitTests
             var fixture = new RedditSetlistbotTestFixture().WithValidOptions();
 
             // Act & Assert
-            Action act = () =>
+            var exception = Assert.Throws<ArgumentNullException>(() =>
                 new RedditSetlistbot(
                     fixture.Logger.Object,
                     fixture.RedditService.Object,
@@ -169,9 +171,10 @@ namespace Setlistbot.Application.UnitTests
                     fixture.SetlistProviderFactory.Object,
                     fixture.BotOptions.Object,
                     fixture.RedditOptions.Object
-                );
+                )
+            );
 
-            act.Should().Throw<ArgumentNullException>().WithParameterName("postRepository");
+            Assert.Equal("postRepository", exception.ParamName);
         }
 
         [Fact]
@@ -181,7 +184,7 @@ namespace Setlistbot.Application.UnitTests
             var fixture = new RedditSetlistbotTestFixture().WithValidOptions();
 
             // Act & Assert
-            Action act = () =>
+            var exception = Assert.Throws<ArgumentNullException>(() =>
                 new RedditSetlistbot(
                     fixture.Logger.Object,
                     fixture.RedditService.Object,
@@ -191,9 +194,10 @@ namespace Setlistbot.Application.UnitTests
                     fixture.SetlistProviderFactory.Object,
                     fixture.BotOptions.Object,
                     fixture.RedditOptions.Object
-                );
+                )
+            );
 
-            act.Should().Throw<ArgumentNullException>().WithParameterName("replyBuilderFactory");
+            Assert.Equal("replyBuilderFactory", exception.ParamName);
         }
 
         [Fact]
@@ -203,7 +207,7 @@ namespace Setlistbot.Application.UnitTests
             var fixture = new RedditSetlistbotTestFixture().WithValidOptions();
 
             // Act & Assert
-            Action act = () =>
+            var exception = Assert.Throws<ArgumentNullException>(() =>
                 new RedditSetlistbot(
                     fixture.Logger.Object,
                     fixture.RedditService.Object,
@@ -213,9 +217,10 @@ namespace Setlistbot.Application.UnitTests
                     null!,
                     fixture.BotOptions.Object,
                     fixture.RedditOptions.Object
-                );
+                )
+            );
 
-            act.Should().Throw<ArgumentNullException>().WithParameterName("setlistProviderFactory");
+            Assert.Equal("setlistProviderFactory", exception.ParamName);
         }
 
         [Fact]
@@ -225,7 +230,7 @@ namespace Setlistbot.Application.UnitTests
             var fixture = new RedditSetlistbotTestFixture().WithValidOptions();
 
             // Act & Assert
-            Action act = () =>
+            var exception = Assert.Throws<ArgumentNullException>(() =>
                 new RedditSetlistbot(
                     fixture.Logger.Object,
                     fixture.RedditService.Object,
@@ -235,9 +240,10 @@ namespace Setlistbot.Application.UnitTests
                     fixture.SetlistProviderFactory.Object,
                     null!,
                     fixture.RedditOptions.Object
-                );
+                )
+            );
 
-            act.Should().Throw<ArgumentNullException>().WithParameterName("botOptions");
+            Assert.Equal("botOptions", exception.ParamName);
         }
 
         [Fact]
@@ -247,7 +253,7 @@ namespace Setlistbot.Application.UnitTests
             var fixture = new RedditSetlistbotTestFixture().WithValidOptions();
 
             // Act & Assert
-            Action act = () =>
+            var exception = Assert.Throws<ArgumentNullException>(() =>
                 new RedditSetlistbot(
                     fixture.Logger.Object,
                     fixture.RedditService.Object,
@@ -257,9 +263,10 @@ namespace Setlistbot.Application.UnitTests
                     fixture.SetlistProviderFactory.Object,
                     fixture.BotOptions.Object,
                     null!
-                );
+                )
+            );
 
-            act.Should().Throw<ArgumentNullException>().WithParameterName("redditOptions");
+            Assert.Equal("redditOptions", exception.ParamName);
         }
 
         [Fact]
@@ -270,9 +277,11 @@ namespace Setlistbot.Application.UnitTests
             fixture.BotOptions.Setup(o => o.Value).Returns((BotOptions)null!);
 
             // Act & Assert
-            Action act = () => fixture.CreateRedditSetlistbot();
+            var exception = Assert.Throws<ArgumentNullException>(() =>
+                fixture.CreateRedditSetlistbot()
+            );
 
-            act.Should().Throw<ArgumentNullException>().WithParameterName("Value");
+            Assert.Equal("Value", exception.ParamName);
         }
 
         [Fact]
@@ -290,9 +299,11 @@ namespace Setlistbot.Application.UnitTests
                 .Returns(fixture.ReplyBuilder.Object);
 
             // Act & Assert
-            Action act = () => fixture.CreateRedditSetlistbot();
+            var exception = Assert.Throws<ArgumentNullException>(() =>
+                fixture.CreateRedditSetlistbot()
+            );
 
-            act.Should().Throw<ArgumentNullException>().WithParameterName("Value");
+            Assert.Equal("Value", exception.ParamName);
         }
 
         [Fact]
@@ -306,9 +317,12 @@ namespace Setlistbot.Application.UnitTests
             fixture.RedditOptions.Setup(o => o.Value).Returns(redditOptions);
 
             // Act & Assert
-            Action act = () => fixture.CreateRedditSetlistbot();
+            var exception = Assert.Throws<ArgumentException>(() =>
+                fixture.CreateRedditSetlistbot()
+            );
 
-            act.Should().Throw<ArgumentException>().WithMessage("*ArtistId*required*");
+            Assert.Contains("ArtistId", exception.Message);
+            Assert.Contains("required", exception.Message);
         }
 
         [Fact]
@@ -326,11 +340,14 @@ namespace Setlistbot.Application.UnitTests
                 .Returns((ISetlistProvider)null!);
 
             // Act & Assert
-            Action act = () => fixture.CreateRedditSetlistbot();
+            var exception = Assert.Throws<ArgumentNullException>(() =>
+                fixture.CreateRedditSetlistbot()
+            );
 
-            act.Should()
-                .Throw<ArgumentNullException>()
-                .WithMessage("*There is no ISetlistProvider configured for artist id: unknown*");
+            Assert.Contains(
+                "There is no ISetlistProvider configured for artist id: unknown",
+                exception.Message
+            );
         }
 
         [Fact]
@@ -349,11 +366,14 @@ namespace Setlistbot.Application.UnitTests
             fixture.ReplyBuilderFactory.Setup(f => f.Get("unknown")).Returns((IReplyBuilder)null!);
 
             // Act & Assert
-            Action act = () => fixture.CreateRedditSetlistbot();
+            var exception = Assert.Throws<ArgumentNullException>(() =>
+                fixture.CreateRedditSetlistbot()
+            );
 
-            act.Should()
-                .Throw<ArgumentNullException>()
-                .WithMessage("*There is no IReplyBuilder registered for artist id: unknown*");
+            Assert.Contains(
+                "There is no IReplyBuilder registered for artist id: unknown",
+                exception.Message
+            );
         }
 
         [Fact]
@@ -366,7 +386,7 @@ namespace Setlistbot.Application.UnitTests
             var bot = fixture.CreateRedditSetlistbot();
 
             // Assert
-            bot.Should().NotBeNull();
+            Assert.NotNull(bot);
         }
 
         [Fact]
