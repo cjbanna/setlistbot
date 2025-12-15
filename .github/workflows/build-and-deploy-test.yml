@@ -46,7 +46,7 @@ jobs:
         run: dotnet build src/Setlistbot.Function.Discord/Setlistbot.Function.Discord.csproj --configuration Release --output ./DiscordBot
 
       - name: Upload Reddit Bot Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: redditbot
           path: ./RedditBot
@@ -54,7 +54,7 @@ jobs:
           include-hidden-files: true
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: discordbot
           path: ./DiscordBot
@@ -73,7 +73,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Download Artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: redditbot
           path: ./RedditBot
@@ -97,7 +97,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Download Artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: redditbot
           path: ./RedditBot
@@ -121,7 +121,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Download Artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: redditbot
           path: ./RedditBot
@@ -145,7 +145,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Download Artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: discordbot
           path: ./DiscordBot
