@@ -5,8 +5,6 @@ namespace Setlistbot.Domain.PostAggregate
 {
     public sealed class Post
     {
-        private List<DateOnly> _dates = null!;
-
         public string Id { get; private set; } = string.Empty;
         public string Author { get; private set; } = string.Empty;
         public string Title { get; private set; } = string.Empty;
@@ -17,45 +15,12 @@ namespace Setlistbot.Domain.PostAggregate
 
         public string ParentId => $"t3_{Id}";
 
-        public IReadOnlyCollection<DateOnly> Dates
-        {
-            get
-            {
-                _dates ??= Title.ParseDates().Concat(SelfText.ParseDates()).ToList();
-                return _dates.AsReadOnly();
-            }
-        }
+        public IReadOnlyCollection<DateOnly> Dates =>
+            Title.ParseDates().Concat(SelfText.ParseDates()).ToList().AsReadOnly();
 
         private Post() { }
 
-        public static Post NewPost(
-            string id,
-            string author,
-            string title,
-            string selfText,
-            string permalink,
-            string artistId
-        )
-        {
-            Ensure.String.IsNotNullOrWhiteSpace(id, nameof(id));
-            Ensure.String.IsNotNullOrWhiteSpace(author, nameof(author));
-            Ensure.String.IsNotNullOrWhiteSpace(title, nameof(title));
-            Ensure.String.IsNotNullOrWhiteSpace(permalink, nameof(permalink));
-            Ensure.String.IsNotEmptyOrWhiteSpace(artistId, nameof(artistId));
-
-            return new Post()
-            {
-                Id = id,
-                Author = author,
-                Title = title,
-                SelfText = selfText,
-                Permalink = permalink,
-                ArtistId = artistId,
-                Reply = string.Empty,
-            };
-        }
-
-        public static Post Hydrate(
+        public Post(
             string id,
             string author,
             string title,
@@ -65,39 +30,31 @@ namespace Setlistbot.Domain.PostAggregate
             string reply
         )
         {
-            Ensure.String.IsNotNullOrWhiteSpace(id, nameof(id));
-            Ensure.String.IsNotNullOrWhiteSpace(author, nameof(author));
-            Ensure.String.IsNotNullOrWhiteSpace(title, nameof(title));
-            Ensure.String.IsNotNullOrWhiteSpace(permalink, nameof(permalink));
-            Ensure.String.IsNotNullOrWhiteSpace(artistId, nameof(artistId));
-            Ensure.String.IsNotNullOrWhiteSpace(reply, nameof(reply));
-
-            return new Post()
-            {
-                Id = id,
-                Author = author,
-                Title = title,
-                SelfText = selfText,
-                Permalink = permalink,
-                ArtistId = artistId,
-                Reply = reply,
-            };
+            Id = Ensure.String.IsNotNullOrWhiteSpace(id, nameof(id));
+            Author = Ensure.String.IsNotNullOrWhiteSpace(author, nameof(author));
+            Title = Ensure.String.IsNotNullOrWhiteSpace(title, nameof(title));
+            SelfText = selfText;
+            Permalink = Ensure.String.IsNotNullOrWhiteSpace(permalink, nameof(permalink));
+            ArtistId = Ensure.String.IsNotNullOrWhiteSpace(artistId, nameof(artistId));
+            Reply = reply;
         }
+
+        public static Post NewPost(
+            string id,
+            string author,
+            string title,
+            string selfText,
+            string permalink,
+            string artistId
+        ) => new(id, author, title, selfText, permalink, artistId, string.Empty);
 
         public bool HasMentionOf(string text)
         {
-            return text != null
-                && (
-                    Title.Contains(text, StringComparison.CurrentCultureIgnoreCase)
-                    || SelfText.Contains(text, StringComparison.CurrentCultureIgnoreCase)
-                );
+            return Title.Contains(text, StringComparison.CurrentCultureIgnoreCase)
+                || SelfText.Contains(text, StringComparison.CurrentCultureIgnoreCase);
         }
 
-        public void SetReply(string reply)
-        {
-            Ensure.That(reply, nameof(reply)).IsNotNullOrWhiteSpace();
-
-            Reply = reply;
-        }
+        public void SetReply(string reply) =>
+            Reply = Ensure.String.IsNotNullOrWhiteSpace(reply, nameof(reply));
     }
 }
