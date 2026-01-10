@@ -18,6 +18,7 @@ namespace Setlistbot.Domain.GratefulDead
                     new CombinedFormatter(
                         new SpaceFormatter(),
                         new CharacterFormatter('|'),
+                        new SpaceFormatter(),
                         new SpotifyLinkFormatter(setlist.SpotifyUrl.Value)
                     )
                 )
