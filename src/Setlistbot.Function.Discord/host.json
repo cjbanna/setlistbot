@@ -5,7 +5,7 @@
       "default": "Warning",
       "Host.Results": "Information",
       "Function": "Information",
-      "Host.Aggregator": "Information",
+      "Microsoft.Hosting.Lifetime": "Information",
       "Setlistbot": "Information"
     }
   }
