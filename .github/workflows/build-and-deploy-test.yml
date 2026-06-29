@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -35,7 +35,7 @@ jobs:
         run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
@@ -46,7 +46,7 @@ jobs:
         run: dotnet build src/Setlistbot.Function.Discord/Setlistbot.Function.Discord.csproj --configuration Release --output ./DiscordBot
 
       - name: Upload Reddit Bot Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: redditbot
           path: ./RedditBot
@@ -54,7 +54,7 @@ jobs:
           include-hidden-files: true
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: discordbot
           path: ./DiscordBot
@@ -70,10 +70,10 @@ jobs:
       name: Test
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Download Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: redditbot
           path: ./RedditBot
@@ -94,10 +94,10 @@ jobs:
       name: Test
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Download Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: redditbot
           path: ./RedditBot
@@ -118,10 +118,10 @@ jobs:
       name: Test
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Download Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: redditbot
           path: ./RedditBot
@@ -142,10 +142,10 @@ jobs:
       name: Test
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Download Artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: discordbot
           path: ./DiscordBot
