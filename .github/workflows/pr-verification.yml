@@ -36,3 +36,37 @@ jobs:
         uses: codecov/codecov-action@v7
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  devvit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: devvit
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: devvit/.nvmrc
+          cache: npm
+          cache-dependency-path: devvit/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Check Formatting
+        run: npm run test:format
+
+      - name: Typecheck
+        run: npm run test:types
+
+      - name: Lint
+        run: npm run test:lint
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build

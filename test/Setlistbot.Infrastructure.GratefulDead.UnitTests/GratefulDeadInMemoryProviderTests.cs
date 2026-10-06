@@ -4,6 +4,37 @@ namespace Setlistbot.Infrastructure.GratefulDead.UnitTests
 {
     public sealed class GratefulDeadInMemoryProviderTests
     {
+        [Theory]
+        [InlineData(1972, 4, 7, "London", "", "England")]
+        [InlineData(1990, 3, 21, "Hamilton", "Ontario", "Canada")]
+        [InlineData(1970, 7, 3, "Calgary", "AB", "Canada")]
+        [InlineData(1968, 2, 22, "North Shore, Lake Tahoe", "CA", "USA")]
+        [InlineData(1969, 2, 4, "Omaha", "NE", "USA")]
+        [InlineData(1969, 4, 15, "Omaha", "NE", "USA")]
+        [InlineData(1966, 7, 29, "Vancouver", "BC", "Canada")]
+        [InlineData(1966, 7, 30, "Vancouver", "BC", "Canada")]
+        [InlineData(1967, 7, 31, "Toronto", "ON", "Canada")]
+        [InlineData(1967, 8, 4, "Toronto", "ON", "Canada")]
+        [InlineData(1969, 7, 8, "Toronto", "ON", "Canada")]
+        public async Task GetSetlists_ParsesLocation(
+            int year,
+            int month,
+            int day,
+            string city,
+            string state,
+            string country
+        )
+        {
+            var provider = new GratefulDeadInMemoryProvider();
+
+            var setlists = await provider.GetSetlists(new DateOnly(year, month, day));
+
+            var location = Assert.Single(setlists).Location;
+            Assert.Equal(City.From(city), location.City);
+            Assert.Equal(state, location.State.HasValue ? location.State.Value.Value : "");
+            Assert.Equal(Country.From(country), location.Country);
+        }
+
         [Fact]
         public async Task GetSetlists_WhenShowExists_ExpectSetlist()
         {

@@ -12,6 +12,8 @@ A setlistbot for reddit and discord.
 - [/r/gratefuldead](https://reddit.com/r/gratefuldead)
 - [/r/kgatlw](https://reddit.com/r/kgatlw)
 
+Reddit is shutting down its public Data API in March 2027, so the bot is moving to Reddit's Developer Platform. The new app is in [`devvit/`](devvit/README.md).
+
 Each subreddit supports only a single artist.
 
 - Phish

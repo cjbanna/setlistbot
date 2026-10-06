@@ -5,12 +5,28 @@ namespace Setlistbot.Infrastructure.GratefulDead.Extensions
 {
     public static class SetlistExtensions
     {
+        private static readonly HashSet<string> UsStates =
+        [
+            .. "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY".Split(
+                ' '
+            ),
+        ];
+
         public static Domain.Setlist ToSetlist(this Setlist gdSetlist)
         {
-            var split = gdSetlist.Location.Split(',');
-            var city = split[0].Trim();
-            var state = split.Length > 1 ? split[1].Trim() : string.Empty;
-            var country = state.Length > 2 ? split[1].Trim() : "USA";
+            // US shows are "City, ST". Everything else ends with the country, e.g.
+            // "London, England" or "Hamilton, Ontario, Canada".
+            var parts = gdSetlist.Location.Split(',', StringSplitOptions.TrimEntries);
+            var (city, state, country) = parts switch
+            {
+                [var only] => (only, string.Empty, "USA"),
+                [.., var last] when UsStates.Contains(last) => (
+                    string.Join(", ", parts[..^1]),
+                    last,
+                    "USA"
+                ),
+                _ => (parts[0], string.Join(", ", parts[1..^1]), parts[^1]),
+            };
 
             var location = new Location(
                 string.IsNullOrWhiteSpace(gdSetlist.Venue)

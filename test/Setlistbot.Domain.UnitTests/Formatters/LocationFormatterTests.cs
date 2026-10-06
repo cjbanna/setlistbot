@@ -1,3 +1,4 @@
+using CSharpFunctionalExtensions;
 using Setlistbot.Domain.Formatters;
 
 namespace Setlistbot.Domain.UnitTests.Formatters
@@ -22,6 +23,21 @@ namespace Setlistbot.Domain.UnitTests.Formatters
 
             // Assert
             Assert.Equal("McNichols Arena, Denver, CO, USA", actual);
+        }
+
+        [Fact]
+        public void Format_WhenNoVenueOrState_ExpectNoEmptyParts()
+        {
+            var location = new Location(
+                Maybe.None,
+                City.From("London"),
+                Maybe.None,
+                Country.From("England")
+            );
+
+            var actual = new LocationFormatter(location).Format();
+
+            Assert.Equal("London, England", actual);
         }
     }
 }

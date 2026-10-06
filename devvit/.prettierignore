@@ -1,0 +1,4 @@
+src/testdata
+package-lock.json
+# Rewritten by the devvit CLI
+devvit.json

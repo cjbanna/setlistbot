@@ -1,0 +1,69 @@
+{
+  "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
+  "name": "setlistbot-app",
+  "server": {
+    "dir": "dist/server",
+    "entry": "index.cjs"
+  },
+  "triggers": {
+    "onCommentCreate": "/internal/triggers/on-comment-create",
+    "onPostCreate": "/internal/triggers/on-post-create"
+  },
+  "settings": {
+    "global": {
+      "phishNetApiKey": {
+        "type": "string",
+        "label": "phish.net API key",
+        "isSecret": true
+      }
+    },
+    "subreddit": {
+      "artist": {
+        "type": "select",
+        "label": "Artist",
+        "options": [
+          {
+            "label": "Phish",
+            "value": "phish"
+          },
+          {
+            "label": "Grateful Dead",
+            "value": "gd"
+          },
+          {
+            "label": "King Gizzard & the Lizard Wizard",
+            "value": "kglw"
+          }
+        ]
+      },
+      "requireMention": {
+        "type": "boolean",
+        "label": "Only reply when u/setlistbot is mentioned",
+        "defaultValue": false
+      },
+      "maxSetlists": {
+        "type": "number",
+        "label": "Most setlists in one reply",
+        "defaultValue": 25
+      }
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "permissions": {
+    "reddit": true,
+    "redis": true,
+    "http": {
+      "enable": true,
+      "domains": [
+        "api.phish.net",
+        "kglw.net"
+      ]
+    }
+  },
+  "dev": {
+    "subreddit": "setlistbot_app_dev"
+  }
+}
