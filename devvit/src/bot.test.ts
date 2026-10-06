@@ -14,6 +14,27 @@ test('ignores the bot’s own comments', () => {
   );
 });
 
+test('ignores the legacy u/setlistbot so the two bots can’t loop', () => {
+  assert.deepEqual(
+    datesToReplyTo(
+      '# 1977-05-08 @ Ithaca',
+      'SetlistBot',
+      'setlistbot-app',
+      false
+    ),
+    []
+  );
+  assert.deepEqual(
+    datesToReplyTo(
+      'u/setlistbot-app 5/8/77',
+      'SetlistBot',
+      'setlistbot-app',
+      true
+    ),
+    []
+  );
+});
+
 test('replies to any comment with a date when no mention is required', () => {
   assert.deepEqual(
     datesToReplyTo('5/8/77 was great', 'someone', 'setlistbot-app', false),
