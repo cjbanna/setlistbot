@@ -5,11 +5,13 @@ import { reddit, redis, runWithContext, settings } from '@devvit/web/server';
 import { app } from './app.ts';
 
 /** Mocks Devvit for a kglw subreddit, and records the Redis and Reddit calls in order. */
-function mockDevvit(t: TestContext) {
+function mockDevvit(
+  t: TestContext,
+  extraSettings: Record<string, unknown> = {}
+) {
   const calls: string[] = [];
-  t.mock.method(settings, 'get', async (key: string) =>
-    key === 'artist' ? 'kglw' : undefined
-  );
+  const values: Record<string, unknown> = { artist: 'kglw', ...extraSettings };
+  t.mock.method(settings, 'get', async (key: string) => values[key]);
   t.mock.method(redis, 'incrBy', async () => {
     calls.push('incrBy');
     return 1;
@@ -45,14 +47,17 @@ test('a failed lookup fails the trigger without recording a reply', async (t) =>
   assert.deepEqual(calls, []);
 });
 
-test('records the reply just before posting it', async (t) => {
-  const calls = mockDevvit(t);
-  const body = readFileSync(
+const setlistResponse = () =>
+  readFileSync(
     new URL(
       '../../test/Setlistbot.Infrastructure.KglwNet.UnitTests/KglwNetResponses/2022-10-10-setlist-response.json',
       import.meta.url
     )
   );
+
+test('records the reply just before posting it', async (t) => {
+  const calls = mockDevvit(t);
+  const body = setlistResponse();
   t.mock.method(globalThis, 'fetch', async () => new Response(body));
 
   const response = await comment();
@@ -60,3 +65,16 @@ test('records the reply just before posting it', async (t) => {
   assert.equal(response.status, 200);
   assert.deepEqual(calls, ['incrBy', 'submitComment']);
 });
+
+for (const maxSetlists of [0, -1, 0.5, Number.NaN, '3']) {
+  test(`still replies when maxSetlists is ${String(maxSetlists)}`, async (t) => {
+    const calls = mockDevvit(t, { maxSetlists });
+    const body = setlistResponse();
+    t.mock.method(globalThis, 'fetch', async () => new Response(body));
+
+    const response = await comment();
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(calls, ['incrBy', 'submitComment']);
+  });
+}

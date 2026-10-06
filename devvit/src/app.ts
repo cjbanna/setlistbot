@@ -48,7 +48,11 @@ async function reply(
   );
   if (dates.length === 0) return;
 
-  const max = maxSetlists ?? 25;
+  // The setting is free-form, so fall back to the default or round it to a usable cap
+  const max =
+    typeof maxSetlists === 'number' && Number.isFinite(maxSetlists)
+      ? Math.max(1, Math.floor(maxSetlists))
+      : 25;
   // ponytail: only the first `max` dates are looked up (caps the parallel requests),
   // so a comment with many non-show dates can get fewer than `max` setlists.
   // A failed lookup throws before the reply is recorded, so the trigger fails

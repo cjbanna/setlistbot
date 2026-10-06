@@ -12,7 +12,7 @@ Install the app, then open its settings for your community:
 
 - **Artist**: whose setlists to look up: Phish, Grateful Dead, or King Gizzard & the Lizard Wizard. The app does nothing until this is set.
 - **Only reply when u/setlistbot is mentioned**: when on, the bot only answers comments and posts that include "setlistbot", like `u/setlistbot 12/31/95`. When off, it answers any comment or post with a date.
-- **Most setlists in one reply**: the maximum number of shows in one reply (default 25).
+- **Most setlists in one reply**: the maximum number of shows in one reply (default 25). Fractions round down, values below 1 count as 1, and anything that isn't a number uses 25.
 
 ## How it works
 
