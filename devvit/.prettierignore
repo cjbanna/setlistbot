@@ -1,5 +1,3 @@
-node_modules
-dist
 src/testdata
 package-lock.json
 # Rewritten by the devvit CLI
