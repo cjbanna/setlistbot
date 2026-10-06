@@ -106,3 +106,30 @@ for (const maxSetlists of [0, -1, 0.5, Number.NaN, '3']) {
     assert.deepEqual(calls, ['incrBy', 'submitComment']);
   });
 }
+
+const phishResponse = (envelope: object) =>
+  new Response(JSON.stringify({ data: [], ...envelope }));
+
+test('a phish.net error in an HTTP 200 body fails the trigger', async (t) => {
+  const calls = mockDevvit(t, { artist: 'phish' });
+  t.mock.method(globalThis, 'fetch', async () =>
+    phishResponse({ error: 2, error_message: 'Invalid API key' })
+  );
+
+  const response = await comment();
+
+  assert.equal(response.status, 500);
+  assert.deepEqual(calls, []);
+});
+
+for (const error of [false, 11]) {
+  test(`a phish.net date with no show (error ${error}) acks without replying`, async (t) => {
+    const calls = mockDevvit(t, { artist: 'phish' });
+    t.mock.method(globalThis, 'fetch', async () => phishResponse({ error }));
+
+    const response = await comment();
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(calls, []);
+  });
+}

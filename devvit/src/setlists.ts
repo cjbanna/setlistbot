@@ -50,9 +50,17 @@ const phishSetNames: Record<string, string> = {
 };
 
 async function getPhishSetlists(date: string, apiKey: string) {
-  const { data } = await getJson<{ data: PhishNetRow[] }>(
+  // phish.net reports API errors (bad key, rate limit) in an HTTP 200 body
+  const { error, error_message, data } = await getJson<{
+    error: boolean | number;
+    error_message?: string;
+    data: PhishNetRow[];
+  }>(
     `https://api.phish.net/v5/setlists/showdate/${date}.json?apikey=${encodeURIComponent(apiKey)}`
   );
+  // Code 11 is "no matching data", i.e. no show that day
+  if (error === 11) return [];
+  if (error) throw new Error(`phish.net error: ${error_message ?? error}`);
   return toSetlists(
     data
       .filter((r) => r.artist_name === 'Phish')
