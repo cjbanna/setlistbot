@@ -16,7 +16,7 @@ The text and username are not stored, logged, or shared.
 
 ## What the app stores
 
-The ID of each comment or post with a date it looks up, so it never replies twice. IDs are kept in Reddit-hosted storage that belongs to that community's installation of the app.
+The ID of each comment or post it replies to, so it never replies twice. IDs are kept in Reddit-hosted storage that belongs to that community's installation of the app.
 
 ## What the app sends elsewhere
 
