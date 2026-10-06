@@ -17,21 +17,16 @@ namespace Setlistbot.Infrastructure.GratefulDead.Extensions
             // US shows are "City, ST". Everything else ends with the country, e.g.
             // "London, England" or "Hamilton, Ontario, Canada".
             var parts = gdSetlist.Location.Split(',', StringSplitOptions.TrimEntries);
-            string city,
-                state,
-                country;
-            if (parts.Length == 1)
+            var (city, state, country) = parts switch
             {
-                (city, state, country) = (parts[0], string.Empty, "USA");
-            }
-            else if (UsStates.Contains(parts[^1]))
-            {
-                (city, state, country) = (string.Join(", ", parts[..^1]), parts[^1], "USA");
-            }
-            else
-            {
-                (city, state, country) = (parts[0], string.Join(", ", parts[1..^1]), parts[^1]);
-            }
+                [var only] => (only, string.Empty, "USA"),
+                [.., var last] when UsStates.Contains(last) => (
+                    string.Join(", ", parts[..^1]),
+                    last,
+                    "USA"
+                ),
+                _ => (parts[0], string.Join(", ", parts[1..^1]), parts[^1]),
+            };
 
             var location = new Location(
                 string.IsNullOrWhiteSpace(gdSetlist.Venue)
