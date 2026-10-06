@@ -65,9 +65,9 @@ async function reply(
   const markdown = buildReply(artist, setlists.slice(0, max));
   if (!markdown) return;
 
+  // Record the reply before posting so a redelivered event can't post twice
+  if ((await redis.incrBy(`replied:${thingId}`, 1)) > 1) return;
   try {
-    // Record the reply before posting so a redelivered event can't post twice
-    if ((await redis.incrBy(`replied:${thingId}`, 1)) > 1) return;
     await reddit.submitComment({
       id: thingId as `t1_${string}` | `t3_${string}`,
       text: markdown,

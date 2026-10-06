@@ -66,6 +66,34 @@ test('records the reply just before posting it', async (t) => {
   assert.deepEqual(calls, ['incrBy', 'submitComment']);
 });
 
+test('a failed reply record fails the trigger without posting', async (t) => {
+  const calls = mockDevvit(t);
+  t.mock.method(redis, 'incrBy', async () => {
+    throw new Error('Redis unavailable');
+  });
+  const body = setlistResponse();
+  t.mock.method(globalThis, 'fetch', async () => new Response(body));
+
+  const response = await comment();
+
+  assert.equal(response.status, 500);
+  assert.deepEqual(calls, []);
+});
+
+test('a failed post still acks the trigger', async (t) => {
+  mockDevvit(t);
+  t.mock.method(reddit, 'submitComment', async () => {
+    throw new Error('Reddit unavailable');
+  });
+  t.mock.method(console, 'error', () => {});
+  const body = setlistResponse();
+  t.mock.method(globalThis, 'fetch', async () => new Response(body));
+
+  const response = await comment();
+
+  assert.equal(response.status, 200);
+});
+
 for (const maxSetlists of [0, -1, 0.5, Number.NaN, '3']) {
   test(`still replies when maxSetlists is ${String(maxSetlists)}`, async (t) => {
     const calls = mockDevvit(t, { maxSetlists });
