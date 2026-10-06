@@ -79,6 +79,13 @@ test('gd several dates', async () => {
   assert.equal(buildReply('gd', setlists), expected('gd-multi.md'));
 });
 
+for (const date of ['1969-02-04', '1969-04-15']) {
+  test(`gd ${date} is in Omaha, NE, USA`, async () => {
+    const [setlist] = await getSetlists('gd', [date], '');
+    assert.equal(setlist?.location, 'The Music Box, Omaha, NE, USA');
+  });
+}
+
 test('no setlists means no reply', async () => {
   assert.equal(
     buildReply('gd', await getSetlists('gd', ['1999-01-01'], '')),

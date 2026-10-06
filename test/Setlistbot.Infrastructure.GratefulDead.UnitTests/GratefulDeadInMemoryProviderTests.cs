@@ -9,6 +9,8 @@ namespace Setlistbot.Infrastructure.GratefulDead.UnitTests
         [InlineData(1990, 3, 21, "Hamilton", "Ontario", "Canada")]
         [InlineData(1970, 7, 3, "Calgary", "AB", "Canada")]
         [InlineData(1968, 2, 22, "North Shore, Lake Tahoe", "CA", "USA")]
+        [InlineData(1969, 2, 4, "Omaha", "NE", "USA")]
+        [InlineData(1969, 4, 15, "Omaha", "NE", "USA")]
         public async Task GetSetlists_ParsesLocation(
             int year,
             int month,
