@@ -59,8 +59,12 @@ async function getPhishSetlists(date: string, apiKey: string) {
     `https://api.phish.net/v5/setlists/showdate/${date}.json?apikey=${encodeURIComponent(apiKey)}`
   );
   // Code 11 is "no matching data", i.e. no show that day
-  if (error === 11) return [];
-  if (error) throw new Error(`phish.net error: ${error_message ?? error}`);
+  if (error === 11) {
+    return [];
+  }
+  if (error) {
+    throw new Error(`phish.net error: ${error_message ?? error}`);
+  }
   return toSetlists(
     data
       .filter((r) => r.artist_name === 'Phish')
@@ -195,7 +199,8 @@ const joinLocation = (...parts: (string | null)[]) =>
 async function getJson<T>(url: string): Promise<T> {
   const response = await fetch(url);
   // Don't put the URL in the error: the phish.net one contains the API key
-  if (!response.ok)
+  if (!response.ok) {
     throw new Error(`${new URL(url).host} returned ${response.status}`);
+  }
   return (await response.json()) as T;
 }

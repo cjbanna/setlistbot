@@ -14,7 +14,9 @@ export function parseDates(text: string): string[] {
     const year =
       y.length > 2 ? Number(y) : Number(y) + (Number(y) < 50 ? 2000 : 1900);
     const date = isoDate(year, Number(m), Number(d));
-    if (date) dates.add(date);
+    if (date) {
+      dates.add(date);
+    }
   }
   return [...dates];
 }
@@ -24,8 +26,9 @@ function isoDate(year: number, month: number, day: number): string | undefined {
     month >= 1 && month <= 12
       ? new Date(Date.UTC(year, month, 0)).getUTCDate()
       : undefined;
-  if (year < 1 || !daysInMonth || day < 1 || day > daysInMonth)
+  if (year < 1 || !daysInMonth || day < 1 || day > daysInMonth) {
     return undefined;
+  }
   const pad = (n: number, width: number) => String(n).padStart(width, '0');
   return `${pad(year, 4)}-${pad(month, 2)}-${pad(day, 2)}`;
 }

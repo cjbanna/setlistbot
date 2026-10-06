@@ -41,6 +41,7 @@ Requires Node 24.
 npm install
 npm test             # unit tests
 npm run test:types   # typecheck
+npm run test:lint    # lint
 npm run dev          # playtest on your test subreddit
 npm run launch       # upload and submit for review
 ```

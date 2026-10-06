@@ -13,14 +13,17 @@ export const app = new Hono();
 
 app.post('/internal/triggers/on-comment-create', async (c) => {
   const { comment, author } = await c.req.json<OnCommentCreateRequest>();
-  if (comment) await reply(comment.id, comment.body, author?.name);
+  if (comment) {
+    await reply(comment.id, comment.body, author?.name);
+  }
   return c.json<TriggerResponse>({});
 });
 
 app.post('/internal/triggers/on-post-create', async (c) => {
   const { post, author } = await c.req.json<OnPostCreateRequest>();
-  if (post)
+  if (post) {
     await reply(post.id, `${post.title}\n${post.selftext}`, author?.name);
+  }
   return c.json<TriggerResponse>({});
 });
 
@@ -38,7 +41,9 @@ async function reply(
     ]);
   // Devvit's docs don't say whether a select setting comes back as a string or a one-item array
   const artist = [artistSetting].flat()[0] as Artist | undefined;
-  if (!artist) return;
+  if (!artist) {
+    return;
+  }
 
   const dates = datesToReplyTo(
     text,
@@ -46,7 +51,9 @@ async function reply(
     context.appSlug,
     requireMention ?? false
   );
-  if (dates.length === 0) return;
+  if (dates.length === 0) {
+    return;
+  }
 
   // The setting is free-form, so fall back to the default or round it to a usable cap
   const max =
@@ -63,10 +70,14 @@ async function reply(
     phishNetApiKey ?? ''
   );
   const markdown = buildReply(artist, setlists.slice(0, max));
-  if (!markdown) return;
+  if (!markdown) {
+    return;
+  }
 
   // Record the reply before posting so a redelivered event can't post twice
-  if ((await redis.incrBy(`replied:${thingId}`, 1)) > 1) return;
+  if ((await redis.incrBy(`replied:${thingId}`, 1)) > 1) {
+    return;
+  }
   try {
     await reddit.submitComment({
       id: thingId as `t1_${string}` | `t3_${string}`,

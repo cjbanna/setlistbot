@@ -42,8 +42,12 @@ const artists: Record<
 export function buildReply(artist: Artist, setlists: Setlist[]): string {
   const { links, url, footer } = artists[artist];
   const [first] = setlists;
-  if (!first) return '';
-  if (setlists.length === 1) return formatSetlist(first) + links(first);
+  if (!first) {
+    return '';
+  }
+  if (setlists.length === 1) {
+    return formatSetlist(first) + links(first);
+  }
   return (
     setlists.map((s) => `[${s.date}](${url(s)}) @ ${s.location}\n\n`).join('') +
     footer
