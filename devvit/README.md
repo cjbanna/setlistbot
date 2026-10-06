@@ -17,7 +17,7 @@ Install the app, then open its settings for your community:
 ## How it works
 
 - The app reads new comments and posts in the communities it's installed in, looking for dates.
-- It never replies to itself or to the legacy u/setlistbot (so the two can't loop on a shared subreddit), and it replies to each comment or post at most once.
+- It never replies to itself or to the legacy u/setlistbot (so the two can't loop on a shared subreddit), and it replies to each comment or post at most once. While both bots remain active, the legacy bot may still reply once to an app comment when no mention is required.
 - Edited comments aren't checked again, so a date added in an edit won't get a reply.
 - Grateful Dead setlists are included in the app. Phish setlists come from [phish.net](https://phish.net) and King Gizzard setlists from [kglw.net](https://kglw.net).
 
