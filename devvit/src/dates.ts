@@ -20,21 +20,10 @@ export function parseDates(text: string): string[] {
 }
 
 function isoDate(year: number, month: number, day: number): string | undefined {
-  const leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-  const daysInMonth = [
-    31,
-    leap ? 29 : 28,
-    31,
-    30,
-    31,
-    30,
-    31,
-    31,
-    30,
-    31,
-    30,
-    31,
-  ][month - 1];
+  const daysInMonth =
+    month >= 1 && month <= 12
+      ? new Date(Date.UTC(year, month, 0)).getUTCDate()
+      : undefined;
   if (year < 1 || !daysInMonth || day < 1 || day > daysInMonth)
     return undefined;
   const pad = (n: number, width: number) => String(n).padStart(width, '0');
