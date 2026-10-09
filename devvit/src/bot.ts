@@ -45,6 +45,10 @@ export async function replyTo(
   // ponytail: only the first `max` dates are looked up (caps the parallel requests),
   // so a comment with many non-show dates can get fewer than `max` setlists.
   const dates = parseDates(text).slice(0, max);
-  const setlists = await getSetlists(artist, dates, settings);
+  const setlists = await getSetlists(
+    artist,
+    dates,
+    settings.phishNetApiKey ?? ''
+  );
   return buildReply(setlists.slice(0, max));
 }

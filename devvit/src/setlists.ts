@@ -17,14 +17,13 @@ export type Setlist = {
   footer?: string;
 };
 
-/** `keys` holds the API keys for the artists whose setlist APIs need one */
 export async function getSetlists(
   artist: Artist,
   dates: string[],
-  keys: { phishNetApiKey?: string } = {}
+  phishNetApiKey = ''
 ): Promise<Setlist[]> {
   const lookup = {
-    phish: (date: string) => getPhishSetlists(date, keys.phishNetApiKey ?? ''),
+    phish: (date: string) => getPhishSetlists(date, phishNetApiKey),
     kglw: getKglwSetlists,
     gd: async (date: string) => getGratefulDeadSetlists(date),
   }[artist];

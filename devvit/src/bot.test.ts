@@ -72,3 +72,19 @@ for (const [maxSetlists, expected] of [
     assert.equal(shows(markdown), expected);
   });
 }
+
+test('sends the phish.net API key setting, or an empty key when unset', async (t) => {
+  const urls: string[] = [];
+  t.mock.method(globalThis, 'fetch', async (url: string) => {
+    urls.push(url);
+    return new Response(JSON.stringify({ error: 11, data: [] }));
+  });
+  const settings = (phishNetApiKey: unknown) =>
+    ({ artist: 'phish', phishNetApiKey }) as Settings;
+  await replyTo('11/22/97', 'someone', 'setlistbot-app', settings('MyApiKey'));
+  await replyTo('11/22/97', 'someone', 'setlistbot-app', settings(null));
+  assert.deepEqual(
+    urls.map((u) => new URL(u).searchParams.get('apikey')),
+    ['MyApiKey', '']
+  );
+});

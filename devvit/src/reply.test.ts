@@ -25,9 +25,7 @@ test('phish', async (t) => {
     'Setlistbot.Infrastructure.PhishNet/PhishNetResponses/1997-11-22-setlist-response.json'
   );
 
-  const setlists = await getSetlists('phish', ['1997-11-22'], {
-    phishNetApiKey: 'MyApiKey',
-  });
+  const setlists = await getSetlists('phish', ['1997-11-22'], 'MyApiKey');
 
   assert.deepEqual(urls, [
     'https://api.phish.net/v5/setlists/showdate/1997-11-22.json?apikey=MyApiKey',
@@ -127,7 +125,7 @@ test('a failed request doesn’t leak the API key', async (t) => {
     async () => new Response('', { status: 500 })
   );
   await assert.rejects(
-    getSetlists('phish', ['1997-11-22'], { phishNetApiKey: 'MyApiKey' }),
+    getSetlists('phish', ['1997-11-22'], 'MyApiKey'),
     (error: Error) => {
       assert.equal(error.message, 'api.phish.net returned 500');
       return true;
@@ -144,21 +142,16 @@ test('a phish.net error in an HTTP 200 body throws', async (t) => {
     'fetch',
     phishResponse({ error: 2, error_message: 'Invalid API key' })
   );
-  await assert.rejects(
-    getSetlists('phish', ['1997-11-22'], { phishNetApiKey: 'MyApiKey' }),
-    {
-      message: 'phish.net error: Invalid API key',
-    }
-  );
+  await assert.rejects(getSetlists('phish', ['1997-11-22'], 'MyApiKey'), {
+    message: 'phish.net error: Invalid API key',
+  });
 });
 
 for (const error of [false, 11]) {
   test(`a phish.net date with no show (error ${error}) has no setlists`, async (t) => {
     t.mock.method(globalThis, 'fetch', phishResponse({ error }));
     assert.deepEqual(
-      await getSetlists('phish', ['1997-11-22'], {
-        phishNetApiKey: 'MyApiKey',
-      }),
+      await getSetlists('phish', ['1997-11-22'], 'MyApiKey'),
       []
     );
   });
