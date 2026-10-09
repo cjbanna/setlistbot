@@ -1,16 +1,18 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { test, type TestContext } from 'node:test';
 import { reddit, redis, runWithContext, settings } from '@devvit/web/server';
 import { app } from './app.ts';
 
-/** Mocks Devvit for a kglw subreddit, and records the Redis and Reddit calls in order. */
+/**
+ * Mocks Devvit for a Grateful Dead subreddit, whose setlists are bundled so no
+ * fetch is needed, and records the Redis and Reddit calls in order.
+ */
 function mockDevvit(
   t: TestContext,
   extraSettings: Record<string, unknown> = {}
 ) {
   const calls: string[] = [];
-  const values: Record<string, unknown> = { artist: 'kglw', ...extraSettings };
+  const values: Record<string, unknown> = { artist: 'gd', ...extraSettings };
   t.mock.method(settings, 'get', async (key: string) => values[key]);
   t.mock.method(redis, 'incrBy', async () => {
     calls.push('incrBy');
@@ -22,19 +24,19 @@ function mockDevvit(
   return calls;
 }
 
-const comment = () =>
+const comment = (body = '5/8/77') =>
   runWithContext({ appSlug: 'setlistbot-app' } as never, async () =>
     app.request('/internal/triggers/on-comment-create', {
       method: 'POST',
       body: JSON.stringify({
-        comment: { id: 't1_abc', body: '2022-10-10' },
+        comment: { id: 't1_abc', body },
         author: { name: 'someone' },
       }),
     })
   );
 
 test('a failed lookup fails the trigger without recording a reply', async (t) => {
-  const calls = mockDevvit(t);
+  const calls = mockDevvit(t, { artist: 'kglw' });
   t.mock.method(
     globalThis,
     'fetch',
@@ -47,18 +49,17 @@ test('a failed lookup fails the trigger without recording a reply', async (t) =>
   assert.deepEqual(calls, []);
 });
 
-const setlistResponse = () =>
-  readFileSync(
-    new URL(
-      '../../test/Setlistbot.Infrastructure.KglwNet.UnitTests/KglwNetResponses/2022-10-10-setlist-response.json',
-      import.meta.url
-    )
-  );
+test('a comment with no show acks without replying', async (t) => {
+  const calls = mockDevvit(t);
+
+  const response = await comment('1/1/99');
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(calls, []);
+});
 
 test('records the reply just before posting it', async (t) => {
   const calls = mockDevvit(t);
-  const body = setlistResponse();
-  t.mock.method(globalThis, 'fetch', async () => new Response(body));
 
   const response = await comment();
 
@@ -71,8 +72,6 @@ test('a failed reply record fails the trigger without posting', async (t) => {
   t.mock.method(redis, 'incrBy', async () => {
     throw new Error('Redis unavailable');
   });
-  const body = setlistResponse();
-  t.mock.method(globalThis, 'fetch', async () => new Response(body));
 
   const response = await comment();
 
@@ -86,50 +85,8 @@ test('a failed post still acks the trigger', async (t) => {
     throw new Error('Reddit unavailable');
   });
   t.mock.method(console, 'error', () => {});
-  const body = setlistResponse();
-  t.mock.method(globalThis, 'fetch', async () => new Response(body));
 
   const response = await comment();
 
   assert.equal(response.status, 200);
 });
-
-for (const maxSetlists of [0, -1, 0.5, Number.NaN, '3']) {
-  test(`still replies when maxSetlists is ${String(maxSetlists)}`, async (t) => {
-    const calls = mockDevvit(t, { maxSetlists });
-    const body = setlistResponse();
-    t.mock.method(globalThis, 'fetch', async () => new Response(body));
-
-    const response = await comment();
-
-    assert.equal(response.status, 200);
-    assert.deepEqual(calls, ['incrBy', 'submitComment']);
-  });
-}
-
-const phishResponse = (envelope: object) =>
-  new Response(JSON.stringify({ data: [], ...envelope }));
-
-test('a phish.net error in an HTTP 200 body fails the trigger', async (t) => {
-  const calls = mockDevvit(t, { artist: 'phish' });
-  t.mock.method(globalThis, 'fetch', async () =>
-    phishResponse({ error: 2, error_message: 'Invalid API key' })
-  );
-
-  const response = await comment();
-
-  assert.equal(response.status, 500);
-  assert.deepEqual(calls, []);
-});
-
-for (const error of [false, 11]) {
-  test(`a phish.net date with no show (error ${error}) acks without replying`, async (t) => {
-    const calls = mockDevvit(t, { artist: 'phish' });
-    t.mock.method(globalThis, 'fetch', async () => phishResponse({ error }));
-
-    const response = await comment();
-
-    assert.equal(response.status, 200);
-    assert.deepEqual(calls, []);
-  });
-}

@@ -5,9 +5,7 @@ import type {
   TriggerResponse,
 } from '@devvit/web/shared';
 import { Hono } from 'hono';
-import { datesToReplyTo } from './bot.ts';
-import { buildReply } from './format.ts';
-import { getSetlists, type Artist } from './setlists.ts';
+import { replyTo } from './bot.ts';
 
 export const app = new Hono();
 
@@ -32,44 +30,21 @@ async function reply(
   text: string,
   author: string | undefined
 ) {
-  const [artistSetting, requireMention, maxSetlists, phishNetApiKey] =
+  const [artist, requireMention, maxSetlists, phishNetApiKey] =
     await Promise.all([
       settings.get<string | string[]>('artist'),
       settings.get<boolean>('requireMention'),
       settings.get<number>('maxSetlists'),
       settings.get<string>('phishNetApiKey'),
     ]);
-  // Devvit's docs don't say whether a select setting comes back as a string or a one-item array
-  const artist = [artistSetting].flat()[0] as Artist | undefined;
-  if (!artist) {
-    return;
-  }
-
-  const dates = datesToReplyTo(
-    text,
-    author,
-    context.appSlug,
-    requireMention ?? false
-  );
-  if (dates.length === 0) {
-    return;
-  }
-
-  // The setting is free-form, so fall back to the default or round it to a usable cap
-  const max =
-    typeof maxSetlists === 'number' && Number.isFinite(maxSetlists)
-      ? Math.max(1, Math.floor(maxSetlists))
-      : 25;
-  // ponytail: only the first `max` dates are looked up (caps the parallel requests),
-  // so a comment with many non-show dates can get fewer than `max` setlists.
   // A failed lookup throws before the reply is recorded, so the trigger fails
   // instead of the comment being marked as replied to.
-  const setlists = await getSetlists(
+  const markdown = await replyTo(text, author, context.appSlug, {
     artist,
-    dates.slice(0, max),
-    phishNetApiKey ?? ''
-  );
-  const markdown = buildReply(artist, setlists.slice(0, max));
+    requireMention,
+    maxSetlists,
+    phishNetApiKey,
+  });
   if (!markdown) {
     return;
   }
