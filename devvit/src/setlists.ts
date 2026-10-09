@@ -103,7 +103,7 @@ type KglwNetRow = {
   city: string;
   state: string;
   country: string;
-  permalink: string;
+  permalink?: string | null;
 };
 
 async function getKglwSetlists(date: string) {
@@ -118,7 +118,7 @@ async function getKglwSetlists(date: string) {
         return {
           date: r.showdate,
           location: joinLocation(r.venuename, r.city, r.state, r.country),
-          url: `https://kglw.net/setlists/${r.permalink}`,
+          url: `https://kglw.net/setlists/${r.permalink ?? ''}`,
           set: /one set/i.test(set) ? 'One Set' : set,
           position: Number(r.position),
           song: r.songname,

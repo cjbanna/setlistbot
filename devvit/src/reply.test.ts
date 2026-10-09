@@ -57,6 +57,33 @@ test('kglw', async (t) => {
   );
 });
 
+test('kglw row without a permalink links to the setlist index', async (t) => {
+  const row = {
+    showdate: '2022-10-10',
+    artist: 'King Gizzard & the Lizard Wizard',
+    position: 1,
+    songname: 'Rattlesnake',
+    settype: 'Set',
+    setnumber: '1',
+    transition: ', ',
+    venuename: 'Red Rocks',
+    city: 'Morrison',
+    state: 'CO',
+    country: 'USA',
+    permalink: null,
+  };
+  t.mock.method(
+    globalThis,
+    'fetch',
+    async () => new Response(JSON.stringify({ data: [row] }))
+  );
+
+  const [setlist] = await getSetlists('kglw', ['2022-10-10']);
+
+  assert.equal(setlist?.url, 'https://kglw.net/setlists/');
+  assert.match(setlist?.links ?? '', /\(https:\/\/kglw\.net\/setlists\/\)/);
+});
+
 for (const date of [
   '1977-05-08',
   '1972-04-07',
