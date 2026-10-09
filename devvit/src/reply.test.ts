@@ -109,3 +109,27 @@ test('a failed request doesn’t leak the API key', async (t) => {
     }
   );
 });
+
+const phishResponse = (envelope: object) => async () =>
+  new Response(JSON.stringify({ data: [], ...envelope }));
+
+test('a phish.net error in an HTTP 200 body throws', async (t) => {
+  t.mock.method(
+    globalThis,
+    'fetch',
+    phishResponse({ error: 2, error_message: 'Invalid API key' })
+  );
+  await assert.rejects(getSetlists('phish', ['1997-11-22'], 'MyApiKey'), {
+    message: 'phish.net error: Invalid API key',
+  });
+});
+
+for (const error of [false, 11]) {
+  test(`a phish.net date with no show (error ${error}) has no setlists`, async (t) => {
+    t.mock.method(globalThis, 'fetch', phishResponse({ error }));
+    assert.deepEqual(
+      await getSetlists('phish', ['1997-11-22'], 'MyApiKey'),
+      []
+    );
+  });
+}
