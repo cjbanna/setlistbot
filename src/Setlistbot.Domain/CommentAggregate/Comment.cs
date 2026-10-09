@@ -32,7 +32,6 @@ namespace Setlistbot.Domain.CommentAggregate
             Ensure.String.IsNotNullOrWhiteSpace(permalink, nameof(permalink));
             Ensure.String.IsNotNullOrWhiteSpace(author, nameof(author));
             Ensure.String.IsNotEmptyOrWhiteSpace(artistId, nameof(artistId));
-            Ensure.String.IsNotNullOrWhiteSpace(reply, nameof(reply));
 
             Id = id;
             Author = author;
@@ -48,24 +47,7 @@ namespace Setlistbot.Domain.CommentAggregate
             string body,
             string permalink,
             string artistId
-        )
-        {
-            Ensure.String.IsNotNullOrWhiteSpace(id, nameof(id));
-            Ensure.String.IsNotNullOrEmpty(body, nameof(body));
-            Ensure.String.IsNotNullOrWhiteSpace(permalink, nameof(permalink));
-            Ensure.String.IsNotNullOrWhiteSpace(author, nameof(author));
-            Ensure.String.IsNotEmptyOrWhiteSpace(artistId, nameof(artistId));
-
-            return new Comment()
-            {
-                Id = id,
-                Author = author,
-                Body = body,
-                Permalink = permalink,
-                ArtistId = artistId,
-                Reply = string.Empty,
-            };
-        }
+        ) => new(id, author, body, permalink, artistId, string.Empty);
 
         /// <summary>
         /// Returns true if text is mentioned in the comment
@@ -81,11 +63,7 @@ namespace Setlistbot.Domain.CommentAggregate
         /// Sets the reply value
         /// </summary>
         /// <param name="reply">The raw string value that was used in the reply</param>
-        public void SetReply(string reply)
-        {
-            Ensure.That(reply, nameof(reply)).IsNotNullOrWhiteSpace();
-
-            Reply = reply;
-        }
+        public void SetReply(string reply) =>
+            Reply = Ensure.String.IsNotNullOrWhiteSpace(reply, nameof(reply));
     }
 }
