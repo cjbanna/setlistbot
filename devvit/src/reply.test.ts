@@ -30,9 +30,9 @@ test('phish', async (t) => {
   assert.deepEqual(urls, [
     'https://api.phish.net/v5/setlists/showdate/1997-11-22.json?apikey=MyApiKey',
   ]);
-  assert.equal(buildReply('phish', setlists), expected('phish-single.md'));
+  assert.equal(buildReply(setlists), expected('phish-single.md'));
   assert.equal(
-    buildReply('phish', [...setlists, ...setlists]),
+    buildReply([...setlists, ...setlists]),
     expected('phish-multi.md')
   );
 });
@@ -43,16 +43,33 @@ test('kglw', async (t) => {
     'Setlistbot.Infrastructure.KglwNet.UnitTests/KglwNetResponses/2022-10-10-setlist-response.json'
   );
 
-  const setlists = await getSetlists('kglw', ['2022-10-10'], '');
+  const setlists = await getSetlists('kglw', ['2022-10-10']);
 
   assert.deepEqual(urls, [
     'https://kglw.net/api/v2/setlists/showdate/2022-10-10.json',
   ]);
-  assert.equal(buildReply('kglw', setlists), expected('kglw-single.md'));
+  assert.equal(buildReply(setlists), expected('kglw-single.md'));
   assert.equal(
-    buildReply('kglw', [...setlists, ...setlists]),
+    buildReply([...setlists, ...setlists]),
     expected('kglw-multi.md')
   );
+});
+
+test('kglw row without a permalink links to the setlist index', async (t) => {
+  const row = {
+    showdate: '2022-10-10',
+    artist: 'King Gizzard & the Lizard Wizard',
+    permalink: null,
+  };
+  t.mock.method(
+    globalThis,
+    'fetch',
+    async () => new Response(JSON.stringify({ data: [row] }))
+  );
+
+  const [setlist] = await getSetlists('kglw', ['2022-10-10']);
+
+  assert.equal(setlist?.url, 'https://kglw.net/setlists/');
 });
 
 for (const date of [
@@ -64,35 +81,31 @@ for (const date of [
 ]) {
   test(`gd ${date}`, async () => {
     assert.equal(
-      buildReply('gd', await getSetlists('gd', [date], '')),
+      buildReply(await getSetlists('gd', [date])),
       expected(`gd-${date}.md`)
     );
   });
 }
 
 test('gd several dates', async () => {
-  const setlists = await getSetlists(
-    'gd',
-    ['1972-04-07', '1970-07-03', '1977-05-08'],
-    ''
-  );
-  assert.equal(buildReply('gd', setlists), expected('gd-multi.md'));
+  const setlists = await getSetlists('gd', [
+    '1972-04-07',
+    '1970-07-03',
+    '1977-05-08',
+  ]);
+  assert.equal(buildReply(setlists), expected('gd-multi.md'));
 });
 
 for (const date of ['1969-02-04', '1969-04-15']) {
   test(`gd ${date} is in Omaha, NE, USA`, async () => {
-    const [setlist] = await getSetlists('gd', [date], '');
+    const [setlist] = await getSetlists('gd', [date]);
     assert.equal(setlist?.location, 'The Music Box, Omaha, NE, USA');
   });
 }
 
 test('no setlists means no reply', async () => {
-  assert.equal(
-    buildReply('gd', await getSetlists('gd', ['1999-01-01'], '')),
-    ''
-  );
-  assert.equal(buildReply('phish', []), '');
-  assert.equal(buildReply('kglw', []), '');
+  assert.equal(buildReply(await getSetlists('gd', ['1999-01-01'])), '');
+  assert.equal(buildReply([]), '');
 });
 
 test('a failed request doesn’t leak the API key', async (t) => {

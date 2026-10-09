@@ -50,5 +50,5 @@ export async function replyTo(
     dates,
     settings.phishNetApiKey ?? ''
   );
-  return buildReply(artist, setlists.slice(0, max));
+  return buildReply(setlists.slice(0, max));
 }
