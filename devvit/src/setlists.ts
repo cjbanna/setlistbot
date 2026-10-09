@@ -9,17 +9,22 @@ export type Setlist = {
   /** "Venue, City, State, Country" with missing parts left out */
   location: string;
   sets: { name: string; songs: Song[] }[];
-  permalink?: string;
-  spotifyUrl?: string;
+  /** Where the date links to when listing several shows */
+  url: string;
+  /** Appended after a single full setlist */
+  links: string;
+  /** Appended after a list of several shows */
+  footer?: string;
 };
 
+/** `keys` holds the API keys for the artists whose setlist APIs need one */
 export async function getSetlists(
   artist: Artist,
   dates: string[],
-  phishNetApiKey: string
+  keys: { phishNetApiKey?: string } = {}
 ): Promise<Setlist[]> {
   const lookup = {
-    phish: (date: string) => getPhishSetlists(date, phishNetApiKey),
+    phish: (date: string) => getPhishSetlists(date, keys.phishNetApiKey ?? ''),
     kglw: getKglwSetlists,
     gd: async (date: string) => getGratefulDeadSetlists(date),
   }[artist];
@@ -49,6 +54,8 @@ const phishSetNames: Record<string, string> = {
   e3: 'Encore 3',
 };
 
+const phishNetCredit = '> _data provided by [phish.net](https://phish.net/)_';
+
 async function getPhishSetlists(date: string, apiKey: string) {
   // phish.net reports API errors (bad key, rate limit) in an HTTP 200 body
   const { error, error_message, data } = await getJson<{
@@ -71,12 +78,17 @@ async function getPhishSetlists(date: string, apiKey: string) {
       .map((r) => ({
         date: r.showdate,
         location: joinLocation(r.venue, r.city, r.state, r.country),
+        url: `https://phish.net/setlists/?d=${r.showdate}`,
         set: phishSetNames[r.set] ?? 'Set',
         position: Number(r.position),
         song: r.song,
         transition: r.trans_mark,
       }))
-  );
+  ).map((s) => ({
+    ...s,
+    links: `[phish.net](${s.url}) | [phish.in](https://phish.in/${s.date}) | [phishtracks](https://phishtracks.com/shows/${s.date})\n\n${phishNetCredit}`,
+    footer: phishNetCredit,
+  }));
 }
 
 type KglwNetRow = {
@@ -106,14 +118,17 @@ async function getKglwSetlists(date: string) {
         return {
           date: r.showdate,
           location: joinLocation(r.venuename, r.city, r.state, r.country),
-          permalink: r.permalink,
+          url: `https://kglw.net/setlists/${r.permalink}`,
           set: /one set/i.test(set) ? 'One Set' : set,
           position: Number(r.position),
           song: r.songname,
           transition: r.transition,
         };
       })
-  );
+  ).map((s) => ({
+    ...s,
+    links: `> _data provided by [kglw.net](${s.url})_`,
+  }));
 }
 
 type GdShow = {
@@ -140,10 +155,14 @@ function getGratefulDeadSetlists(date: string): Setlist[] {
     // "London, England" or "Hamilton, Ontario, Canada".
     const parts = show.location.split(',').map((p) => p.trim());
     const isUs = parts.length === 1 || usStates.has(parts.at(-1) ?? '');
+    const url = `https://archive.org/details/GratefulDead?query=date:${date}`;
     return {
       date,
       location: joinLocation(show.venue, ...parts, isUs ? 'USA' : ''),
-      spotifyUrl: show.spotifyUrl || undefined,
+      url,
+      links:
+        `[archive.org](${url})` +
+        (show.spotifyUrl ? ` | [Spotify](${show.spotifyUrl})` : ''),
       sets: show.sets.map((set) => ({
         name: set.name,
         songs: set.songs.map((song) => ({
@@ -158,7 +177,7 @@ function getGratefulDeadSetlists(date: string): Setlist[] {
 type Row = {
   date: string;
   location: string;
-  permalink?: string;
+  url: string;
   set: string;
   position: number;
   song: string;
@@ -166,16 +185,13 @@ type Row = {
 };
 
 /** Groups one-row-per-song API data into shows, then sets, ordered like the C# bot did. */
-function toSetlists(rows: Row[]): Setlist[] {
-  const shows = Map.groupBy(
-    rows,
-    (r) => `${r.date}|${r.location}|${r.permalink}`
-  );
+function toSetlists(rows: Row[]): Omit<Setlist, 'links'>[] {
+  const shows = Map.groupBy(rows, (r) => `${r.date}|${r.location}|${r.url}`);
   return [...shows.values()]
     .map((show) => ({
       date: show[0]!.date,
       location: show[0]!.location,
-      permalink: show[0]!.permalink,
+      url: show[0]!.url,
       sets: [...Map.groupBy(show, (r) => r.set)].map(([name, songs]) => ({
         name,
         songs: songs
