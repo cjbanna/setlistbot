@@ -5,7 +5,7 @@ import type {
   TriggerResponse,
 } from '@devvit/web/shared';
 import { Hono } from 'hono';
-import { replyTo } from './bot.ts';
+import { replyTo, type Settings } from './bot.ts';
 
 export const app = new Hono();
 
@@ -30,21 +30,14 @@ async function reply(
   text: string,
   author: string | undefined
 ) {
-  const [artist, requireMention, maxSetlists, phishNetApiKey] =
-    await Promise.all([
-      settings.get<string | string[]>('artist'),
-      settings.get<boolean>('requireMention'),
-      settings.get<number>('maxSetlists'),
-      settings.get<string>('phishNetApiKey'),
-    ]);
   // A failed lookup throws before the reply is recorded, so the trigger fails
   // instead of the comment being marked as replied to.
-  const markdown = await replyTo(text, author, context.appSlug, {
-    artist,
-    requireMention,
-    maxSetlists,
-    phishNetApiKey,
-  });
+  const markdown = await replyTo(
+    text,
+    author,
+    context.appSlug,
+    await settings.getAll<Settings>()
+  );
   if (!markdown) {
     return;
   }

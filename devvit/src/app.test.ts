@@ -13,7 +13,7 @@ function mockDevvit(
 ) {
   const calls: string[] = [];
   const values: Record<string, unknown> = { artist: 'gd', ...extraSettings };
-  t.mock.method(settings, 'get', async (key: string) => values[key]);
+  t.mock.method(settings, 'getAll', async () => values);
   t.mock.method(redis, 'incrBy', async () => {
     calls.push('incrBy');
     return 1;
@@ -65,6 +65,17 @@ test('records the reply just before posting it', async (t) => {
 
   assert.equal(response.status, 200);
   assert.deepEqual(calls, ['incrBy', 'submitComment']);
+});
+
+test('reads settings in one call', async (t) => {
+  mockDevvit(t);
+  const getAll = t.mock.method(settings, 'getAll', async () => ({
+    artist: 'gd',
+  }));
+
+  await comment();
+
+  assert.equal(getAll.mock.callCount(), 1);
 });
 
 test('a failed reply record fails the trigger without posting', async (t) => {
