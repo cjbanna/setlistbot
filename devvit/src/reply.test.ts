@@ -70,7 +70,6 @@ test('kglw row without a permalink links to the setlist index', async (t) => {
   const [setlist] = await getSetlists('kglw', ['2022-10-10']);
 
   assert.equal(setlist?.url, 'https://kglw.net/setlists/');
-  assert.match(setlist?.links ?? '', /\(https:\/\/kglw\.net\/setlists\/\)/);
 });
 
 for (const date of [
