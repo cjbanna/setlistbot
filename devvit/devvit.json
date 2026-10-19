@@ -1,6 +1,6 @@
 {
   "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
-  "name": "setlistbot-app",
+  "name": "setlistbot",
   "server": {
     "dir": "dist/server",
     "entry": "index.cjs"

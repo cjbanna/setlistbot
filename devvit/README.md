@@ -46,8 +46,6 @@ npm run dev          # playtest on your test subreddit
 npm run launch       # upload and submit for public review
 ```
 
-First time only: create the app at [developers.reddit.com/new](https://developers.reddit.com/new), named `setlistbot-app`, while logged in to Reddit as the same account as `npm run login`. Skip the `npx devvit init` command the wizard shows you: in this folder it would `git init` a nested repo and rewrite `package.json`.
-
 The phish.net API key is a secret, set once with `npx devvit settings set phishNetApiKey`.
 
 The Grateful Dead data is `src/Setlistbot.Infrastructure.GratefulDead/gd-shows.json` from the C# part of this repo, which the Discord bot also uses. The files in `src/testdata` are replies from the original C# bot, so these tests check that the replies haven't changed.
