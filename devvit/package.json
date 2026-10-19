@@ -7,7 +7,7 @@
     "build": "vite build",
     "dev": "devvit playtest",
     "deploy": "npm run test:types && npm run test:lint && npm test && devvit upload",
-    "launch": "npm run deploy && devvit publish",
+    "launch": "npm run deploy && devvit publish --public",
     "login": "devvit login",
     "format": "prettier --write .",
     "test": "node --test \"src/**/*.test.ts\"",

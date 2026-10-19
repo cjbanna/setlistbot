@@ -4,7 +4,7 @@ setlistbot replies with concert setlists when someone mentions a show date in a 
 
 Write `12/31/95` or `1995-12-31` in a comment and setlistbot replies with the songs played that night, the venue, and links to recordings. When a comment has several dates, it replies with a list of the shows, each linked to its full setlist.
 
-This app replaces the Data API bot [u/setlistbot](https://www.reddit.com/user/setlistbot), which has been answering in these communities for years, as part of Reddit's Data API migration.
+This app replaces the old Data API version of [u/setlistbot](https://www.reddit.com/user/setlistbot), which has been answering in these communities for years, as part of Reddit's Data API migration. It posts as the same u/setlistbot account.
 
 ## Setup for moderators
 
@@ -17,7 +17,7 @@ Install the app, then open its settings for your community:
 ## How it works
 
 - The app reads new comments and posts in the communities it's installed in, looking for dates.
-- It never replies to itself or to the legacy u/setlistbot (so the two can't loop on a shared subreddit), and it replies to each comment or post at most once. While both bots remain active, the legacy bot may still reply once to an app comment when no mention is required.
+- It never replies to its own comments, and it replies to each comment or post at most once.
 - Edited comments aren't checked again, so a date added in an edit won't get a reply.
 - Grateful Dead setlists are included in the app. Phish setlists come from [phish.net](https://phish.net) and King Gizzard setlists from [kglw.net](https://kglw.net).
 
@@ -43,7 +43,7 @@ npm test             # unit tests
 npm run test:types   # typecheck
 npm run test:lint    # lint
 npm run dev          # playtest on your test subreddit
-npm run launch       # upload and submit for review
+npm run launch       # upload and submit for public review
 ```
 
 First time only: create the app at [developers.reddit.com/new](https://developers.reddit.com/new), named `setlistbot-app`, while logged in to Reddit as the same account as `npm run login`. Skip the `npx devvit init` command the wizard shows you: in this folder it would `git init` a nested repo and rewrite `package.json`.
