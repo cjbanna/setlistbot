@@ -21,6 +21,9 @@ function mockDevvit(
   t.mock.method(reddit, 'submitComment', async () => {
     calls.push('submitComment');
   });
+  t.mock.method(redis, 'expire', async (key: string, seconds: number) => {
+    calls.push(`expire ${key} ${seconds}`);
+  });
   return calls;
 }
 
@@ -58,13 +61,17 @@ test('a comment with no show acks without replying', async (t) => {
   assert.deepEqual(calls, []);
 });
 
-test('records the reply just before posting it', async (t) => {
+test('records the reply just before posting it, then expires the record after 30 days', async (t) => {
   const calls = mockDevvit(t);
 
   const response = await comment();
 
   assert.equal(response.status, 200);
-  assert.deepEqual(calls, ['incrBy', 'submitComment']);
+  assert.deepEqual(calls, [
+    'incrBy',
+    'submitComment',
+    `expire replied:t1_abc ${30 * 24 * 60 * 60}`,
+  ]);
 });
 
 test('reads settings in one call', async (t) => {

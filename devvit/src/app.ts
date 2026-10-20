@@ -7,6 +7,9 @@ import type {
 import { Hono } from 'hono';
 import { replyTo, type Settings } from './bot.ts';
 
+// Devvit Rules recommend deleting stored data within 30 days
+const REPLIED_TTL_SECONDS = 30 * 24 * 60 * 60;
+
 export const app = new Hono();
 
 app.post('/internal/triggers/on-comment-create', async (c) => {
@@ -43,7 +46,8 @@ async function reply(
   }
 
   // Record the reply before posting so a redelivered event can't post twice
-  if ((await redis.incrBy(`replied:${thingId}`, 1)) > 1) {
+  const key = `replied:${thingId}`;
+  if ((await redis.incrBy(key, 1)) > 1) {
     return;
   }
   try {
@@ -56,4 +60,7 @@ async function reply(
     // Don't fail the trigger: a failed post may still have gone through
     console.error(`Failed to reply to ${thingId}`, error);
   }
+  // Each event fires once, so the key is only needed briefly. Expire it after
+  // posting, as a failed expire before would drop the reply on redelivery.
+  await redis.expire(key, REPLIED_TTL_SECONDS);
 }
