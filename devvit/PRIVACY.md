@@ -1,6 +1,6 @@
 # setlistbot Privacy Policy
 
-_Last updated: October 6, 2026_
+_Last updated: October 20, 2026_
 
 This policy explains what the setlistbot Reddit app ("setlistbot", "the app") does with data.
 
@@ -16,7 +16,7 @@ The text and username are not stored, logged, or shared.
 
 ## What the app stores
 
-The ID of each comment or post it replies to, so it never replies twice. IDs are kept in Reddit-hosted storage that belongs to that community's installation of the app.
+The ID of each comment or post it replies to, to prevent duplicate replies. Newly stored IDs are deleted after 30 days; older IDs may be kept longer. IDs are kept in Reddit-hosted storage that belongs to that community's installation of the app.
 
 ## What the app sends elsewhere
 

@@ -14,9 +14,9 @@ function mockDevvit(
   const calls: string[] = [];
   const values: Record<string, unknown> = { artist: 'gd', ...extraSettings };
   t.mock.method(settings, 'getAll', async () => values);
-  t.mock.method(redis, 'incrBy', async () => {
-    calls.push('incrBy');
-    return 1;
+  t.mock.method(redis, 'set', async () => {
+    calls.push('set');
+    return 'OK';
   });
   t.mock.method(reddit, 'submitComment', async () => {
     calls.push('submitComment');
@@ -58,13 +58,57 @@ test('a comment with no show acks without replying', async (t) => {
   assert.deepEqual(calls, []);
 });
 
-test('records the reply just before posting it', async (t) => {
+test('claims the reply with a 30-day expiry before posting it', async (t) => {
+  t.mock.timers.enable({
+    apis: ['Date'],
+    now: new Date('2026-10-20T00:00:00Z'),
+  });
   const calls = mockDevvit(t);
+  const claim = t.mock.method(redis, 'set');
 
   const response = await comment();
 
   assert.equal(response.status, 200);
-  assert.deepEqual(calls, ['incrBy', 'submitComment']);
+  assert.deepEqual(claim.mock.calls[0]?.arguments, [
+    'replied:t1_abc',
+    '1',
+    { nx: true, expiration: new Date('2026-11-19T00:00:00Z') },
+  ]);
+  assert.deepEqual(calls, ['set', 'submitComment']);
+});
+
+test('an existing reply claim skips posting', async (t) => {
+  const calls = mockDevvit(t);
+  t.mock.method(redis, 'set', async () => {
+    calls.push('set');
+    return '';
+  });
+
+  const response = await comment();
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(calls, ['set']);
+});
+
+test('post triggers also claim the reply before posting it', async (t) => {
+  const calls = mockDevvit(t);
+  const claim = t.mock.method(redis, 'set');
+
+  const response = await runWithContext(
+    { appSlug: 'setlistbot-app' } as never,
+    async () =>
+      app.request('/internal/triggers/on-post-create', {
+        method: 'POST',
+        body: JSON.stringify({
+          post: { id: 't3_abc', title: '5/8/77', selftext: '' },
+          author: { name: 'someone' },
+        }),
+      })
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(claim.mock.calls[0]?.arguments[0], 'replied:t3_abc');
+  assert.deepEqual(calls, ['set', 'submitComment']);
 });
 
 test('reads settings in one call', async (t) => {
@@ -80,7 +124,7 @@ test('reads settings in one call', async (t) => {
 
 test('a failed reply record fails the trigger without posting', async (t) => {
   const calls = mockDevvit(t);
-  t.mock.method(redis, 'incrBy', async () => {
+  t.mock.method(redis, 'set', async () => {
     throw new Error('Redis unavailable');
   });
 

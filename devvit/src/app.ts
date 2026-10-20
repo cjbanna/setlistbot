@@ -7,6 +7,8 @@ import type {
 import { Hono } from 'hono';
 import { replyTo, type Settings } from './bot.ts';
 
+const REPLIED_TTL_SECONDS = 30 * 24 * 60 * 60;
+
 export const app = new Hono();
 
 app.post('/internal/triggers/on-comment-create', async (c) => {
@@ -42,8 +44,12 @@ async function reply(
     return;
   }
 
-  // Record the reply before posting so a redelivered event can't post twice
-  if ((await redis.incrBy(`replied:${thingId}`, 1)) > 1) {
+  // Claim with expiry before posting so a redelivered event can't post twice
+  const claimed = await redis.set(`replied:${thingId}`, '1', {
+    nx: true,
+    expiration: new Date(Date.now() + REPLIED_TTL_SECONDS * 1000),
+  });
+  if (claimed !== 'OK') {
     return;
   }
   try {
