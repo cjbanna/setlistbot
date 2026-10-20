@@ -20,6 +20,23 @@ Each subreddit supports only a single artist.
 - Grateful Dead
 - King Gizzard & the Lizard Wizard
 
+### Developing the Reddit app
+
+Requires Node 24. Run these from `devvit/`:
+
+```sh
+npm install
+npm test             # unit tests
+npm run test:types   # typecheck
+npm run test:lint    # lint
+npm run dev          # playtest on your test subreddit
+npm run launch       # upload and submit for public review
+```
+
+The phish.net API key is a secret, set once with `npx devvit settings set phishNetApiKey`.
+
+The Grateful Dead data is `src/Setlistbot.Infrastructure.GratefulDead/gd-shows.json`, which the Discord bot also uses. The files in `devvit/src/testdata` are replies from the original C# bot, so these tests check that the replies haven't changed.
+
 ## Discord
 
 You can add the bot to your discord server by using this link:
